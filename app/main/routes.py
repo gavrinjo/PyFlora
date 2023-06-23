@@ -1,11 +1,12 @@
 from flask import render_template, flash, redirect, url_for
+from flask_login import login_required
 from app.main import bp
 
 
 @bp.route('/')
 @bp.route('/index')
+@login_required
 def index():
-    user = {'username': 'Miguel'}
     posts = [
         {
             'author': {'username': 'John'},
@@ -16,5 +17,5 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
+    return render_template('index.html', title='Home', posts=posts)
 
