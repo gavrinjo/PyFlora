@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
-from app.auth.forms import LoginForm
+from app import db
+from app.auth.forms import LoginForm, RegistrationForm
 from app.auth import bp
 from app.models import User
 
@@ -29,3 +30,18 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
+
+
+@bp.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password_one.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, registertion secesseful!')
+        return redirect(url_for('auth.login'))
+    return render_template('register.html', title='Register', form=form)
