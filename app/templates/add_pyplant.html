@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add Plant</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=32) }}<br>
+            {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.salinity.label }}<br>
+            {{ form.salinity }}<br>
+            {% for error in form.salinity.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.temperature.label }}<br>
+            {{ form.temperature(size=32) }}<br>
+            {% for error in form.temperature.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.ph_range.label }}<br>
+            {{ form.ph_range }}<br>
+            {% for error in form.ph_range.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.moisture.label }}<br>
+            {{ form.moisture }}<br>
+            {% for error in form.moisture.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.shade.label }}<br>
+            {{ form.shade }}<br>
+            {% for error in form.shade.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.soil_texture.label }}<br>
+            {{ form.soil_texture }}<br>
+            {% for error in form.soil_texture.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.substrate.label }}<br>
+            {{ form.substrate(size=32) }}<br>
+            {% for error in form.substrate.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(size=32) }}<br>
+            {% for error in form.description.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

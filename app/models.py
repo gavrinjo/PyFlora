@@ -59,6 +59,7 @@ class Plant(db.Model):
     soil_texture = db.Column(db.String(64)) # fine, medium, coarse
     # precipitation = db.Column(db.Integer) # 8-26
     substrate = db.Column(db.String(128)) # recomendation
+    description = db.Column(db.String(256))
     
     pots = db.relationship('Pot', backref='pot', lazy='dynamic')
 
