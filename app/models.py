@@ -60,8 +60,8 @@ class Plant(db.Model):
     # precipitation = db.Column(db.Integer) # 8-26
     substrate = db.Column(db.String(128)) # recomendation
     description = db.Column(db.String(256))
-    
-    pots = db.relationship('Pot', backref='pot', lazy='dynamic')
+
+    pots = db.relationship('Pot', backref='plant', lazy='dynamic')
 
     def __repr__(self):
         return f'<Plant {self.name}>'
@@ -69,12 +69,20 @@ class Plant(db.Model):
 class Pot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
+    description = db.Column(db.String(256))
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))
 
     def __repr__(self):
         return f'<Pot {self.name}>'
+    
+    def get_plant(self, id):
+        return Plant.query.get(id)
+    
+    def get_user(self, id):
+        return User.query.get(id)
+
 
 
 @login.user_loader

@@ -1,0 +1,11 @@
+<table>
+    <tr valign="top">
+        <td>slika</td>
+        <td>
+            Name: {{ pot.name }}<br>
+            Plant: {{ pot.get_plant(pot.plant_id).name }}<br>
+            User: {{ pot.get_user(pot.user_id).username }}<br>
+            Description: {{ pot.description }}<br>
+        </td>
+    </tr>
+</table>

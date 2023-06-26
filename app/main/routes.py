@@ -3,8 +3,8 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 from app import db
 from app.main import bp
-from app.models import User, Plant
-from app.main.forms import EditProfileForm, AddPlantForm
+from app.models import User, Plant, Pot
+from app.main.forms import EditProfileForm, AddPlantForm, PotForm
 
 @bp.before_app_request
 def before_request():
@@ -68,7 +68,7 @@ def pyplants():
 @bp.route('/new_plant', methods=['GET', 'POST'])
 @login_required
 def new_plant():
-    form = AddPlantForm()
+    form = AddPlantForm('')
     if form.validate_on_submit():
         plant = Plant(
             name=form.name.data,
@@ -83,6 +83,105 @@ def new_plant():
         )
         db.session.add(plant)
         db.session.commit()
-        flash(f'Congratulations, Plant {plant.name} added secesseful!')
+        flash(f'Congratulations, Plant {plant.name} added secessefuly!')
         return redirect(url_for('main.index'))
     return render_template('add_pyplant.html', title='Add PyPlant', form=form)
+
+
+@bp.route('/plant/<plant_id>/update', methods=['GET', 'POST'])
+@login_required
+def update_plant(plant_id):
+    plant = Plant.query.get_or_404(plant_id)
+    form = AddPlantForm(plant.name)
+    if form.validate_on_submit():
+        plant.name=form.name.data
+        plant.salinity=form.salinity.data
+        plant.temperature=form.temperature.data
+        plant.ph_range=form.ph_range.data
+        plant.moisture=form.moisture.data
+        plant.shade=form.shade.data
+        plant.soil_texture=form.soil_texture.data
+        plant.substrate=form.substrate.data
+        plant.description=form.description.data
+        db.session.commit()
+        flash(f'Congratulations, Plant {plant.name} updated secessefuly!')
+        return redirect(url_for('main.pyplants'))
+    elif request.method == 'GET':
+        form.name.data = plant.name
+        form.salinity.data = plant.salinity
+        form.temperature.data = plant.temperature
+        form.ph_range.data = plant.ph_range
+        form.moisture.data = plant.moisture
+        form.shade.data = plant.shade
+        form.soil_texture.data = plant.soil_texture
+        form.substrate.data = plant.substrate
+        form.description.data = plant.description
+    return render_template('add_pyplant.html', title='Update PyPlant', form=form)
+
+
+@bp.route('/plant/<plant_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_plant(plant_id):
+    plant = Plant.query.get_or_404(plant_id)
+    name = plant.name
+    db.session.delete(plant)
+    db.session.commit()
+    flash(f'Congratulations, Plant {name} deleted secessefuly!')
+    return redirect(url_for('main.pyplants'))
+
+
+@bp.route('/explore/pypots')
+@login_required
+def pypots():
+    pots = Pot.query.all()
+    return render_template('pypots.html', title='PyPlants', pots=pots)
+
+
+@bp.route('/pot/new', methods=['GET', 'POST'])
+@login_required
+def new_pot():
+    plants = Plant.query.all()
+    plant_list = [(i.id, i.name) for i in plants]
+    form = PotForm()
+    form.plant.choices = plant_list
+    if form.validate_on_submit():
+        plant = Plant.query.get(form.plant.data)
+        potty = Pot(name=form.name.data, description=form.description.data, owner=current_user, plant=plant)
+        db.session.add(potty)
+        db.session.commit()
+        flash(f'Congratulations, Pot {potty.name} added secessefuly!')
+        return redirect(url_for('main.index'))
+    return render_template('new_pot.html', title='Add PyPot', form=form)
+
+
+@bp.route('/pot/<pot_id>/update', methods=['GET', 'POST'])
+@login_required
+def update_pot(pot_id):
+    pot = Pot.query.get_or_404(pot_id)
+    plants = Plant.query.all()
+    plant_list = [(i.id, i.name) for i in plants]
+    form = PotForm()
+    form.plant.choices = plant_list
+    if form.validate_on_submit():
+        plant = Plant.query.get(form.plant.data)
+        pot.name=form.name.data
+        pot.description=form.description.data
+        pot.plant=plant
+        db.session.commit()
+        flash(f'Congratulations, Pot {pot.name} updated secessefuly!')
+        return redirect(url_for('main.pypots'))
+    elif request.method == 'GET':
+        form.name.data = pot.name
+        form.description.data = pot.description
+    return render_template('new_pot.html', title='Update PyPot', form=form)
+
+
+@bp.route('/pot/<pot_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_pot(pot_id):
+    pot = Pot.query.get_or_404(pot_id)
+    name = pot.name
+    db.session.delete(pot)
+    db.session.commit()
+    flash(f'Congratulations, Pot {name} deleted secessefuly!')
+    return redirect(url_for('main.pypots'))
