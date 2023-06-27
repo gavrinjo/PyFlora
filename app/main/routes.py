@@ -58,14 +58,14 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile', form=form)
     
 
-@bp.route('/pyplants')
+@bp.route('/explore/pyplants')
 @login_required
 def pyplants():
     plants = Plant.query.all()
     return render_template('pyplants.html', title='PyPlants', plants=plants)
 
 
-@bp.route('/new_plant', methods=['GET', 'POST'])
+@bp.route('/plant/new', methods=['GET', 'POST'])
 @login_required
 def new_plant():
     form = AddPlantForm('')
@@ -85,7 +85,14 @@ def new_plant():
         db.session.commit()
         flash(f'Congratulations, Plant {plant.name} added secessefuly!')
         return redirect(url_for('main.index'))
-    return render_template('add_pyplant.html', title='Add PyPlant', form=form)
+    return render_template('new_plant.html', title='Add PyPlant', form=form)
+
+
+@bp.route('/plant/<plant_id>')
+@login_required
+def view_plant(plant_id):
+    plant = Plant.query.get(plant_id)
+    return render_template('view_plant.html', title=plant.name, plant=plant)
 
 
 @bp.route('/plant/<plant_id>/update', methods=['GET', 'POST'])
@@ -135,6 +142,13 @@ def delete_plant(plant_id):
 def pypots():
     pots = Pot.query.all()
     return render_template('pypots.html', title='PyPlants', pots=pots)
+
+
+@bp.route('/pot/<pot_id>')
+@login_required
+def view_pot(pot_id):
+    pot = Pot.query.get(pot_id)
+    return render_template('view_pot.html', title=pot.name, pot=pot)
 
 
 @bp.route('/pot/new', methods=['GET', 'POST'])

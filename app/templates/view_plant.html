@@ -1,8 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
 <table>
     <tr valign="top">
         <td>slika</td>
         <td>
-            Name:  <a href="{{ url_for('main.view_plant', plant_id=plant.id) }}">{{ plant.name }}</a><br>
+            Name: {{ plant.name }}<br>
             Salinity:{{ plant.salinity }}<br>
             Temperature: {{ plant.temperature }}<br>
             pH range: {{ plant.ph_range }}<br>
@@ -14,3 +17,4 @@
         </td>
     </tr>
 </table>
+{% endblock %}
