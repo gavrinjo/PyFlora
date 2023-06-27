@@ -75,6 +75,8 @@ class Pot(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))
 
+    measurements = db.relationship('SensorMeasurements', backref='pot', lazy='dynamic')
+
     def __repr__(self):
         return f'<Pot {self.name}>'
     
@@ -83,6 +85,22 @@ class Pot(db.Model):
     
     def get_user(self, id):
         return User.query.get(id)
+
+
+class SensorMeasurements(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    salinity = db.Column(db.Integer)
+    moisture = db.Column(db.Integer)
+    ph_range = db.Column(db.Integer)
+    measured = db.Column(db.DateTime)
+
+    pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'))
+
+    def __repr__(self):
+        return f'<Sensor data for {self.get_pot(self.pot_id).name}, measured at {self.measured}>'
+
+    def get_pot(self, id):
+        return Pot.query.get(id)
 
 
 

@@ -61,3 +61,4 @@ from app import models
 admin.add_view(ModleViewController(models.User, db.session))
 admin.add_view(ModleViewController(models.Pot, db.session))
 admin.add_view(ModleViewController(models.Plant, db.session))
+admin.add_view(ModleViewController(models.SensorMeasurements, db.session))

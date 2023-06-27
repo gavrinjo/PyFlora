@@ -2,8 +2,9 @@ from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 from app import db
+from app.data_sim import SensorData
 from app.main import bp
-from app.models import User, Plant, Pot
+from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm
 
 @bp.before_app_request
@@ -199,3 +200,16 @@ def delete_pot(pot_id):
     db.session.commit()
     flash(f'Congratulations, Pot {name} deleted secessefuly!')
     return redirect(url_for('main.pypots'))
+
+
+@bp.route('/pot/<pot_id>/sync', methods=['GET', 'POST'])
+@login_required
+def sync_pot(pot_id):
+    pot = Pot.query.get(pot_id)
+    sensor = SensorData()
+    measurement = SensorMeasurements(salinity=sensor.salinity, moisture=sensor.moisture, ph_range=sensor.ph_range)
+    measurement.measured = datetime.utcnow()
+    measurement.pot = pot
+    db.session.add(measurement)
+    db.session.commit()
+    return redirect(url_for('main.view_pot', pot_id=pot.id))
