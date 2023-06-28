@@ -206,8 +206,9 @@ def delete_pot(pot_id):
 @login_required
 def sync_pot(pot_id):
     pot = Pot.query.get(pot_id)
-    sensor = SensorData()
-    measurement = SensorMeasurements(salinity=sensor.salinity, moisture=sensor.moisture, ph_range=sensor.ph_range)
+    measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
+    sensor = SensorData(measurement)
+    measurement = SensorMeasurements(salinity=sensor.soil_salinity(), moisture=sensor.soil_moisture(), ph_range=sensor.soil_ph())
     measurement.measured = datetime.utcnow()
     measurement.pot = pot
     db.session.add(measurement)

@@ -44,7 +44,6 @@ class User(UserMixin, db.Model):
         return User.query.get(id)
     
 
-
 class Plant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
@@ -90,7 +89,7 @@ class Pot(db.Model):
 class SensorMeasurements(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     salinity = db.Column(db.Integer)
-    moisture = db.Column(db.Integer)
+    moisture = db.Column(db.Numeric(precision=3, scale=2))
     ph_range = db.Column(db.Integer)
     measured = db.Column(db.DateTime)
 
