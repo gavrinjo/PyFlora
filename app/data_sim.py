@@ -1,71 +1,50 @@
-from random import choice, uniform, random
+from random import choice
 
 class SensorData():
-    """
-    traži id posude i zadnji datum mjerenja,
-        1. ako mjerenje ne postoji, onda postavlje neutralne vrijednosti.
-        2. ako mjerenje postoji, onda uzima random vrijednost u rasponu od +-1 od zadnjeg mjerenja. 
-    """
 
     def __init__(self, mesurement) -> None:
         self.mesurement = mesurement
-        # self.salinity = self.soil_slinity_scale() #choice(range(1, 32))
-        # self.ph_range = choice(range(1, 15))
-        # self.moisture = choice(range(1, 50))
 
 
+    def data(self):
+        """Randomize and return multi sensor data set
 
-    def soil_salinity(self):
-        # soil salinity scale
-        # 0-2 -> None -> very sensitive crop
-        # 2-4 -> Low -> sensitive crop
-        # 4-8 -> Medium -> medium sensitive crop
-        # 8-16 -> High -> medium resistant crop
-        # > 16 -> Severe -> resistant crop
-        try:
-            self.mesurement.salinity
-        except AttributeError:
-            new_value = 8
+        Returns:
+            tuple: Resturns tuple of sensor data in particular order (ph, salinity, moisture)
+        """
+
+        if self.mesurement is None:
+            return (7, 8, 0.5)
+
         else:
-            ref_value = self.mesurement.salinity
-            new_value = choice(range(ref_value-1, ref_value+2))
-        return new_value
-    
-    def soil_moisture(self):
-        # soil moisture scale
-        # 0     extremely dry soil
-        # 0,1   extremely dry soil
-        # 0,2   well drained soil
-        # 0,3   well drained soil
-        # 0,4   moist soil
-        # 0,5   moist soil
-        # 0,6   moist soil
-        # 0,7   wet soil
-        # 0,8   wet soil
-        # 0,9   extremely wet soil
-        # 1     extremely wet soil
+            ph_range = self.randomizer(1, 14, 1, int(self.mesurement.ph_range))
+            salinity = self.randomizer(1,32, 1, int(self.mesurement.salinity))
+            moisture = self.randomizer(0, 1, 0.1, float(self.mesurement.moisture))
+        
+            return (ph_range, salinity, moisture)
 
-        try:
-            self.mesurement.moisture
-        except AttributeError:
-            new_value = 0.5
-        else:
-            ref_value = float(self.mesurement.moisture)
-            new_value = uniform(ref_value-0.1, ref_value+0.2)
-        return new_value
-    
-    def soil_ph(self):
-        # soil pH
-        # <7 - acidic
-        # =7 - neutral
-        # >7 - alkaline
 
-        try:
-            self.mesurement.ph_range
-        except AttributeError:
-            new_value = 7
+    def randomizer(self, minimal, maximal, offset, value):
+        """Random sensor data
+
+        Args:
+            minimal (int, float): Minimal sensor value
+            maximal (int, float): Maximal sensor value
+            offset (int, float): Offset from measured value in both directions
+            value (int, float): Existing or default measured value
+
+        Returns:
+            int,float: randomized value
+        """
+        if value <= minimal:
+            mi = minimal
         else:
-            ref_value = self.mesurement.ph_range
-            new_value = choice(range(ref_value-1, ref_value+2))
-        return new_value
-            
+            mi = value - offset
+
+        if value >= maximal:
+            mx = maximal
+        else:
+            mx = value + offset
+
+        return choice([mi, value, mx])
+
