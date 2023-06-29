@@ -6,6 +6,7 @@ from flask_login import LoginManager, current_user
 from flask_mail import Mail
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
+from flask_bootstrap import Bootstrap5
 
 
 class ModleViewController(ModelView):
@@ -29,6 +30,7 @@ migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
 mail = Mail()
+bootstrap = Bootstrap5()
 admin = Admin(name='PyFlora', index_view=AdminViewController())
 
 
@@ -40,6 +42,7 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     login.init_app(app)
     mail.init_app(app)
+    bootstrap.init_app(app)
     admin.init_app(app)
 
     from app.main import bp as main_bp
