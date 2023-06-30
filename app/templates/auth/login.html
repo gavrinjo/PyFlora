@@ -1,26 +1,59 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Sign In</h1>
+
+    <main class="text-center form-signin w-50 m-auto">
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+            <div class="form-floating">
+                {{ form.username.label }}
+                {{ form.username(size=32, class="form-control", placeholder="name@example.com") }}
+            </div>
             {% for error in form.username.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
+
+            <div class="form-floating">
+                {{ form.password.label }}
+                {{ form.password(size=32, class="form-control", placeholder="Password") }}
+            </div>
             {% for error in form.password.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
+            <div class="checkbox mb-3">
+                {{ form.remember_me() }} {{ form.remember_me.label }}
+            </div>
+            {{ form.submit(class="w-100 btn btn-lg btn-primary") }}
         <p>New User? <a href="{{ url_for('auth.register') }}">Click to Register!</a></p>
         <p>Forgot Your Password?<a href="{{ url_for('auth.reset_password_request') }}">Click to Reset It</a></p>
     </form>
+    </main>
+
+    <!-- <main class="form-signin w-100 m-auto">
+        <form>
+            <img class="mb-4" src="/docs/5.2/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+        <div class="form-floating">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            <p class="mt-5 mb-3 text-muted">© 2017–2022</p>
+        </form>
+    </main> -->
+
+
 {% endblock %}
