@@ -51,7 +51,7 @@ def edit_profile():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         db.session.commit()
-        flash('Changes have been saved!')
+        flash('Changes have been saved!', 'success')
         return redirect(url_for('main.edit_profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username
@@ -84,7 +84,7 @@ def new_plant():
         )
         db.session.add(plant)
         db.session.commit()
-        flash(f'Congratulations, Plant {plant.name} added secessefuly!')
+        flash(f'Congratulations, Plant {plant.name} added secessefuly!', 'success')
         return redirect(url_for('main.index'))
     return render_template('new_plant.html', title='Add PyPlant', form=form)
 
@@ -112,7 +112,7 @@ def update_plant(plant_id):
         plant.substrate=form.substrate.data
         plant.description=form.description.data
         db.session.commit()
-        flash(f'Congratulations, Plant {plant.name} updated secessefuly!')
+        flash(f'Congratulations, Plant {plant.name} updated secessefuly!', 'success')
         return redirect(url_for('main.pyplants'))
     elif request.method == 'GET':
         form.name.data = plant.name
@@ -134,7 +134,7 @@ def delete_plant(plant_id):
     name = plant.name
     db.session.delete(plant)
     db.session.commit()
-    flash(f'Congratulations, Plant {name} deleted secessefuly!')
+    flash(f'Congratulations, Plant {name} deleted secessefuly!', 'success')
     return redirect(url_for('main.pyplants'))
 
 
@@ -164,7 +164,7 @@ def new_pot():
         potty = Pot(name=form.name.data, description=form.description.data, owner=current_user, plant=plant)
         db.session.add(potty)
         db.session.commit()
-        flash(f'Congratulations, Pot {potty.name} added secessefuly!')
+        flash(f'Congratulations, Pot {potty.name} added secessefuly!', 'success')
         return redirect(url_for('main.index'))
     return render_template('new_pot.html', title='Add PyPot', form=form)
 
@@ -183,7 +183,7 @@ def update_pot(pot_id):
         pot.description=form.description.data
         pot.plant=plant
         db.session.commit()
-        flash(f'Congratulations, Pot {pot.name} updated secessefuly!')
+        flash(f'Congratulations, Pot {pot.name} updated secessefuly!', 'success')
         return redirect(url_for('main.pypots'))
     elif request.method == 'GET':
         form.name.data = pot.name
@@ -198,7 +198,7 @@ def delete_pot(pot_id):
     name = pot.name
     db.session.delete(pot)
     db.session.commit()
-    flash(f'Congratulations, Pot {name} deleted secessefuly!')
+    flash(f'Congratulations, Pot {name} deleted secessefuly!', 'success')
     return redirect(url_for('main.pypots'))
 
 
