@@ -1,7 +1,13 @@
 {% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-    <h1>Register</h1>
+<main class="form-signin border rounded">
+    <h1 class="h3 mb-3 fw-normal">Register</h1>
+    {{ render_form(form) }}
+    <p class="mt-2 mb-3"><a class="link-primary" href="{{ url_for('auth.login') }}">Already a member</a></p>
+</main>
+    <!-- <h1>Register</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -33,5 +39,5 @@
             {% endfor %}
         </p>
         <p>{{ form.submit() }}</p>
-    </form>
+    </form> -->
 {% endblock %}
