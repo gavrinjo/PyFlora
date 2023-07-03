@@ -1,9 +1,9 @@
-<table>
+<!-- <table>
     <tr valign="top">
         <td>slika</td>
         <td>
             Name:  <a href="{{ url_for('main.view_plant', plant_id=plant.id) }}">{{ plant.name }}</a><br>
-            Salinity:{{ plant.salinity }}<br>
+            Salinity: {{ plant.salinity }}<br>
             Temperature: {{ plant.temperature }}<br>
             pH range: {{ plant.ph_range }}<br>
             Moisture: {{ plant.moisture }}<br>
@@ -13,4 +13,34 @@
             Description: {{ plant.description }}<br>
         </td>
     </tr>
-</table>
+</table> -->
+
+<div class="col">
+    <div class="card h-100">
+        <img src="{{ url_for('static', filename='dummy_flower.jpg') }}" class="card-img-top" alt="app/static/dummy_flower.jpg">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{{ url_for('main.view_plant', plant_id=plant.id) }}">{{ plant.name }}</a></h5>
+            <p class="card-text">{{ plant.description }}</p>
+            <hr>
+            <small>Substrate: {{ plant.substrate }}</small>
+            <hr>
+            <small>Salinity: {{ plant.salinity }}</small><br>
+            <small>Temperature: {{ plant.temperature }}</small><br>
+            <small>pH range: {{ plant.ph_range }}</small><br>
+            <small>Moisture: {{ plant.moisture }}</small><br>
+            <small>Shade: {{ plant.shade }}</small><br>
+            <small>Soil texture: {{ plant.soil_texture }}</small><br>
+        </div>
+        <!-- <ul class="list-group list-group-flush">
+            <li class="list-group-item">Salinity: {{ plant.salinity }}</li>
+            <li class="list-group-item">Temperature: {{ plant.temperature }}</li>
+            <li class="list-group-item">pH range: {{ plant.ph_range }}</li>
+            <li class="list-group-item">Moisture: {{ plant.moisture }}</li>
+            <li class="list-group-item">Shade: {{ plant.shade }}</li>
+            <li class="list-group-item">Soil texture: {{ plant.soil_texture }}</li>
+        </ul> -->
+        <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+    </div>
+</div>

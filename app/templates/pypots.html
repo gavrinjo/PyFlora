@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
+
+<h3>pyPots</h3>
+<div class="row row-cols-1 row-cols-md-2 g-4">
     {% for pot in pots %}
         {% include '_pot.html' %}
     {% endfor %}
+
+</div>
 {% endblock %}

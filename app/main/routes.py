@@ -124,7 +124,7 @@ def update_plant(plant_id):
         form.soil_texture.data = plant.soil_texture
         form.substrate.data = plant.substrate
         form.description.data = plant.description
-    return render_template('add_pyplant.html', title='Update PyPlant', form=form)
+    return render_template('new_plant.html', title='Update PyPlant', form=form)
 
 
 @bp.route('/plant/<plant_id>/delete', methods=['GET', 'POST'])

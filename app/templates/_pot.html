@@ -1,4 +1,4 @@
-<table>
+<!-- <table>
     <tr valign="top">
         <td>slika</td>
         <td>
@@ -8,4 +8,21 @@
             Description: {{ pot.description }}<br>
         </td>
     </tr>
-</table>
+</table> -->
+
+<div class="col">
+    <div class="card h-100">
+        <img src="{{ url_for('static', filename='dummy_flower.jpg') }}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{{ url_for('main.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a></h5>
+            <p class="card-text">{{ pot.description }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{ pot.get_plant(pot.plant_id).name }}</li>
+            <li class="list-group-item">{{ pot.get_user(pot.user_id).username }}</li>
+        </ul>
+        <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+    </div>
+</div>

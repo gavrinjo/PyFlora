@@ -1,7 +1,10 @@
 {% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-    <h1>Add Pot</h1>
+<h1 class="h3 mb-3 fw-normal">Add Pot</h1>
+{{ render_form(form) }}
+    <!-- <h1>Add Pot</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -26,5 +29,5 @@
             {% endfor %}
         </p>
         <p>{{ form.submit() }}</p>
-    </form>
+    </form> -->
 {% endblock %}

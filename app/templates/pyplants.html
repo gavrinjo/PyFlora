@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    <!-- <h1>Hi, {{ current_user.username }}!</h1> -->
     {% for plant in plants %}
-        {% include '_plant.html' %}
+    {% include '_plant.html' %}
     {% endfor %}
+</div>
 {% endblock %}
