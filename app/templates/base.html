@@ -21,7 +21,7 @@
     </head>
     <body>
         <!-- navbar -->
-        <nav class="navbar navbar-expand-md bg-light fixed-top mb-3 border-bottom">
+        <nav class="navbar navbar-expand-md bg-secondary fixed-top mb-3 border-bottom">
           <div class="container">
 
             <div class="lh-1">
@@ -36,7 +36,9 @@
             <div class="collapse navbar-collapse" id="navbarNav">
               <!-- Navbar left side -->
               <div class="navbar-nav me-auto d-flex align-items-center">
-                <a class="nav-link">bla</a>
+                    <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="wicon" width="64" height="64" style="margin: -10px; margin-left: 10px; margin-right: 0px;">
+                    <span class="display-6">22°C</span>
+                    <small style="margin-left: 10px;">Feels like 24°C. Few clouds. Light breeze </small>
               </div>
 
               <!-- Navbar right side -->
@@ -61,7 +63,7 @@
                 <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
                 <div class="nav-item dropdown text-end">
                   <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle" style="transform: skewX(-15deg);">
                   </a>
                   <div class="dropdown-menu text-small">
                     <a class="dropdown-item" href="#">New project...</a>
