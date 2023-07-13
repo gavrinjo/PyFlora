@@ -24,10 +24,11 @@
         <nav class="navbar navbar-expand-md bg-secondary fixed-top mb-3 border-bottom">
           <div class="container">
 
-            <div class="lh-1">
-              <h1 class="h6 mb-0 text-black lh-1">pyFlora</h1>
-              <small>Algebra seminarski</small>
-            </div>
+              <a class="lh-1 text-black" href="{{ url_for('main.index') }}" style="text-decoration: none;">
+                <h1 class="h4 mb-0 text-black lh-2">pyFlora</h1>
+                <small>Algebra seminarski</small>
+              </a>
+
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -38,7 +39,7 @@
               <div class="navbar-nav me-auto d-flex align-items-center">
                     <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="wicon" width="64" height="64" style="margin: -10px; margin-left: 10px; margin-right: 0px;">
                     <span class="display-6">22°C</span>
-                    <small style="margin-left: 10px;">Feels like 24°C. Few clouds. Light breeze </small>
+                    <!-- <small style="margin-left: 10px;">Feels like 24°C. Few clouds. Light breeze </small> -->
               </div>
 
               <!-- Navbar right side -->
@@ -49,7 +50,6 @@
                 {% else %}
                 <a class="nav-link" href="{{ url_for('main.new_plant') }}">Add pyPlant</a>
                 <a class="nav-link" href="{{ url_for('main.new_pot') }}">Add pyPot</a>
-                <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
                 <div class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Explore
@@ -59,18 +59,14 @@
                     <a class="dropdown-item" href="{{ url_for('main.pypots') }}">pyPots</a>
                   </div>
                 </div>
-                <a class="nav-link" href="{{ url_for('main.user', username=current_user.username) }}">{{current_user.username}}</a>
-                <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
                 <div class="nav-item dropdown text-end">
                   <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle" style="transform: skewX(-15deg);">
+                    <img src="https://github.com/mdo.png" alt="mdo" width="64" height="64" class="rounded-circle">
                   </a>
                   <div class="dropdown-menu text-small">
-                    <a class="dropdown-item" href="#">New project...</a>
-                    <a class="dropdown-item" href="#">Settings</a>
-                    <a class="dropdown-item" href="#">Profile</a>
+                    <a class="dropdown-item" href="{{ url_for('main.user', username=current_user.username) }}">Profile</a>
                     <hr class="dropdown-divider"></li>
-                    <a class="dropdown-item" href="#">Sign out</a>
+                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sign out</a>
                   </div>
                 </div>
                 {% endif %}
