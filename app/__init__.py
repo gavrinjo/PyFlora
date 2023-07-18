@@ -6,21 +6,26 @@ from flask_login import LoginManager, current_user
 from flask_mail import Mail
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
+from flask_admin.contrib.fileadmin import FileAdmin
 from flask_bootstrap import Bootstrap5
+from flask_uploads import UploadSet, configure_uploads, IMAGES
+import os.path as op
 
 
 class ModleViewController(ModelView):
     def is_accessible(self):
-        if current_user.is_admin:
-            return current_user.is_authenticated
+        if current_user.is_authenticated:
+            if current_user.is_admin:
+                return current_user.is_authenticated
     def inaccessible_callback(self, name, **kwargs):
         return abort(404)
 
 
 class AdminViewController(AdminIndexView):
     def is_accessible(self):
-        if current_user.is_admin:
-            return current_user.is_authenticated
+        if current_user.is_authenticated:
+            if current_user.is_admin:
+                return current_user.is_authenticated
     def inaccessible_callback(self, name, **kwargs):
         return abort(404)
 
@@ -37,6 +42,9 @@ admin = Admin(name='PyFlora', index_view=AdminViewController())
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+
+    images = UploadSet('images', IMAGES)
+    configure_uploads(app, images)
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -65,3 +73,6 @@ admin.add_view(ModleViewController(models.User, db.session))
 admin.add_view(ModleViewController(models.Pot, db.session))
 admin.add_view(ModleViewController(models.Plant, db.session))
 admin.add_view(ModleViewController(models.SensorMeasurements, db.session))
+
+path = op.join(op.dirname(__file__), 'static')
+admin.add_view(FileAdmin(path, '/static/', name='Static Files'))

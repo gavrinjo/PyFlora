@@ -1,11 +1,13 @@
+import os
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, abort, current_app
 from flask_login import login_required, current_user
 from app import db
 from app.data_sim import SensorData
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm
+from werkzeug.utils import secure_filename
 
 @bp.before_app_request
 def before_request():
@@ -93,7 +95,8 @@ def new_plant():
 @login_required
 def view_plant(plant_id):
     plant = Plant.query.get(plant_id)
-    return render_template('view_plant.html', title=plant.name, plant=plant)
+    image_file = url_for('static', filename=f'plants/{plant.photo}')
+    return render_template('view_plant.html', title=plant.name, plant=plant, image_file=image_file)
 
 
 @bp.route('/plant/<plant_id>/update', methods=['GET', 'POST'])
@@ -102,7 +105,17 @@ def update_plant(plant_id):
     plant = Plant.query.get_or_404(plant_id)
     form = AddPlantForm(plant.name)
     if form.validate_on_submit():
+
+        uploaded_file = request.files['photo']
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
+                abort(400)
+            uploaded_file.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
+
         plant.name=form.name.data
+        plant.photo=filename
         plant.salinity=form.salinity.data
         plant.temperature=form.temperature.data
         plant.ph_range=form.ph_range.data
@@ -116,6 +129,7 @@ def update_plant(plant_id):
         return redirect(url_for('main.pyplants'))
     elif request.method == 'GET':
         form.name.data = plant.name
+        form.photo.data = plant.photo
         form.salinity.data = plant.salinity
         form.temperature.data = plant.temperature
         form.ph_range.data = plant.ph_range

@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Length, ValidationError, NumberRange
 from app.models import User, Plant
@@ -22,6 +23,7 @@ class EditProfileForm(FlaskForm):
 
 class AddPlantForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
+    photo = FileField('Image file', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     salinity = SelectField('Salinity', validators=[DataRequired()], choices=['Low', 'Medium', 'High'])
     temperature = IntegerField('Temperature', validators=[DataRequired(), NumberRange(min=0, max=40)])
     ph_range = SelectField('PH range', validators=[DataRequired()], choices=['Acidic', 'Neutral', 'Alkaline'])

@@ -47,7 +47,7 @@ class User(UserMixin, db.Model):
 class Plant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    # photo = db.Column(db.LargeBinary) # ovo ću naknadno napraviti
+    photo = db.Column(db.String(64), nullable=False, default='default.jpg') # ovo ću naknadno napraviti
     # Requirements
     salinity = db.Column(db.String(64)) # None, Low, Medium, High (postoji senzor)
     temperature = db.Column(db.Integer) # ~20 (celzijevih) (senzor temperature i vlažnisti zraka, postoji rpi)

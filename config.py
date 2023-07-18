@@ -15,3 +15,5 @@ class Config(object):
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
     MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL')
     ADMINS = ['admin@pyflora.com']
+    UPLOADED_FILES_ALLOW = ['.jpg', '.jpeg', '.png']
+    UPLOADS_DEFAULT_DEST = os.path.join(basedir, 'app/static')
