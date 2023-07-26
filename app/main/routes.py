@@ -9,6 +9,12 @@ from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm
 from werkzeug.utils import secure_filename
 
+# import matplotlib.pyplot as plt
+import io
+import base64
+from matplotlib.figure import Figure
+import numpy as np
+
 @bp.before_app_request
 def before_request():
     if current_user.is_authenticated:
@@ -163,7 +169,22 @@ def pypots():
 @login_required
 def view_pot(pot_id):
     pot = Pot.query.get(pot_id)
-    return render_template('view_pot.html', title=pot.name, pot=pot)
+
+    # Generate the figure **without using pyplot**.
+    fig = Figure()
+    ax = fig.subplots()
+    x = [1, 2, 3]
+    y = np.array([[1, 2], [3, 4], [5, 6]])
+    ax.plot(x,y)
+    # Save it to a temporary buffer.
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png")
+    # Embed the result in the html output.
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+
+    # plot_url = base64.b64encode(img.getvalue()).decode()
+
+    return render_template('view_pot.html', title=pot.name, pot=pot, data=data)
 
 
 @bp.route('/pot/new', methods=['GET', 'POST'])
