@@ -8,8 +8,9 @@ from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm
 from werkzeug.utils import secure_filename
+from app.repo import PyGraf
 
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import io
 import base64
 from matplotlib.figure import Figure
@@ -169,19 +170,25 @@ def pypots():
 @login_required
 def view_pot(pot_id):
     pot = Pot.query.get(pot_id)
+    # # plt.plot([1,2,3], [3,2,1])
+    
+    # # Generate the figure **without using pyplot**.
+    # fig = Figure()
+    # ax = fig.subplots()
+    x = ['A', 'B', 'C', 'D']
+    y = [4, 5, 6, 2]
+    # y = np.array([[1, 2], [3, 4], [5, 6]])
+    # ax.plot(x,y)
 
-    # Generate the figure **without using pyplot**.
-    fig = Figure()
-    ax = fig.subplots()
-    x = [1, 2, 3]
-    y = np.array([[1, 2], [3, 4], [5, 6]])
-    ax.plot(x,y)
-    # Save it to a temporary buffer.
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png")
-    # Embed the result in the html output.
-    data = base64.b64encode(buf.getbuffer()).decode("ascii")
-
+    # # Save it to a temporary buffer.
+    # buf = io.BytesIO()
+    # # plt.savefig(buf, format='png')
+    # fig.savefig(buf, format="png")
+    # # Embed the result in the html output.
+    # data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    chart = PyGraf(x, y)
+    chart._subs()
+    data = chart.represent_chart()
     # plot_url = base64.b64encode(img.getvalue()).decode()
 
     return render_template('view_pot.html', title=pot.name, pot=pot, data=data)
