@@ -79,6 +79,11 @@ class Radar(PyGraf):
 
 
 
+
+
+
+# testiranje (cod dolje)
+
 # histogram plot
 ages = [18, 19, 21, 25, 26, 26, 30, 32, 38, 45, 55]
 bins = range(10, 61, 10)
@@ -95,10 +100,10 @@ y1 = np.array([r**2 for r in x])
 y2 = np.array([r**3 for r in x])
 
 
-chart = Radar()
-chart.plot(employee, actual, 'red', 'test1')
-chart.plot(employee, actual2, 'blue', 'test2')
-chart._save('test2')
+# chart = Radar()
+# chart.plot(employee, actual, 'red', 'test1')
+# chart.plot(employee, actual2, 'blue', 'test2')
+# chart._save('test2')
 
 # lchar = Line()
 # lchar.plot(x, y1, 'blue', 'test')

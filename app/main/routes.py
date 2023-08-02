@@ -15,6 +15,7 @@ import io
 import base64
 from matplotlib.figure import Figure
 import numpy as np
+import pandas as pd
 
 @bp.before_app_request
 def before_request():
@@ -171,6 +172,8 @@ def pypots():
 def view_pot(pot_id):
     pot = Pot.query.get(pot_id)
 
+    df = SensorMeasurements.query.filter_by(pot_id=1).order_by(SensorMeasurements.measured.desc())
+    print(df)
     x = ['A', 'B', 'C', 'D']
     y = [4, 5, 6, 2]
 
