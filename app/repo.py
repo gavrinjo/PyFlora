@@ -2,6 +2,8 @@
 import io
 import base64
 from matplotlib.figure import Figure
+from matplotlib.ticker import ScalarFormatter
+import matplotlib.dates as mdates
 import numpy as np
 
 
@@ -27,9 +29,17 @@ class Line(PyGraf):
         self.ax = self.subplots()
     
     def plot(self, x_axis, y_axis, color, label):
+        # print(x_axis[0])
+        # print(type(x_axis[0]))
+        fdates = [x.strftime('%d-%m-%Y\n%H:%M:%S.%f') for x in x_axis]
+        # fmt = mdates.DateFormatter('%S.%f')
         self.ax.grid(True)
-        self.ax.plot(x_axis, y_axis, marker='.' , color=color, label=label) # line chart
-        # self.ax.xaxis.set_ticks(x_axis)
+        self.ax.plot(fdates, y_axis, marker='.' , color=color, label=label) # line chart
+        # self.ax.xaxis.set_major_formatter(fmt)
+        # self.autofmt_xdate(rotation=45)
+        self.ax.set_xticklabels(fdates, rotation=45, ha='right', color="grey", size=6)
+        # self.ax.xaxis.set_major_locator(dates.MicrosecondLocator(interval=10000000, tz=None))
+        # self.ax.xaxis.set_ticks(data['measured'])
         # self.ax.yaxis.set_ticks(y_axis)
         # self.ax.margins(x=0, y=0)
         self.ax.legend()
