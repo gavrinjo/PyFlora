@@ -1,0 +1,12 @@
+{
+    "id": ["eiv", "min_value", "max_value", "description"],
+    "1": [1, 0, 1, "low-salt to salt-free, but occasionally on slightly salty soils"],
+    "2": [2, 1, 2, "very low salt content"],
+    "3": [3, 2, 3, "low salt content"],
+    "4": [4, 3, 4, "low to moderate salt content"],
+    "5": [5, 4, 6, "moderate salt content"],
+    "6": [6, 6, 8, "moderate to high salt content"],
+    "7": [7, 8, 12, "high salt content"],
+    "8": [8, 12, 16, "very high salt content"],
+    "9": [9, 16, 32, "very high and in dry periods extremely high salt content"]
+    }

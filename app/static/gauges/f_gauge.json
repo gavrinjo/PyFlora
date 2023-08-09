@@ -1,0 +1,12 @@
+{
+    "id": ["eiv", "min_value", "max_value", "description"],
+    "1": [1, 0, 15, "severely dry"],
+    "2": [2, 15, 25, "moderately dry"],
+    "3": [3, 25, 35, "mildly dry"],
+    "4": [4, 35, 45, "mildly dry to normal"],
+    "5": [5, 45, 55, "normal"],
+    "6": [6, 55, 65, "normal to mildly wet"],
+    "7": [7, 65, 75, "mildly wet"],
+    "8": [8, 75, 85, "moderately wet"],
+    "9": [9, 85, 100, "severely wet"]
+}

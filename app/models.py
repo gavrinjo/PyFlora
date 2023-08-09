@@ -17,6 +17,8 @@ class User(UserMixin, db.Model):
 
     about_me = db.Column(db.String(256))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # created = db.Column(db.DateTime, default=datetime.utcnow)
 
     pots = db.relationship('Pot', backref='owner', lazy='dynamic')
     
@@ -61,6 +63,8 @@ class Plant(db.Model):
     substrate = db.Column(db.String(128)) # recomendation
     description = db.Column(db.String(256))
 
+    # created = db.Column(db.DateTime, default=datetime.utcnow)
+
     pots = db.relationship('Pot', backref='plant', lazy='dynamic')
 
     def __repr__(self):
@@ -70,6 +74,15 @@ class Pot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(256))
+
+    # created = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # sunlight_value = 'L status (ACTIVE / INACTIVE)'
+    # postoji i temperatura ali ona se poziva sa meteo stanice 'T'
+    # moisture_value = 'F status (ACTIVE / INACTIVE)'
+    # reaction_value = 'R status (ACTIVE / INACTIVE)'
+    # nutrient_value = 'N status (ACTIVE / INACTIVE)' 
+    # salinity_value = 'S status (ACTIVE / INACTIVE)'
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))
@@ -100,6 +113,14 @@ class SensorMeasurements(db.Model):
 
     def get_pot(self, id):
         return Pot.query.get(id)
+
+
+class LightGauge(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    eiv = db.Column(db.Integer, nullable=False) # ellenberg indicator value
+    min_value = db.Column(db.Integer) # min [lux] value for given 'EIV'
+    max_value = db.Column(db.Integer) # max [lux] value for given 'EIV'
+    description = db.Column(db.String(128))
 
 
 

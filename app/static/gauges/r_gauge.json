@@ -1,0 +1,12 @@
+{
+    "id": ["eiv", "min_value", "max_value", "description"],
+    "1": [1, 0, 3, "strong acidity"],
+    "2": [2, 3, 5, "moderate acidity"],
+    "3": [3, 5, 6, "slightly acidic"],
+    "4": [4, 6, 7, "slightly acidic to Neutral"],
+    "5": [5, 7, 7, "Neutral"],
+    "6": [6, 7, 8, "neutral to slightly alkaline"],
+    "7": [7, 8, 9, "slightly alkaline"],
+    "8": [8, 9, 11, "moderate alkaline"],
+    "9": [9, 11, 14, "strong alkaline"]
+}

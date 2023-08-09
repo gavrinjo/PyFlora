@@ -177,25 +177,26 @@ def view_pot(pot_id):
     # .filter_by(pot_id=pot_id)
     # .order_by(metrics.measured.desc()).first(), columns=['salinity', 'ph_range', 'moisture'])
 
-    df = (metrics.query
-    .with_entities(metrics.salinity, metrics.ph_range, metrics.moisture)
-    .filter_by(pot_id=pot_id)
-    .order_by(metrics.measured.desc()).first())
-    df = [x for x in df]
-    print(df)
-    # df = pd.DataFrame(metrics.query
-    # .with_entities(metrics.measured, metrics.salinity, metrics.ph_range)
+    # df = (metrics.query
+    # .with_entities(metrics.salinity, metrics.ph_range, metrics.moisture)
     # .filter_by(pot_id=pot_id)
-    # .order_by(metrics.measured).limit(7), columns=['measured', 'salinity', 'ph_range'])
+    # .order_by(metrics.measured.desc()).first())
+    # df = [x for x in df]
 
-    # chart = Line()
-    # chart.plot(df['measured'], df['salinity'], 'blue', 'salinity')
-    # chart.plot(df['measured'], df['ph_range'], 'red', 'ph_range')
-    # data = chart.represent_chart()
+    df = pd.DataFrame(metrics.query
+    .with_entities(metrics.measured, metrics.salinity, metrics.ph_range)
+    .filter_by(pot_id=pot_id)
+    .order_by(metrics.measured.desc()).limit(7)[::-1], columns=['measured', 'salinity', 'ph_range'])
 
-    radar = Radar()
-    radar.plot(['salinity', 'ph_range', 'moisture'], df, 'blue', 'salinity')
-    data = radar.represent_chart()
+    chart = Line()
+    chart.plot(df['measured'], df['salinity'], 'blue', 'salinity')
+    chart.plot(df['measured'], df['ph_range'], 'red', 'ph_range')
+    data = chart.represent_chart()
+
+    # radar = Radar()
+    # radar.plot(['salinity', 'ph_range', 'moisture'], df, 'blue', 'salinity')
+    # radar.plot(['salinity', 'ph_range', 'moisture'], [7, 8, 0.5], 'orange', 'neutral')
+    # data = radar.represent_chart()
 
     return render_template('view_pot.html', title=pot.name, pot=pot, data=data)
 

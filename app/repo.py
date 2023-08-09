@@ -6,6 +6,9 @@ from matplotlib.ticker import ScalarFormatter
 import matplotlib.dates as mdates
 import numpy as np
 
+from app import db
+from app.models import User, Plant, Pot, SensorMeasurements
+
 
 class PyGraf(Figure):
 
@@ -123,3 +126,12 @@ y2 = np.array([r**3 for r in x])
 # hchart = Histogram()
 # hchart.plot(ages, bins, 'test')
 # hchart._save('hist_02')
+
+# db.session.execute(db.slect(User)).first() -> ovo radi, objašnjeno (https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/queries/), query je stari način
+
+# dodavanje bulk u tablicu baze
+# db.session.execute(Pot.__table__.insert(), dict) -> gdje je dict python dictionary object (ili lista dictionarija)
+
+# a radi i ovako gdje je dict python dictionary object
+# obj_data = Pot(**dict)   
+# db.session.add(obj_data)
