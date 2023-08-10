@@ -1,12 +1,11 @@
-{
-    "id": ["eiv", "min_value", "max_value", "description"],
-    "1": [1, 0, 15, "severely dry"],
-    "2": [2, 15, 25, "moderately dry"],
-    "3": [3, 25, 35, "mildly dry"],
-    "4": [4, 35, 45, "mildly dry to normal"],
-    "5": [5, 45, 55, "normal"],
-    "6": [6, 55, 65, "normal to mildly wet"],
-    "7": [7, 65, 75, "mildly wet"],
-    "8": [8, 75, 85, "moderately wet"],
-    "9": [9, 85, 100, "severely wet"]
-}
+[
+    {"eiv": 1, "min_value": 0, "max_value": 15, "description": "Severely dry"},
+    {"eiv": 2, "min_value": 15, "max_value": 25, "description": "Moderately dry"},
+    {"eiv": 3, "min_value": 25, "max_value": 35, "description": "Mildly dry"},
+    {"eiv": 4, "min_value": 35, "max_value": 45, "description": "Mildly dry-normal"},
+    {"eiv": 5, "min_value": 45, "max_value": 55, "description": "Normal"},
+    {"eiv": 6, "min_value": 55, "max_value": 65, "description": "Normal-mildly wet"},
+    {"eiv": 7, "min_value": 65, "max_value": 75, "description": "Mildly wet"},
+    {"eiv": 8, "min_value": 75, "max_value": 85, "description": "Moderately wet"},
+    {"eiv": 9, "min_value": 85, "max_value": 100, "description": "Severely wet"}
+]

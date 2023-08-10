@@ -99,11 +99,26 @@ class Pot(db.Model):
         return User.query.get(id)
 
 
+class LightGauge(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ei = db.Column(db.String(64)) # ellenberg indicator [L,T,F,R,N,S]
+    eiv = db.Column(db.Integer, nullable=False) # ellenberg indicator value
+    min_value = db.Column(db.Integer) # min value for given 'EIV'
+    max_value = db.Column(db.Integer) # max value for given 'EIV'
+    units = db.Column(db.String(64)) # measuring unit
+    description = db.Column(db.String(128))
+
+
 class SensorMeasurements(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    salinity = db.Column(db.Integer)
-    moisture = db.Column(db.Numeric(precision=3, scale=2))
-    ph_range = db.Column(db.Integer)
+
+    # sunlight = db.Column(db.Integer) # [lux]
+    # temperature = db.Column(db.Integer) # [°C]
+    moisture = db.Column(db.Numeric(precision=3, scale=2)) # [%]
+    ph_range = db.Column(db.Integer) # [pH]
+    # nutrient = db.Column(db.Numeric(precision=3, scale=2)) # [%]
+    salinity = db.Column(db.Integer) # [dS/m]
+
     measured = db.Column(db.DateTime)
 
     pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'))
@@ -113,15 +128,6 @@ class SensorMeasurements(db.Model):
 
     def get_pot(self, id):
         return Pot.query.get(id)
-
-
-class LightGauge(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    eiv = db.Column(db.Integer, nullable=False) # ellenberg indicator value
-    min_value = db.Column(db.Integer) # min [lux] value for given 'EIV'
-    max_value = db.Column(db.Integer) # max [lux] value for given 'EIV'
-    description = db.Column(db.String(128))
-
 
 
 @login.user_loader
