@@ -6,15 +6,14 @@ class SensorData():
         self.mesurement = mesurement
 
 
-    def data(self):
+    def data(self, value, min_value, max_value, offset_value):
         """Randomize and return multi sensor data set
 
         Returns:
             tuple: Resturns tuple of sensor data in particular order (ph, salinity, moisture)
         """
-
         if self.mesurement is None:
-            return (7, 8, 0.5)
+            return (value, min_value, max_value)
 
         else:
             ph_range = self.randomizer(1, 14, 1, int(self.mesurement.ph_range))
@@ -23,8 +22,9 @@ class SensorData():
         
             return (ph_range, salinity, moisture)
 
+        return self.randomizer(self.mesurement, min_value, max_value, offset_value)
 
-    def randomizer(self, minimal, maximal, offset, value):
+    def randomizer(self, value, min_value, max_value, offset):
         """Random sensor data
 
         Args:
@@ -36,13 +36,13 @@ class SensorData():
         Returns:
             int,float: randomized value
         """
-        if value <= minimal:
-            mi = minimal
+        if value <= min_value:
+            mi = min_value
         else:
             mi = value - offset
 
-        if value >= maximal:
-            mx = maximal
+        if value >= max_value:
+            mx = max_value
         else:
             mx = value + offset
 
