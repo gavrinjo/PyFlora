@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, abort, current_app
 from flask_login import login_required, current_user
 from app import db
-from app.data_sim import SensorData
+from app.data_sim import Sensor
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm
@@ -256,7 +256,8 @@ def delete_pot(pot_id):
 def sync_pot(pot_id):
     pot = Pot.query.get(pot_id)
     measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
-    soil_ph_range, soil_salinity, soil_moisture = SensorData(measurement).data()
+    soil_ph_range, soil_salinity, soil_moisture = Sensor(measurement).data()
+    a = Sensor.simulate(measurement.moisture, 0, 100, 5)
     measurement = SensorMeasurements(salinity=soil_salinity, moisture=soil_moisture, ph_range=soil_ph_range)
     measurement.measured = datetime.utcnow()
     measurement.pot = pot

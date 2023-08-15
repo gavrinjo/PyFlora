@@ -99,13 +99,13 @@ class Pot(db.Model):
         return User.query.get(id)
 
 
-class LightGauge(db.Model):
+class Gauge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ei = db.Column(db.String(64)) # ellenberg indicator [L,T,F,R,N,S]
     eiv = db.Column(db.Integer, nullable=False) # ellenberg indicator value
     min_value = db.Column(db.Integer) # min value for given 'EIV'
     max_value = db.Column(db.Integer) # max value for given 'EIV'
-    units = db.Column(db.String(64)) # measuring unit
+    unit = db.Column(db.String(64)) # measuring unit
     description = db.Column(db.String(128))
 
 

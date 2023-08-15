@@ -1,8 +1,8 @@
 from app import create_app, db
-from app.models import User, Pot, Plant, SensorMeasurements
+from app.models import User, Pot, Plant, SensorMeasurements, Gauge
 
 app = create_app()
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'User': User, 'Pot': Pot, 'Plant': Plant, 'SensorMeasurements': SensorMeasurements}
+    return {'db': db, 'User': User, 'Pot': Pot, 'Plant': Plant, 'SensorMeasurements': SensorMeasurements, 'Gauge': Gauge}

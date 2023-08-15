@@ -7,7 +7,10 @@ import matplotlib.dates as mdates
 import numpy as np
 
 from app import db
-from app.models import User, Plant, Pot, SensorMeasurements
+from app.models import User, Plant, Pot, SensorMeasurements, Gauge
+from flask import current_app
+import json
+import os
 
 
 class PyGraf(Figure):
@@ -135,3 +138,10 @@ y2 = np.array([r**3 for r in x])
 # a radi i ovako gdje je dict python dictionary object
 # obj_data = Pot(**dict)   
 # db.session.add(obj_data)
+
+def build_gauge(filename, path):
+    # funkcija za popunjavanje gauge tablice u bazi, potrebna joj je JSON datoteka '_gauge.json' nalazi se u static mapi
+    with open(os.path.normpath(os.path.join(path, filename)), 'r') as json_data:
+        data = json.load(json_data)
+        db.session.execute(Gauge.__table__.insert(), data)
+        db.session.commit()
