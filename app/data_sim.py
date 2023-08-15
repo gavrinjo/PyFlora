@@ -1,5 +1,6 @@
 from random import randint
 from app import db
+from app.models import Gauge
 
 class Sensor():
 
@@ -17,7 +18,10 @@ class Sensor():
     def status(self, columns):
         for c in columns:
             if getattr(self.pot, c) == 0:
-                print()
+                if c == 'sunlight_status':
+                    data = db.session.execute(db.select(Gauge).filter_by(ei='L')).all()
+                    max_value = db.session.execute(db.select(db.func.max(Gauge.max_value)).filter_by(ei='L')).all()
+                    min_value = db.session.execute(db.select(db.func.max(Gauge.min_value)).filter_by(ei='L')).all()
                 # self.simulate()
 
     def simulate(self, value, min_value, max_value, offset):
