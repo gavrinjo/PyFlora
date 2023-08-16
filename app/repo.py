@@ -1,16 +1,18 @@
 # import matplotlib.pyplot as plt
+import os
+import json
 import io
 import base64
+import numpy as np
+from requests import get
+from contextlib import closing
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 import matplotlib.dates as mdates
-import numpy as np
 
 from app import db
 from app.models import User, Plant, Pot, SensorMeasurements, Gauge
 from flask import current_app
-import json
-import os
 
 
 class PyGraf(Figure):
@@ -93,6 +95,29 @@ class Radar(PyGraf):
         self.ax.fill(angles, values, color=color, alpha=0.25)
         self.ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
 
+
+class Weather():
+
+    def __init__(self, city) -> None:
+        self.city = city
+    
+    def get_url(self, src):
+        # delay()
+        with closing(get(src, stream=True)) as source:
+            if self.response_check(source):
+                return source.content
+            else:
+                self.log_error(source)
+    
+    def response_check(self, check):
+        content_type = check.headers["Content-Type"].lower()
+        return check.status_code == 200 and content_type is not None
+
+    def log_error(self, error):
+        exit(f"ERROR, check your URLs, invalid response code \"{error.status_code}\"")
+    
+    def location(self, city):
+        pass
 
 
 

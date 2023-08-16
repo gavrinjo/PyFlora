@@ -101,10 +101,11 @@ class Pot(db.Model):
 
 class Gauge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ei = db.Column(db.String(64)) # ellenberg indicator [L,T,F,R,N,S]
+    ei = db.Column(db.String(64), nullable=False) # ellenberg indicator [L,T,F,R,N,S]
     eiv = db.Column(db.Integer, nullable=False) # ellenberg indicator value
-    min_value = db.Column(db.Integer) # min value for given 'EIV'
-    max_value = db.Column(db.Integer) # max value for given 'EIV'
+    name = db.Column(db.String(64))
+    min_value = db.Column(db.Integer, nullable=False) # min value for given 'EIV'
+    max_value = db.Column(db.Integer, nullable=False) # max value for given 'EIV'
     unit = db.Column(db.String(64)) # measuring unit
     description = db.Column(db.String(128))
 
@@ -112,11 +113,11 @@ class Gauge(db.Model):
 class SensorMeasurements(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    # sunlight = db.Column(db.Integer) # [lux]
-    # temperature = db.Column(db.Integer) # [°C]
-    moisture = db.Column(db.Numeric(precision=3, scale=2)) # [%]
-    ph_range = db.Column(db.Integer) # [pH]
-    # nutrient = db.Column(db.Numeric(precision=3, scale=2)) # [%]
+    sunlight = db.Column(db.Integer) # [lux]
+    temperature = db.Column(db.Integer) # [°C]
+    moisture = db.Column(db.Integer) # [%]
+    reaction = db.Column(db.Integer) # [pH]
+    nutrient = db.Column(db.Integer) # [%]
     salinity = db.Column(db.Integer) # [dS/m]
 
     measured = db.Column(db.DateTime)

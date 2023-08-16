@@ -258,6 +258,7 @@ def sync_pot(pot_id):
     measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
     soil_ph_range, soil_salinity, soil_moisture = Sensor(measurement).data()
     a = Sensor.simulate(measurement.moisture, 0, 100, 5)
+    b = Sensor(pot, measurement).build()
     measurement = SensorMeasurements(salinity=soil_salinity, moisture=soil_moisture, ph_range=soil_ph_range)
     measurement.measured = datetime.utcnow()
     measurement.pot = pot

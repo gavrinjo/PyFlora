@@ -1,12 +1,37 @@
+import numpy as np
+from datetime import datetime
 from random import randint
 from app import db
-from app.models import Gauge
+from app.models import Gauge, SensorMeasurements
 
 class Sensor():
 
     def __init__(self, pot, measurement) -> None:
         self.pot = pot
         self.measurement = measurement
+
+    def build(self):
+        attributes = []
+        ddd = {}
+        columns = self.columns(self.pot)
+        for column in columns:
+            if getattr(self.pot, column) == 1:
+                default_value, min_value, max_value, off_value = self.gauge_values(column)
+                measured_value = getattr(self.measurement, column[:column.find('_')])
+                if measured_value is not None:
+                    val = self.simulate(measured_value, min_value, max_value, off_value)
+                else:
+                    val = self.simulate(default_value, min_value, max_value, off_value)
+            else:
+                val = None
+            ddd[column] = val
+            attributes.append(val)
+        sunlight, moisture, reaction, nutrient, salinity = attributes
+        measurement = SensorMeasurements(sunlight=sunlight, moisture=moisture, reaction=reaction, nutrient=nutrient, salinity=salinity)
+        measurement.measured = datetime.utcnow()
+        measurement.pot = self.pot
+        return measurement
+        
 
     def columns(self, pot):
         cols = []
@@ -15,14 +40,15 @@ class Sensor():
                 cols.append(c.key)
         return cols
     
-    def status(self, columns):
-        for c in columns:
-            if getattr(self.pot, c) == 0:
-                if c == 'sunlight_status':
-                    data = db.session.execute(db.select(Gauge).filter_by(ei='L')).all()
-                    max_value = db.session.execute(db.select(db.func.max(Gauge.max_value)).filter_by(ei='L')).all()
-                    min_value = db.session.execute(db.select(db.func.max(Gauge.min_value)).filter_by(ei='L')).all()
-                # self.simulate()
+    def gauge_values(self, column):
+
+        data = db.session.execute(db.select(Gauge).filter_by(name=column[:column.find('_')], eiv=5)).scalar_one()
+        max_value = data.max_value
+        min_value = data.min_value
+        avg_value = int(np.floor((max_value + min_value) / 2))
+        off_value = int(np.floor(np.log10(max_value) * 2))
+
+        return avg_value, min_value, max_value, off_value
 
     def simulate(self, value, min_value, max_value, offset):
         """Randomize and return multi sensor data set
