@@ -9,6 +9,8 @@ from contextlib import closing
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 import matplotlib.dates as mdates
+import xml.etree.ElementTree as ET
+import xmltodict
 
 from app import db
 from app.models import User, Plant, Pot, SensorMeasurements, Gauge
@@ -98,12 +100,28 @@ class Radar(PyGraf):
 
 class Weather():
 
+    GEO_LOCATION_URL = 'http://api.openweathermap.org/geo/1.0/direct?q={city_name}&limit={limit}&appid={api_key}'
+    WEATHER_DATA_URL = 'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric'
+
     def __init__(self, city) -> None:
         self.city = city
+        self.weather_data = self.weather_raw_data()
+        self.temperature = self.weather_data['main']['temp']
+        self.feels_like = self.weather_data['main']['feels_like']
+        self.temp_min = self.weather_data['main']['temp_min']
+        self.temp_max = self.weather_data['main']['temp_max']
+        self.pressure = self.weather_data['main']['pressure']
+        self.humidity = self.weather_data['main']['humidity']
+        self.visibility = self.weather_data['visibility']
+        self.wind_speed = self.weather_data['wind']['speed']
+        self.wind_deg = self.weather_data['wind']['deg']
+        self.idd = self.weather_data['weather'][0]['id']
+        self.main = self.weather_data['weather'][0]['main']
+        self.description = self.weather_data['weather'][0]['description']
+        self.icon = self.weather_data['weather'][0]['icon']
     
-    def get_url(self, src):
-        # delay()
-        with closing(get(src, stream=True)) as source:
+    def get_url(self, url):
+        with closing(get(url, stream=True)) as source:
             if self.response_check(source):
                 return source.content
             else:
@@ -116,8 +134,31 @@ class Weather():
     def log_error(self, error):
         exit(f"ERROR, check your URLs, invalid response code \"{error.status_code}\"")
     
-    def location(self, city):
-        pass
+    def location(self):
+        content = self.get_url(self.GEO_LOCATION_URL.format(city_name=self.city, limit=1, api_key=current_app.config['WEATHER_API']))
+        content = json.loads(content)
+        lat = content[0]['lat']
+        lon = content[0]['lon']
+        return lat, lon
+
+    def weather_raw_data(self):
+        location = self.location()
+        content = self.get_url(self.WEATHER_DATA_URL.format(lat=location[0], lon=location[1], api_key=current_app.config['WEATHER_API']))
+        content = json.loads(content)
+        return content
+    
+    def cwd_xml(self):
+        location = self.location()
+        content = self.get_url(self.WEATHER_DATA_URL.format(lat=location[0], lon=location[1], api_key=current_app.config['WEATHER_API']) + '&mode=xml')
+            # root = ET.fromstring(content)
+            # for child in root:
+            #     print(f'{child.tag} - {child.attrib} - {child.get("value")}')
+        root = xmltodict.parse(content)
+        # print(json.dumps(root), indent=2)
+
+        return root
+
+
 
 
 

@@ -3,6 +3,7 @@ from datetime import datetime
 from random import randint
 from app import db
 from app.models import Gauge, SensorMeasurements
+from app.repo import Weather
 
 class Sensor():
 
@@ -11,8 +12,7 @@ class Sensor():
         self.measurement = measurement
 
     def build(self):
-        attributes = []
-        ddd = {}
+        attribs = {}
         columns = self.columns(self.pot)
         for column in columns:
             if getattr(self.pot, column) == 1:
@@ -24,10 +24,15 @@ class Sensor():
                     val = self.simulate(default_value, min_value, max_value, off_value)
             else:
                 val = None
-            ddd[column] = val
-            attributes.append(val)
-        sunlight, moisture, reaction, nutrient, salinity = attributes
-        measurement = SensorMeasurements(sunlight=sunlight, moisture=moisture, reaction=reaction, nutrient=nutrient, salinity=salinity)
+            attribs[column] = val
+        temperature = round(Weather('Zagreb').temperature)
+        measurement = SensorMeasurements(
+            sunlight=attribs['sunlight'],
+            moisture=attribs['moisture'],
+            reaction=attribs['reaction'],
+            nutrient=attribs['nutrient'],
+            salinity=attribs['salinity'],
+            temperature=temperature)
         measurement.measured = datetime.utcnow()
         measurement.pot = self.pot
         return measurement

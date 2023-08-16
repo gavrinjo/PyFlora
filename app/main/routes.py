@@ -256,12 +256,10 @@ def delete_pot(pot_id):
 def sync_pot(pot_id):
     pot = Pot.query.get(pot_id)
     measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
-    soil_ph_range, soil_salinity, soil_moisture = Sensor(measurement).data()
-    a = Sensor.simulate(measurement.moisture, 0, 100, 5)
-    b = Sensor(pot, measurement).build()
-    measurement = SensorMeasurements(salinity=soil_salinity, moisture=soil_moisture, ph_range=soil_ph_range)
-    measurement.measured = datetime.utcnow()
-    measurement.pot = pot
-    db.session.add(measurement)
+    sensor_data = Sensor(pot, measurement).build()
+    # measurement = SensorMeasurements(salinity=soil_salinity, moisture=soil_moisture, ph_range=soil_ph_range)
+    # measurement.measured = datetime.utcnow()
+    # measurement.pot = pot
+    db.session.add(sensor_data)
     db.session.commit()
     return redirect(url_for('main.view_pot', pot_id=pot.id))
