@@ -73,6 +73,7 @@ admin.add_view(ModleViewController(models.User, db.session))
 admin.add_view(ModleViewController(models.Pot, db.session))
 admin.add_view(ModleViewController(models.Plant, db.session))
 admin.add_view(ModleViewController(models.SensorMeasurements, db.session))
+admin.add_view(ModleViewController(models.Gauge, db.session))
 
 path = op.join(op.dirname(__file__), 'static')
 admin.add_view(FileAdmin(path, '/static/', name='Static Files'))

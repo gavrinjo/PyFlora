@@ -24,8 +24,8 @@ class Sensor():
                     val = self.simulate(default_value, min_value, max_value, off_value)
             else:
                 val = None
-            attribs[column] = val
-        temperature = round(Weather('Zagreb').temperature)
+            attribs[column[:column.find('_')]] = val
+        temperature = round(float(Weather('Zagreb').temperature[0]))
         measurement = SensorMeasurements(
             sunlight=attribs['sunlight'],
             moisture=attribs['moisture'],

@@ -184,13 +184,13 @@ def view_pot(pot_id):
     # df = [x for x in df]
 
     df = pd.DataFrame(metrics.query
-    .with_entities(metrics.measured, metrics.salinity, metrics.ph_range)
+    .with_entities(metrics.measured, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
     .filter_by(pot_id=pot_id)
-    .order_by(metrics.measured.desc()).limit(7)[::-1], columns=['measured', 'salinity', 'ph_range'])
+    .order_by(metrics.measured.desc()).limit(7)[::-1], columns=['measured', 'salinity', 'reaction', 'sunlight', 'nutrient'])
 
     chart = Line()
-    chart.plot(df['measured'], df['salinity'], 'blue', 'salinity')
-    chart.plot(df['measured'], df['ph_range'], 'red', 'ph_range')
+    chart.plot(df['measured'], np.log2(df['salinity'])*2, 'blue', 'salinity')
+    chart.plot(df['measured'], (df['reaction']/14)*10, 'red', 'ph_range')
     data = chart.represent_chart()
 
     # radar = Radar()
