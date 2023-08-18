@@ -172,6 +172,17 @@ def pypots():
 def view_pot(pot_id):
     pot = Pot.query.get(pot_id)
     metrics = SensorMeasurements
+
+    query = (
+        metrics.query
+        .with_entities(metrics.measured, (metrics.moisture/100)*10, metrics.salinity, (metrics.reaction/14)*10, metrics.sunlight, metrics.nutrient)
+        .filter_by(pot_id=pot_id)
+        .order_by(metrics.measured.desc()).limit(7)
+    )
+    columns = ['measured', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
+
+    dff = pd.DataFrame(query, columns=columns)
+
     # df = pd.DataFrame(metrics.query
     # .with_entities(metrics.salinity, metrics.ph_range, metrics.moisture)
     # .filter_by(pot_id=pot_id)
@@ -183,20 +194,33 @@ def view_pot(pot_id):
     # .order_by(metrics.measured.desc()).first())
     # df = [x for x in df]
 
+    # df = pd.DataFrame(metrics.query
+    # .with_entities(metrics.measured, metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
+    # .filter_by(pot_id=pot_id)
+    # .order_by(metrics.measured.desc()).limit(7)[::-1], columns=['measured', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'])
+
+    # chart = Line()
+    # chart.plot(df['measured'], np.log2(df['salinity'])*2, 'blue', 'salinity')
+    # chart.plot(df['measured'], (df['reaction']/14)*10, 'red', 'reaction')
+    # chart.plot(df['measured'], (df['moisture']/100)*10, 'orange', 'moisture')
+    # data = chart.represent_chart()
+
+
+
+
+    radar = Radar()
+
     df = pd.DataFrame(metrics.query
-    .with_entities(metrics.measured, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
+    .with_entities(metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
     .filter_by(pot_id=pot_id)
-    .order_by(metrics.measured.desc()).limit(7)[::-1], columns=['measured', 'salinity', 'reaction', 'sunlight', 'nutrient'])
+    .order_by(metrics.measured.desc()).limit(1), columns=['moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'])
+    # for x in dff.iloc[0][columns[1:]]:
 
-    chart = Line()
-    chart.plot(df['measured'], np.log2(df['salinity'])*2, 'blue', 'salinity')
-    chart.plot(df['measured'], (df['reaction']/14)*10, 'red', 'ph_range')
-    data = chart.represent_chart()
 
-    # radar = Radar()
-    # radar.plot(['salinity', 'ph_range', 'moisture'], df, 'blue', 'salinity')
-    # radar.plot(['salinity', 'ph_range', 'moisture'], [7, 8, 0.5], 'orange', 'neutral')
-    # data = radar.represent_chart()
+    radar.plot(columns[1:], [x for x in dff.iloc[0][columns[1:]]], 'green', 'measured')
+    # radar.plot(['moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'], [(df.iloc[0]['moisture']/100)*10, np.log2(df.iloc[0]['salinity'])*2, (df.iloc[0]['reaction']/14)*10, 0, 0], 'blue', 'salinity')
+    # radar.plot(['moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'], [5, 5, 5, 5, 5], 'orange', 'neutral')
+    data = radar.represent_chart()
 
     return render_template('view_pot.html', title=pot.name, pot=pot, data=data)
 

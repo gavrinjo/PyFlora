@@ -46,12 +46,12 @@ class Sensor():
         return cols
     
     def gauge_values(self, column):
-
-        data = db.session.execute(db.select(Gauge).filter_by(name=column[:column.find('_')], eiv=5)).scalar_one()
-        max_value = data.max_value
-        min_value = data.min_value
-        avg_value = int(np.floor((max_value + min_value) / 2))
-        off_value = int(np.floor(np.log10(max_value) * 2))
+        column_name = column[:column.find('_')]
+        norm = Gauge.query.filter_by(name=column_name, eiv=5).first()
+        max_value = Gauge.query.filter_by(name=column_name).order_by(Gauge.max_value.desc()).first().max_value
+        min_value = Gauge.query.filter_by(name=column_name).order_by(Gauge.min_value).first().min_value
+        avg_value = int(np.floor((norm.max_value + norm.min_value) / 2))
+        off_value = int(np.floor(np.log10(max_value)))
 
         return avg_value, min_value, max_value, off_value
 
