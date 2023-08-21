@@ -15,16 +15,20 @@ class Sensor():
         attribs = {}
         columns = self.columns(self.pot)
         for column in columns:
-            if getattr(self.pot, column) == 1:
-                default_value, min_value, max_value, off_value = self.gauge_values(column)
-                measured_value = getattr(self.measurement, column[:column.find('_')])
-                if measured_value is not None:
-                    val = self.simulate(measured_value, min_value, max_value, off_value)
+            c = column[:column.find('_')]
+            if self.measurement is not None:
+                if getattr(self.pot, column):
+                    # default_value, min_value, max_value, off_value = self.gauge_values(column)
+                    measured_value = getattr(self.measurement, c)
+                    if measured_value is not None:
+                        val = self.simulate(measured_value, 1, 100, 2)
+                    else:
+                        val = self.simulate(50, 1, 100, 2)
                 else:
-                    val = self.simulate(default_value, min_value, max_value, off_value)
+                    val = None
             else:
                 val = None
-            attribs[column[:column.find('_')]] = val
+            attribs[c] = val
         temperature = round(float(Weather('Zagreb').temperature[0]))
         measurement = SensorMeasurements(
             sunlight=attribs['sunlight'],

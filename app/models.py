@@ -77,12 +77,13 @@ class Pot(db.Model):
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
     
-    sunlight_status = db.Column(db.Integer, default=0) # 'L status (ACTIVE / INACTIVE)'
+    sunlight_status = db.Column(db.Boolean, default=False) # 'L status (ACTIVE / INACTIVE)'
+    temperature_status = db.Column(db.Boolean, default=True)
     # postoji i temperatura ali ona se poziva sa meteo stanice 'T'
-    moisture_status = db.Column(db.Integer, default=0) # 'F status (ACTIVE / INACTIVE)'
-    reaction_status = db.Column(db.Integer, default=0) # 'R status (ACTIVE / INACTIVE)'
-    nutrient_status = db.Column(db.Integer, default=0) # 'N status (ACTIVE / INACTIVE)' 
-    salinity_status = db.Column(db.Integer, default=0) # 'S status (ACTIVE / INACTIVE)'
+    moisture_status = db.Column(db.Boolean, default=False) # 'F status (ACTIVE / INACTIVE)'
+    reaction_status = db.Column(db.Boolean, default=False) # 'R status (ACTIVE / INACTIVE)'
+    nutrient_status = db.Column(db.Boolean, default=False) # 'N status (ACTIVE / INACTIVE)' 
+    salinity_status = db.Column(db.Boolean, default=False) # 'S status (ACTIVE / INACTIVE)'
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))

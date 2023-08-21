@@ -88,7 +88,7 @@ class Radar(PyGraf):
         self.ax.set_thetagrids(np.degrees(angles[:-1]), labels, size=10, fontweight="bold")
         self.ax.tick_params(pad=10, grid_linestyle=':')
         self.ax.set_rticks(range(0, 10, 2), range(0, 10, 2), color="grey", size=8, fontweight="bold")
-        self.ax.set_rlim(bottom=0, top=16)
+        self.ax.set_rlim(bottom=0, top=10)
         self.ax.set_rlabel_position(180 / N)
         self.ax.plot(angles, values, color=color, linewidth=1, label=text)
         self.ax.fill(angles, values, color=color, alpha=0.25)

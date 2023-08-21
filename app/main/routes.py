@@ -175,11 +175,11 @@ def view_pot(pot_id):
 
     query = (
         metrics.query
-        .with_entities(metrics.measured, (metrics.moisture/100)*10, metrics.salinity, (metrics.reaction/14)*10, metrics.sunlight, metrics.nutrient)
+        .with_entities(metrics.measured, metrics.temperature, metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
         .filter_by(pot_id=pot_id)
         .order_by(metrics.measured.desc()).limit(7)
     )
-    columns = ['measured', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
+    columns = ['measured', 'temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
 
     dff = pd.DataFrame(query, columns=columns)
 
@@ -211,15 +211,19 @@ def view_pot(pot_id):
     radar = Radar()
 
     df = pd.DataFrame(metrics.query
-    .with_entities(metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
+    .with_entities(metrics.temperature, metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
     .filter_by(pot_id=pot_id)
-    .order_by(metrics.measured.desc()).limit(1), columns=['moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'])
-    # for x in dff.iloc[0][columns[1:]]:
+    .order_by(metrics.measured.desc()).limit(1), columns=['temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'])
 
+    data = []
+    for i, val in enumerate(df.iloc[0][columns[1:]]):
+        if i == 0:
+           data.append(np.interp(val, [-20,80], [1,10]))
+        else:
+            data.append(np.interp(val, [0,100], [1,10]))
 
-    radar.plot(columns[1:], [x for x in dff.iloc[0][columns[1:]]], 'green', 'measured')
-    # radar.plot(['moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'], [(df.iloc[0]['moisture']/100)*10, np.log2(df.iloc[0]['salinity'])*2, (df.iloc[0]['reaction']/14)*10, 0, 0], 'blue', 'salinity')
-    # radar.plot(['moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'], [5, 5, 5, 5, 5], 'orange', 'neutral')
+    radar.plot(columns[1:], data, 'green', 'measured')
+    radar.plot(columns[1:], [5, 5, 5, 5, 5, 5], 'orange', 'neutral')
     data = radar.represent_chart()
 
     return render_template('view_pot.html', title=pot.name, pot=pot, data=data)
@@ -281,9 +285,6 @@ def sync_pot(pot_id):
     pot = Pot.query.get(pot_id)
     measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
     sensor_data = Sensor(pot, measurement).build()
-    # measurement = SensorMeasurements(salinity=soil_salinity, moisture=soil_moisture, ph_range=soil_ph_range)
-    # measurement.measured = datetime.utcnow()
-    # measurement.pot = pot
     db.session.add(sensor_data)
     db.session.commit()
     return redirect(url_for('main.view_pot', pot_id=pot.id))
