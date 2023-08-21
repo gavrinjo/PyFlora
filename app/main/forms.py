@@ -24,6 +24,9 @@ class EditProfileForm(FlaskForm):
 class AddPlantForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     photo = FileField('Image file', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+
+    sunlight = SelectField('Sunlight', coerce=int)
+
     salinity = SelectField('Salinity', validators=[DataRequired()], choices=['Low', 'Medium', 'High'])
     temperature = IntegerField('Temperature', validators=[DataRequired(), NumberRange(min=0, max=40)])
     ph_range = SelectField('PH range', validators=[DataRequired()], choices=['Acidic', 'Neutral', 'Alkaline'])

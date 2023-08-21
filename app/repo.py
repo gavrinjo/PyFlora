@@ -200,3 +200,20 @@ def build_gauge(filename, path):
         data = json.load(json_data)
         db.session.execute(Gauge.__table__.insert(), data)
         db.session.commit()
+
+
+def columns(self, model_query):
+        cols = []
+        for c in db.inspect(model_query).attrs:
+            if c.key.endswith("status"):
+                cols.append(c.key)
+        return cols
+
+def plant_needs():
+    columns = ['sunlight', 'temperature', 'moisture', 'reaction', 'nutrient', 'salinity']
+    attribs =  {}
+    for column in columns:
+        plants = Gauge.query.filter_by(name=column).all()
+        plant_list = [(i.id, i.description) for i in plants]
+        attribs[column] = plant_list
+    return attribs

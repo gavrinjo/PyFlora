@@ -3,12 +3,12 @@ from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, abort, current_app
 from flask_login import login_required, current_user
 from app import db
-from app.data_sim import Sensor
+from app.data_sim import Sensor, Gauge
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm
 from werkzeug.utils import secure_filename
-from app.repo import Radar, Line
+from app.repo import Radar, Line, plant_needs
 
 import matplotlib.pyplot as plt
 import io
@@ -80,14 +80,16 @@ def pyplants():
 @login_required
 def new_plant():
     form = AddPlantForm('')
+    form.sunlight.choices = plant_needs()['sunlight']
     if form.validate_on_submit():
+        sun = Gauge.query.get(form.sunlight.data)
         plant = Plant(
             name=form.name.data,
             salinity=form.salinity.data,
             temperature=form.temperature.data,
             ph_range=form.ph_range.data,
             moisture=form.moisture.data,
-            shade=form.shade.data,
+            shade=sun,
             soil_texture=form.soil_texture.data,
             substrate=form.substrate.data,
             description=form.description.data
