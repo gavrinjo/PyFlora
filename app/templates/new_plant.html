@@ -4,6 +4,28 @@
 {% block content %}
 <h1 class="h3 mb-3 fw-normal">Add Plant</h1>
 {{ render_form(form) }}
+<div class="input-group mb-3">
+    <span class="input-group-text col-sm-2">Salinity</span>
+    <span class="input-group-text">MIN</span>
+    <input type="text" class="form-control" placeholder="Username" aria-label="Username">
+    <span class="input-group-text">%</span>
+    <span class="input-group-text">-</span>
+    <span class="input-group-text">MAX</span>
+    <input type="text" class="form-control" placeholder="Server" aria-label="Server">
+    <span class="input-group-text">%</span>
+    <span class="input-group-text">i</span>
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text col-sm-2">Temperature</span>
+    <span class="input-group-text">MIN</span>
+    <input type="text" class="form-control" placeholder="Username" aria-label="Username">
+    <span class="input-group-text">°C</span>
+    <span class="input-group-text">-</span>
+    <span class="input-group-text">MAX</span>
+    <input type="text" class="form-control" placeholder="Server" aria-label="Server">
+    <span class="input-group-text">°C</span>
+    <span class="input-group-text">i</span>
+  </div>
 {% endblock %}
 
 <!-- 

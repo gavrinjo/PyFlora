@@ -13,6 +13,7 @@ from app import db
 from app.models import User, Plant, Pot, SensorMeasurements, Gauge
 from flask import current_app
 
+COLUMNS = ['sunlight', 'temperature', 'moisture', 'reaction', 'nutrient', 'salinity']
 
 class PyGraf(Figure):
 
@@ -202,18 +203,17 @@ def build_gauge(filename, path):
         db.session.commit()
 
 
-def columns(self, model_query):
+def columns(model_query):
         cols = []
         for c in db.inspect(model_query).attrs:
             if c.key.endswith("status"):
                 cols.append(c.key)
         return cols
 
-def plant_needs():
-    columns = ['sunlight', 'temperature', 'moisture', 'reaction', 'nutrient', 'salinity']
+def plant_needs(forma):
     attribs =  {}
-    for column in columns:
-        plants = Gauge.query.filter_by(name=column).all()
-        plant_list = [(i.id, i.description) for i in plants]
-        attribs[column] = plant_list
+    for column in COLUMNS:
+        setattr(forma, column,)
+        vals = Gauge.query.filter_by(name=column).all()
+        attribs[column] = [(i.id, i.description) for i in vals]
     return attribs

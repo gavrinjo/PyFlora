@@ -80,7 +80,9 @@ def pyplants():
 @login_required
 def new_plant():
     form = AddPlantForm('')
-    form.sunlight.choices = plant_needs()['sunlight']
+    attribs = plant_needs()
+    form.sunlight.choices = attribs['sunlight']
+    setattr(form, 'sunlight')
     if form.validate_on_submit():
         sun = Gauge.query.get(form.sunlight.data)
         plant = Plant(
