@@ -210,10 +210,9 @@ def columns(model_query):
                 cols.append(c.key)
         return cols
 
-def plant_needs(forma):
+def plant_needs():
     attribs =  {}
     for column in COLUMNS:
-        setattr(forma, column,)
         vals = Gauge.query.filter_by(name=column).all()
         attribs[column] = [(i.id, i.description) for i in vals]
     return attribs

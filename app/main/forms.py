@@ -25,6 +25,9 @@ class AddPlantForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     photo = FileField('Image file', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
 
+    l_min = IntegerField('Light min. Value [lux]', validators=[NumberRange(min=0, max=99999)])
+    l_max = IntegerField('Light max. Value [lux]', validators=[NumberRange(min=0, max=100000)])
+
     sunlight = SelectField('Sunlight', coerce=int)
 
     salinity = SelectField('Salinity', validators=[DataRequired()], choices=['Low', 'Medium', 'High'])

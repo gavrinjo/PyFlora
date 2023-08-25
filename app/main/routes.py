@@ -82,7 +82,6 @@ def new_plant():
     form = AddPlantForm('')
     attribs = plant_needs()
     form.sunlight.choices = attribs['sunlight']
-    setattr(form, 'sunlight')
     if form.validate_on_submit():
         sun = Gauge.query.get(form.sunlight.data)
         plant = Plant(
