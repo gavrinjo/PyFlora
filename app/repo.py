@@ -116,7 +116,8 @@ class Weather():
         self.clouds = (self.cwd['clouds']['@name'])
         self.weather = (self.cwd['weather']['@number'], self.cwd['weather']['@value'], self.cwd['weather']['@icon'])
         self.precipitation = (self.cwd['precipitation']['@mode'])
-    
+
+
     def get_url(self, url):
         with closing(get(url, stream=True)) as source:
             if self.response_check(source):

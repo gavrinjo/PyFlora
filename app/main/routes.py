@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, abort, current_app
 from flask_login import login_required, current_user
-from app import db
+from app import db, weather
 from app.data_sim import Sensor, Gauge
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
@@ -16,6 +16,9 @@ import base64
 from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd
+
+temperature = round(float(weather.temperature[0]))
+f_like = round(float(weather.feels_like[0]))
 
 @bp.before_app_request
 def before_request():
@@ -39,7 +42,7 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home', posts=posts)
+    return render_template('index.html', title='Home', posts=posts, temperature=temperature, f_like=f_like)
 
 
 @bp.route('/user/<username>')
@@ -184,7 +187,7 @@ def view_pot(pot_id):
     )
     columns = ['measured', 'temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
 
-    dff = pd.DataFrame(query, columns=columns)
+    df = pd.DataFrame(query, columns=columns)
 
     # df = pd.DataFrame(metrics.query
     # .with_entities(metrics.salinity, metrics.ph_range, metrics.moisture)
@@ -213,10 +216,10 @@ def view_pot(pot_id):
 
     radar = Radar()
 
-    df = pd.DataFrame(metrics.query
-    .with_entities(metrics.temperature, metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
-    .filter_by(pot_id=pot_id)
-    .order_by(metrics.measured.desc()).limit(1), columns=['temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'])
+    # df = pd.DataFrame(metrics.query
+    # .with_entities(metrics.temperature, metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
+    # .filter_by(pot_id=pot_id)
+    # .order_by(metrics.measured.desc()).limit(1), columns=['temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'])
 
     data = []
     for i, val in enumerate(df.iloc[0][columns[1:]]):

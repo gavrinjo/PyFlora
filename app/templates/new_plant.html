@@ -3,17 +3,29 @@
 
 {% block content %}
 <h1 class="h3 mb-3 fw-normal">Add Plant</h1>
+<!-- <h1>Add Plant</h1> -->
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {% for field in form %}
+        {% if field.type == 'IntegerField' %}
+            {% include '_sensor_input.html' %}
+        {% else %}
+            {{ field }}
+        {% endif %}
+    {% endfor %}
+<!-- 
 {{ render_form(form) }}
+
 <div class="input-group mb-3">
     <span class="input-group-text col-sm-2">Salinity</span>
     <span class="input-group-text">MIN</span>
     {{ form.l_min(class='form-control') }}
-    <!-- <input type="text" class="form-control" placeholder="Username" aria-label="Username"> -->
+    <input type="text" class="form-control" placeholder="Username" aria-label="Username"> 
     <span class="input-group-text">%</span>
     <span class="input-group-text">-</span>
     <span class="input-group-text">MAX</span>
     {{ form.l_max(min=form.l_min.data, class='form-control') }}
-    <!-- <input type="text" class="form-control" placeholder="Server" aria-label="Server"> -->
+     <input type="text" class="form-control" placeholder="Server" aria-label="Server"> 
     <span class="input-group-text">%</span>
     <span class="input-group-text dropdown">
 
@@ -52,13 +64,13 @@
         </svg>
     </span>
   </div>
+-->
+
 {% endblock %}
 
-<!-- 
-    <h1>Add Plant</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
+
+    <!-- 
+    <p>
             {{ form.name.label }}<br>
             {{ form.name(size=32) }}<br>
             {% for error in form.name.errors %}
