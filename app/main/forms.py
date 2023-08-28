@@ -43,15 +43,15 @@ class AddPlantForm(FlaskForm):
     s_min = IntegerField('Salinity min. Value [%]', validators=[NumberRange(min=0, max=100)])
     s_max = IntegerField('Salinity max. Value [%]', validators=[NumberRange(min=0, max=100)])
 
-    sunlight = SelectField('Sunlight', coerce=int)
+    # sunlight = SelectField('Sunlight', coerce=int)
 
 
-    salinity = SelectField('Salinity', validators=[DataRequired()], choices=['Low', 'Medium', 'High'])
-    temperature = IntegerField('Temperature', validators=[DataRequired(), NumberRange(min=0, max=40)])
-    ph_range = SelectField('PH range', validators=[DataRequired()], choices=['Acidic', 'Neutral', 'Alkaline'])
-    moisture = SelectField('Moisture', validators=[DataRequired()], choices=['Low', 'Medium', 'High'])
-    shade = SelectField('Shade', validators=[DataRequired()], choices=['Intolerant', 'Intermediate', 'Tolerant'])
-    soil_texture = SelectField('Soil texture', validators=[DataRequired()], choices=['Fine', 'Medium', 'Coarse'])
+    # salinity = SelectField('Salinity', validators=[DataRequired()], choices=['Low', 'Medium', 'High'])
+    # temperature = IntegerField('Temperature', validators=[DataRequired(), NumberRange(min=0, max=40)])
+    # ph_range = SelectField('PH range', validators=[DataRequired()], choices=['Acidic', 'Neutral', 'Alkaline'])
+    # moisture = SelectField('Moisture', validators=[DataRequired()], choices=['Low', 'Medium', 'High'])
+    # shade = SelectField('Shade', validators=[DataRequired()], choices=['Intolerant', 'Intermediate', 'Tolerant'])
+    soil_texture = SelectField('Soil texture', choices=['Fine', 'Medium', 'Coarse'])
     substrate = StringField('Substrate recomendation')
     description = TextAreaField('Description', validators=[Length(min=0, max=256)])
     submit = SubmitField('Submit')

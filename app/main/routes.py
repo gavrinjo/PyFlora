@@ -83,17 +83,27 @@ def pyplants():
 @login_required
 def new_plant():
     form = AddPlantForm('')
-    attribs = plant_needs()
-    form.sunlight.choices = attribs['sunlight']
+    # attribs = plant_needs()
+    # form.sunlight.choices = attribs['sunlight']
     if form.validate_on_submit():
-        sun = Gauge.query.get(form.sunlight.data)
+
+        uploaded_file = request.files['photo']
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
+                abort(400)
+            uploaded_file.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
+        # sun = Gauge.query.get(form.sunlight.data)
         plant = Plant(
             name=form.name.data,
-            salinity=form.salinity.data,
-            temperature=form.temperature.data,
-            ph_range=form.ph_range.data,
-            moisture=form.moisture.data,
-            shade=sun,
+            photo=filename,
+            sunlight=f'{form.l_min.data};{form.l_max.data}',
+            temperature=f'{form.t_min.data};{form.t_max.data}',
+            moisture=f'{form.f_min.data};{form.f_max.data}',
+            reaction=f'{form.r_min.data};{form.r_max.data}',
+            nutrient=f'{form.n_min.data};{form.n_max.data}',
+            salinity=f'{form.s_min.data};{form.s_max.data}',
             soil_texture=form.soil_texture.data,
             substrate=form.substrate.data,
             description=form.description.data
@@ -130,11 +140,12 @@ def update_plant(plant_id):
 
         plant.name=form.name.data
         plant.photo=filename
-        plant.salinity=form.salinity.data
-        plant.temperature=form.temperature.data
-        plant.ph_range=form.ph_range.data
-        plant.moisture=form.moisture.data
-        plant.shade=form.shade.data
+        plant.sunlight=f'{form.l_min.data};{form.l_max.data}'
+        plant.temperature=f'{form.t_min.data};{form.t_max.data}'
+        plant.moisture=f'{form.f_min.data};{form.f_max.data}'
+        plant.reaction=f'{form.r_min.data};{form.r_max.data}'
+        plant.nutrient=f'{form.n_min.data};{form.n_max.data}'
+        plant.salinity=f'{form.s_min.data};{form.s_max.data}'
         plant.soil_texture=form.soil_texture.data
         plant.substrate=form.substrate.data
         plant.description=form.description.data
@@ -144,11 +155,12 @@ def update_plant(plant_id):
     elif request.method == 'GET':
         form.name.data = plant.name
         form.photo.data = plant.photo
-        form.salinity.data = plant.salinity
-        form.temperature.data = plant.temperature
-        form.ph_range.data = plant.ph_range
-        form.moisture.data = plant.moisture
-        form.shade.data = plant.shade
+        form.l_min.data, form.l_max.data = plant.sunlight.split(';')
+        form.t_min.data, form.t_max.data = plant.temperature.split(';')
+        form.f_min.data, form.f_max.data = plant.moisture.split(';')
+        form.r_min.data, form.r_max.data = plant.reaction.split(';')
+        form.n_min.data, form.n_max.data = plant.nutrient.split(';')
+        form.s_min.data, form.s_max.data = plant.salinity.split(';')
         form.soil_texture.data = plant.soil_texture
         form.substrate.data = plant.substrate
         form.description.data = plant.description

@@ -50,16 +50,16 @@ class Plant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     photo = db.Column(db.String(64), nullable=False, default='default.jpg') # ovo ću naknadno napraviti
+    
     # Requirements
-    salinity = db.Column(db.String(64)) # None, Low, Medium, High (postoji senzor)
-    temperature = db.Column(db.Integer) # ~20 (celzijevih) (senzor temperature i vlažnisti zraka, postoji rpi)
-    ph_range = db.Column(db.String(64)) # 6-8 (senzot pH vrijednosti tla, postoji rpi)
+    sunlight = db.Column(db.String(64)) # Intolerant, Intermediate, Tolerant (senzor za svjetlo, photoresistor)
+    temperature = db.Column(db.String(64)) # ~20 (celzijevih) (senzor temperature i vlažnisti zraka, postoji rpi)
     moisture = db.Column(db.String(64)) #  Low, Medium, High (senzor za vlažnost tla, postoji rpi)
+    reaction = db.Column(db.String(64)) # 6-8 (senzot pH vrijednosti tla, postoji rpi)
+    nutrient = db.Column(db.String(64))
+    salinity = db.Column(db.String(64)) # None, Low, Medium, High (postoji senzor)
 
-    shade = db.Column(db.String(64)) # Intolerant, Intermediate, Tolerant (senzor za svjetlo, photoresistor)
-    # drought = db.Column(db.String(64)) # None, Low, Medium, High (ovo nam ne treba za seminarski)
     soil_texture = db.Column(db.String(64)) # fine, medium, coarse
-    # precipitation = db.Column(db.Integer) # 8-26
     substrate = db.Column(db.String(128)) # recomendation
     description = db.Column(db.String(256))
 

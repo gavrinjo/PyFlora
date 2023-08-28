@@ -1,137 +1,20 @@
 {% extends "base.html" %}
-{% from 'bootstrap5/form.html' import render_form %}
+{% from 'bootstrap5/form.html' import render_form, render_field %}
 
 {% block content %}
 <h1 class="h3 mb-3 fw-normal">Add Plant</h1>
 <!-- <h1>Add Plant</h1> -->
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     {% for field in form %}
-        {% if field.type == 'IntegerField' %}
-            {% include '_sensor_input.html' %}
+        {% if field.type == 'IntegerField' and 'min' in field.name %}
+            {% include '_sensor_input_min.html' %}
+        {% elif field.type == 'IntegerField' and 'max' in field.name %}
+            {% include '_sensor_input_max.html' %}
         {% else %}
-            {{ field }}
+            {{ render_field(field, form_type='inline', placeholder=field.label.text) }}
+
         {% endif %}
     {% endfor %}
-<!-- 
-{{ render_form(form) }}
-
-<div class="input-group mb-3">
-    <span class="input-group-text col-sm-2">Salinity</span>
-    <span class="input-group-text">MIN</span>
-    {{ form.l_min(class='form-control') }}
-    <input type="text" class="form-control" placeholder="Username" aria-label="Username"> 
-    <span class="input-group-text">%</span>
-    <span class="input-group-text">-</span>
-    <span class="input-group-text">MAX</span>
-    {{ form.l_max(min=form.l_min.data, class='form-control') }}
-     <input type="text" class="form-control" placeholder="Server" aria-label="Server"> 
-    <span class="input-group-text">%</span>
-    <span class="input-group-text dropdown">
-
-        <span role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-            </svg>
-        </span>
-        <div class="dropdown-menu">
-            1 - 2, "Very low salt content"<br>
-            2 - 3, "Low salt content"<br>
-            3 - 4, "Low-moderate salt content"<br>
-            4 - 6, "Moderate salt content"<br>
-            6 - 8, "Moderate-high salt content"<br>
-            8 - 12, "High salt content"<br>
-            12 - 16, "Very high salt content"<br>
-            16 - 32, "Very high and in dry periods extremely high salt content"<br>
-        </div>
-    </span>
-
-  </div>
-  <div class="input-group mb-3">
-    <span class="input-group-text col-sm-2">Temperature</span>
-    <span class="input-group-text">MIN</span>
-    <input type="text" class="form-control" placeholder="Username" aria-label="Username">
-    <span class="input-group-text">°C</span>
-    <span class="input-group-text">-</span>
-    <span class="input-group-text">MAX</span>
-    <input type="text" class="form-control" placeholder="Server" aria-label="Server">
-    <span class="input-group-text">°C</span>
-    <span class="input-group-text" data-bs-toggle="tooltip" data-bs-placement="right" title="Tooltip on right">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-        </svg>
-    </span>
-  </div>
--->
-
+</form>
 {% endblock %}
-
-
-    <!-- 
-    <p>
-            {{ form.name.label }}<br>
-            {{ form.name(size=32) }}<br>
-            {% for error in form.name.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.salinity.label }}<br>
-            {{ form.salinity }}<br>
-            {% for error in form.salinity.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.temperature.label }}<br>
-            {{ form.temperature(size=32) }}<br>
-            {% for error in form.temperature.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.ph_range.label }}<br>
-            {{ form.ph_range }}<br>
-            {% for error in form.ph_range.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.moisture.label }}<br>
-            {{ form.moisture }}<br>
-            {% for error in form.moisture.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.shade.label }}<br>
-            {{ form.shade }}<br>
-            {% for error in form.shade.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.soil_texture.label }}<br>
-            {{ form.soil_texture }}<br>
-            {% for error in form.soil_texture.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.substrate.label }}<br>
-            {{ form.substrate(size=32) }}<br>
-            {% for error in form.substrate.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.description.label }}<br>
-            {{ form.description(size=32) }}<br>
-            {% for error in form.description.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form> -->

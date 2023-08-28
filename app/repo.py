@@ -10,6 +10,7 @@ from matplotlib.figure import Figure
 import xmltodict
 
 from app import db
+from app.functions import bp
 from app.models import User, Plant, Pot, SensorMeasurements, Gauge
 from flask import current_app
 
@@ -217,3 +218,23 @@ def plant_needs():
         vals = Gauge.query.filter_by(name=column).all()
         attribs[column] = [(i.id, i.description) for i in vals]
     return attribs
+
+
+@bp.app_template_filter()
+def splitvalue(value, start=None, end=None):
+    value = str(value)
+
+    if start is None:
+        start = 0
+    if type(start) is int:
+        start = start
+    else:
+        start = value.find(start) + len(start)
+
+    if type(end) is int:
+        end = end
+    else:
+        end = value.find(end)
+
+    return value[start:end]
+
