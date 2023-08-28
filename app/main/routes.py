@@ -8,7 +8,7 @@ from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm
 from werkzeug.utils import secure_filename
-from app.repo import Radar, Line, plant_needs
+from app.repo import Radar, Line, plant_needs, upload_image
 
 import matplotlib.pyplot as plt
 import io
@@ -86,18 +86,18 @@ def new_plant():
     # attribs = plant_needs()
     # form.sunlight.choices = attribs['sunlight']
     if form.validate_on_submit():
-
-        uploaded_file = request.files['photo']
-        filename = secure_filename(uploaded_file.filename)
-        if filename != '':
-            file_ext = os.path.splitext(filename)[1]
-            if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
-                abort(400)
-            uploaded_file.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
+        # a = upload_image(request.files['photo'])
+        # uploaded_file = request.files['photo']
+        # filename = secure_filename(uploaded_file.filename)
+        # if filename != '':
+        #     file_ext = os.path.splitext(filename)[1]
+        #     if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
+        #         abort(400)
+        #     uploaded_file.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
         # sun = Gauge.query.get(form.sunlight.data)
         plant = Plant(
             name=form.name.data,
-            photo=filename,
+            photo=upload_image(request.files['photo']),
             sunlight=f'{form.l_min.data};{form.l_max.data}',
             temperature=f'{form.t_min.data};{form.t_max.data}',
             moisture=f'{form.f_min.data};{form.f_max.data}',
@@ -154,7 +154,7 @@ def update_plant(plant_id):
         return redirect(url_for('main.pyplants'))
     elif request.method == 'GET':
         form.name.data = plant.name
-        form.photo.data = plant.photo
+        form.photo.process_data(plant.photo) #= plant.photo # os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', plant.photo)) # plant.photo
         form.l_min.data, form.l_max.data = plant.sunlight.split(';')
         form.t_min.data, form.t_max.data = plant.temperature.split(';')
         form.f_min.data, form.f_max.data = plant.moisture.split(';')

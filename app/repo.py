@@ -12,7 +12,8 @@ import xmltodict
 from app import db
 from app.functions import bp
 from app.models import User, Plant, Pot, SensorMeasurements, Gauge
-from flask import current_app
+from flask import current_app, request, abort
+from werkzeug.utils import secure_filename
 
 COLUMNS = ['sunlight', 'temperature', 'moisture', 'reaction', 'nutrient', 'salinity']
 
@@ -237,4 +238,15 @@ def splitvalue(value, start=None, end=None):
         end = value.find(end)
 
     return value[start:end]
+
+
+def upload_image(request):
+    uploaded_file = request
+    filename = secure_filename(uploaded_file.filename)
+    if filename != '':
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
+            abort(400)
+        uploaded_file.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
+    return filename
 
