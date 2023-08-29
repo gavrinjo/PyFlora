@@ -254,3 +254,9 @@ def upload_image(request):
         upload.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
     return filename
 
+def form_data(form):
+
+    try:
+        return form.split(';')
+    except:
+        return None, None
