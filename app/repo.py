@@ -3,6 +3,7 @@ import os
 import json
 import io
 import base64
+import secrets
 import numpy as np
 from requests import get
 from contextlib import closing
@@ -241,12 +242,15 @@ def splitvalue(value, start=None, end=None):
 
 
 def upload_image(request):
-    uploaded_file = request
-    filename = secure_filename(uploaded_file.filename)
-    if filename != '':
-        file_ext = os.path.splitext(filename)[1]
+    upload = request
+    # filename = secure_filename(uploaded_file.filename)
+    file_name = secrets.token_hex(16)
+    if upload.filename != '':
+        file_ext = os.path.splitext(upload.filename)[1]
         if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
             abort(400)
-        uploaded_file.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
+        else:
+            filename = file_name + file_ext
+        upload.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
     return filename
 

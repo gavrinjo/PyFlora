@@ -72,3 +72,7 @@ class PotForm(FlaskForm):
     plant = SelectField('Select plant', coerce=int) # , validators=[DataRequired()]
     description = TextAreaField('Description', validators=[Length(min=0, max=256)])
     submit = SubmitField('Submit')
+
+
+class EmptyForm(FlaskForm):
+    submit = SubmitField('Submit')

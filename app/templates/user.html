@@ -13,9 +13,9 @@
         </tr>
     </table>
     <hr>
-    {% for post in posts %}
-    <p>
-    {{ post.author.username }} says: <b>{{ post.body }}</b>
-    </p>
-    {% endfor %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for pot in pots %}
+            {% include '_pot.html' %}
+        {% endfor %}
+    </div>
 {% endblock %}

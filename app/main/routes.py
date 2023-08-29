@@ -6,7 +6,7 @@ from app import db, weather
 from app.data_sim import Sensor, Gauge
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
-from app.main.forms import EditProfileForm, AddPlantForm, PotForm
+from app.main.forms import EditProfileForm, AddPlantForm, PotForm, EmptyForm
 from werkzeug.utils import secure_filename
 from app.repo import Radar, Line, plant_needs, upload_image
 
@@ -49,11 +49,9 @@ def index():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
-    return render_template('user.html', title=username, user=user, posts=posts)
+    pots = Pot.query.filter_by(user_id=user.id).all()
+
+    return render_template('user.html', title=username, user=user, pots=pots)
 
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -83,18 +81,7 @@ def pyplants():
 @login_required
 def new_plant():
     form = AddPlantForm('')
-    # attribs = plant_needs()
-    # form.sunlight.choices = attribs['sunlight']
     if form.validate_on_submit():
-        # a = upload_image(request.files['photo'])
-        # uploaded_file = request.files['photo']
-        # filename = secure_filename(uploaded_file.filename)
-        # if filename != '':
-        #     file_ext = os.path.splitext(filename)[1]
-        #     if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
-        #         abort(400)
-        #     uploaded_file.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
-        # sun = Gauge.query.get(form.sunlight.data)
         plant = Plant(
             name=form.name.data,
             photo=upload_image(request.files['photo']),
@@ -118,9 +105,10 @@ def new_plant():
 @bp.route('/plant/<plant_id>')
 @login_required
 def view_plant(plant_id):
+    form = EmptyForm()
     plant = Plant.query.get(plant_id)
     image_file = url_for('static', filename=f'plants/{plant.photo}')
-    return render_template('view_plant.html', title=plant.name, plant=plant, image_file=image_file)
+    return render_template('view_plant.html', title=plant.name, plant=plant, image_file=image_file, form=form)
 
 
 @bp.route('/plant/<plant_id>/update', methods=['GET', 'POST'])
@@ -129,17 +117,8 @@ def update_plant(plant_id):
     plant = Plant.query.get_or_404(plant_id)
     form = AddPlantForm(plant.name)
     if form.validate_on_submit():
-
-        uploaded_file = request.files['photo']
-        filename = secure_filename(uploaded_file.filename)
-        if filename != '':
-            file_ext = os.path.splitext(filename)[1]
-            if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
-                abort(400)
-            uploaded_file.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
-
         plant.name=form.name.data
-        plant.photo=filename
+        plant.photo=upload_image(request.files['photo']),
         plant.sunlight=f'{form.l_min.data};{form.l_max.data}'
         plant.temperature=f'{form.t_min.data};{form.t_max.data}'
         plant.moisture=f'{form.f_min.data};{form.f_max.data}'
@@ -154,7 +133,7 @@ def update_plant(plant_id):
         return redirect(url_for('main.pyplants'))
     elif request.method == 'GET':
         form.name.data = plant.name
-        form.photo.process_data(plant.photo) #= plant.photo # os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', plant.photo)) # plant.photo
+        form.photo.data = plant.photo # os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', plant.photo)) # plant.photo
         form.l_min.data, form.l_max.data = plant.sunlight.split(';')
         form.t_min.data, form.t_max.data = plant.temperature.split(';')
         form.f_min.data, form.f_max.data = plant.moisture.split(';')
@@ -188,6 +167,7 @@ def pypots():
 @bp.route('/pot/<pot_id>')
 @login_required
 def view_pot(pot_id):
+    form = EmptyForm()
     pot = Pot.query.get(pot_id)
     metrics = SensorMeasurements
 
@@ -244,7 +224,7 @@ def view_pot(pot_id):
     radar.plot(columns[1:], [5, 5, 5, 5, 5, 5], 'orange', 'neutral')
     data = radar.represent_chart()
 
-    return render_template('view_pot.html', title=pot.name, pot=pot, data=data)
+    return render_template('view_pot.html', title=pot.name, pot=pot, data=data, form=form)
 
 
 @bp.route('/pot/new', methods=['GET', 'POST'])
@@ -297,12 +277,14 @@ def delete_pot(pot_id):
     return redirect(url_for('main.pypots'))
 
 
-@bp.route('/pot/<pot_id>/sync', methods=['GET', 'POST'])
+@bp.route('/pot/<pot_id>/sync', methods=['POST'])
 @login_required
 def sync_pot(pot_id):
-    pot = Pot.query.get(pot_id)
-    measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
-    sensor_data = Sensor(pot, measurement).build()
-    db.session.add(sensor_data)
-    db.session.commit()
-    return redirect(url_for('main.view_pot', pot_id=pot.id))
+    form = EmptyForm()
+    if form.validate_on_submit():
+        pot = Pot.query.get(pot_id)
+        measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
+        sensor_data = Sensor(pot, measurement).build()
+        db.session.add(sensor_data)
+        db.session.commit()
+        return redirect(url_for('main.view_pot', pot_id=pot.id))
