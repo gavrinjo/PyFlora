@@ -252,7 +252,8 @@ def upload_image(request):
         else:
             filename = file_name + file_ext
         upload.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
-    return filename
+        return filename
+
 
 def form_data(form):
 

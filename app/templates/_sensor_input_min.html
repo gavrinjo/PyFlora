@@ -3,6 +3,9 @@
     <span class="input-group-text col-sm-2">{{ field.label|splitvalue(start=0, end=' min.') }}</span>
     <span class="input-group-text">MIN</span>
     {{ field(class='form-control') }}
+    <!-- {% for error in field.errors %}
+        <div class="invalid-feedback">[{{ error }}]</div>
+    {% endfor %} -->
     <span class="input-group-text">{{ field.label|splitvalue(start='[', end=']') }}</span>
     <span class="input-group-text">-</span>
     

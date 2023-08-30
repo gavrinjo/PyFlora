@@ -25,23 +25,23 @@ class AddPlantForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     photo = FileField('Image file', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
 
-    l_min = IntegerField('Light min. Value [lux]', validators=[NumberRange(min=0, max=100000)])
-    l_max = IntegerField('Light max. Value [lux]', validators=[NumberRange(min=0, max=100000)])
+    l_min = IntegerField('Light min. Value [lux]', validators=[DataRequired(), NumberRange(min=0, max=100000)])
+    l_max = IntegerField('Light max. Value [lux]', validators=[DataRequired(), NumberRange(min=0, max=100000)])
 
-    t_min = IntegerField('Temperature min. Value [°C]', validators=[NumberRange(min=-20, max=60)])
-    t_max = IntegerField('Temperature max. Value [°C]', validators=[NumberRange(min=-20, max=60)])
+    t_min = IntegerField('Temperature min. Value [°C]', validators=[DataRequired(), NumberRange(min=-20, max=60)])
+    t_max = IntegerField('Temperature max. Value [°C]', validators=[DataRequired(), NumberRange(min=-20, max=60)])
 
-    f_min = IntegerField('Moisture min. Value [%]', validators=[NumberRange(min=0, max=100)])
-    f_max = IntegerField('Moisture max. Value [%]', validators=[NumberRange(min=0, max=100)])
+    f_min = IntegerField('Moisture min. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
+    f_max = IntegerField('Moisture max. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
 
-    r_min = IntegerField('Reaction min. Value [pH]', validators=[NumberRange(min=0, max=14)])
-    r_max = IntegerField('Reaction max. Value [pH]', validators=[NumberRange(min=0, max=14)])
+    r_min = IntegerField('Reaction min. Value [pH]', validators=[DataRequired(), NumberRange(min=0, max=14)])
+    r_max = IntegerField('Reaction max. Value [pH]', validators=[DataRequired(), NumberRange(min=0, max=14)])
 
-    n_min = IntegerField('Nutrient min. Value [%]', validators=[NumberRange(min=0, max=100)])
-    n_max = IntegerField('Nutrient max. Value [%]', validators=[NumberRange(min=0, max=100)])
+    n_min = IntegerField('Nutrient min. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
+    n_max = IntegerField('Nutrient max. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
 
-    s_min = IntegerField('Salinity min. Value [%]', validators=[NumberRange(min=0, max=100)])
-    s_max = IntegerField('Salinity max. Value [%]', validators=[NumberRange(min=0, max=100)])
+    s_min = IntegerField('Salinity min. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
+    s_max = IntegerField('Salinity max. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
 
     # sunlight = SelectField('Sunlight', coerce=int)
 

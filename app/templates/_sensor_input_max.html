@@ -2,6 +2,9 @@
 
     <span class="input-group-text">MAX</span>
     {{ field(class='form-control') }}
+    <!-- {% for error in field.errors %}
+        <div class="invalid-feedback">[{{ error }}]</div>
+    {% endfor %} -->
     <span class="input-group-text">{{ field.label|splitvalue(start='[', end=']') }}</span>
     <span class="input-group-text dropdown">
 
