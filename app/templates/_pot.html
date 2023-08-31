@@ -9,7 +9,7 @@
         </td>
     </tr>
 </table> -->
-
+{% if pot.get_plant(pot.plant_id) %}
 <div class="col">
     <div class="card h-100">
         <img src="{{ url_for('static', filename='plants/' + pot.get_plant(pot.plant_id).photo ) }}" class="card-img-top" alt="...">
@@ -26,3 +26,21 @@
         </div>
     </div>
 </div>
+{% else %}
+<div class="col">
+    <div class="card h-100">
+        <img src="{{ url_for('static', filename='plants/default.jpg') }}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{{ url_for('main.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a></h5>
+            <p class="card-text">{{ pot.description }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Empty pot</li>
+            <li class="list-group-item">{{ pot.get_user(pot.user_id).username }}</li>
+        </ul>
+        <div class="card-footer">
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+    </div>
+</div>
+{% endif %}

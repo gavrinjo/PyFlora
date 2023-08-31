@@ -84,7 +84,7 @@ def new_plant():
     if form.validate_on_submit():
         plant = Plant(
             name=form.name.data,
-            photo=upload_image(request.files['photo']),
+            # photo=upload_image(request.files['photo']),
             sunlight=f'{form.l_min.data};{form.l_max.data}',
             temperature=f'{form.t_min.data};{form.t_max.data}',
             moisture=f'{form.f_min.data};{form.f_max.data}',
@@ -95,6 +95,8 @@ def new_plant():
             substrate=form.substrate.data,
             description=form.description.data
         )
+        photo = upload_image(form.photo.data)
+        plant.photo = photo
         db.session.add(plant)
         db.session.commit()
         flash(f'Congratulations, Plant {plant.name} added secessefuly!', 'success')
@@ -118,6 +120,8 @@ def update_plant(plant_id):
     form = AddPlantForm(plant.name)
     if form.validate_on_submit():
         plant.name=form.name.data
+        photo = upload_image(form.photo.data)
+        plant.photo = photo
         # plant.photo=upload_image(request.files['photo']),
         plant.sunlight=f'{form.l_min.data};{form.l_max.data}'
         plant.temperature=f'{form.t_min.data};{form.t_max.data}'
@@ -133,7 +137,7 @@ def update_plant(plant_id):
         return redirect(url_for('main.pyplants'))
     elif request.method == 'GET':
         form.name.data = plant.name
-        # form.photo.data = plant.photo # os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', plant.photo)) # plant.photo
+        form.photo.data = plant.photo # os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', plant.photo)) # plant.photo
         form.l_min.data, form.l_max.data = plant.sunlight.split(';')
         form.t_min.data, form.t_max.data = plant.temperature.split(';')
         form.f_min.data, form.f_max.data = plant.moisture.split(';')

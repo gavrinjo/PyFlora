@@ -241,18 +241,17 @@ def splitvalue(value, start=None, end=None):
     return value[start:end]
 
 
-def upload_image(request):
-    upload = request
-    # filename = secure_filename(uploaded_file.filename)
-    file_name = secrets.token_hex(16)
-    if upload.filename != '':
-        file_ext = os.path.splitext(upload.filename)[1]
+def upload_image(form_image): #nova funkcija
+    if form_image:
+        random_hex = secrets.token_hex(8)
+        file_ext = os.path.splitext(form_image.filename)[1]
         if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
             abort(400)
         else:
-            filename = file_name + file_ext
-        upload.save(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
-        return filename
+            filename = random_hex + file_ext
+            filename_path = os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
+            form_image.save(filename_path)
+            return filename
 
 
 def form_data(form):

@@ -66,6 +66,9 @@
                   </a>
                   <div class="dropdown-menu text-small">
                     <a class="dropdown-item" href="{{ url_for('main.user', username=current_user.username) }}">Profile</a>
+                    {% if current_user.is_admin %}
+                    <a class="dropdown-item" href="{{ url_for('admin.index') }}">Admin interface</a>
+                    {% endif %}
                     <hr class="dropdown-divider"></li>
                     <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sign out</a>
                   </div>

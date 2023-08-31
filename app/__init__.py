@@ -14,6 +14,8 @@ from app.weather import Weather
 
 
 class ModleViewController(ModelView):
+    column_exclude_list = ['password_hash']
+    form_excluded_columns = ['password_hash']
     def is_accessible(self):
         if current_user.is_authenticated:
             if current_user.is_admin:
@@ -37,7 +39,7 @@ login = LoginManager()
 login.login_view = 'auth.login'
 mail = Mail()
 bootstrap = Bootstrap5()
-admin = Admin(name='PyFlora', index_view=AdminViewController())
+admin = Admin(name='PyFlora', index_view=AdminViewController(), template_mode='bootstrap4')
 weather = Weather('Zagreb')
 
 
@@ -81,5 +83,5 @@ admin.add_view(ModleViewController(models.Plant, db.session))
 admin.add_view(ModleViewController(models.SensorMeasurements, db.session))
 admin.add_view(ModleViewController(models.Gauge, db.session))
 
-path = op.join(op.dirname(__file__), 'static')
+path = op.normpath(op.join(op.dirname(__file__), 'static'))
 admin.add_view(FileAdmin(path, '/static/', name='Static Files'))
