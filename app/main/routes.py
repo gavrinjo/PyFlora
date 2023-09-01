@@ -1,19 +1,14 @@
 import os
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request, abort, current_app
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 from app import db, weather
 from app.data_sim import Sensor, Gauge
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
-from app.main.forms import EditProfileForm, AddPlantForm, PotForm, EmptyForm
-from werkzeug.utils import secure_filename
-from app.repo import Radar, Line, plant_needs, upload_image
+from app.main.forms import EditProfileForm, AddPlantForm, PotForm, EditPotForm, EmptyForm
+from app.repo import Weather, Radar, Line, upload_image
 
-import matplotlib.pyplot as plt
-import io
-import base64
-from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd
 
@@ -48,10 +43,11 @@ def index():
 @bp.route('/user/<username>')
 @login_required
 def user(username):
+    form = EmptyForm()
     user = User.query.filter_by(username=username).first_or_404()
     pots = Pot.query.filter_by(user_id=user.id).all()
 
-    return render_template('user.html', title=username, user=user, pots=pots)
+    return render_template('user.html', title=username, user=user, pots=pots, form=form)
 
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -254,19 +250,30 @@ def update_pot(pot_id):
     pot = Pot.query.get_or_404(pot_id)
     plants = Plant.query.all()
     plant_list = [(i.id, i.name) for i in plants]
-    form = PotForm()
+    form = EditPotForm(pot.name)
     form.plant.choices = plant_list
     if form.validate_on_submit():
         plant = Plant.query.get(form.plant.data)
         pot.name=form.name.data
         pot.description=form.description.data
         pot.plant=plant
+        pot.sunlight_status = form.sunlight.data
+        pot.moisture_status = form.moisture.data
+        pot.reaction_status = form.reaction.data
+        pot.nutrient_status = form.nutrient.data
+        pot.salinity_status = form.salinity.data
         db.session.commit()
         flash(f'Congratulations, Pot {pot.name} updated secessefuly!', 'success')
         return redirect(url_for('main.pypots'))
     elif request.method == 'GET':
         form.name.data = pot.name
         form.description.data = pot.description
+        form.plant.data = pot.plant_id
+        form.sunlight.data = pot.sunlight_status
+        form.moisture.data = pot.moisture_status
+        form.reaction.data = pot.reaction_status
+        form.nutrient.data = pot.nutrient_status
+        form.salinity.data = pot.salinity_status
     return render_template('new_pot.html', title='Update PyPot', form=form)
 
 
@@ -292,3 +299,11 @@ def sync_pot(pot_id):
         db.session.add(sensor_data)
         db.session.commit()
         return redirect(url_for('main.view_pot', pot_id=pot.id))
+
+
+@bp.route('/weather')
+@login_required
+def wether():
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    cwd = Weather('Zagreb')
+    return render_template('weather.html', title='Weather', cwd=cwd)

@@ -4,6 +4,7 @@ import json
 import io
 import base64
 import secrets
+from datetime import datetime
 import numpy as np
 from requests import get
 from contextlib import closing
@@ -14,7 +15,6 @@ from app import db
 from app.functions import bp
 from app.models import User, Plant, Pot, SensorMeasurements, Gauge
 from flask import current_app, request, abort
-from werkzeug.utils import secure_filename
 
 COLUMNS = ['sunlight', 'temperature', 'moisture', 'reaction', 'nutrient', 'salinity']
 
@@ -107,18 +107,19 @@ class Weather():
     def __init__(self, city) -> None:
         self.city = city
         self.cwd = self.parse_xml_raw()
-        self.temperature = (self.cwd['temperature']['@value'], self.cwd['temperature']['@unit'])
+        self.temperature = {'value': self.cwd['temperature']['@value'], 'max': self.cwd['temperature']['@max'], 'min': self.cwd['temperature']['@min'], 'unit': self.cwd['temperature']['@unit']}
         self.feels_like = (self.cwd['feels_like']['@value'], self.cwd['feels_like']['@unit'])
         self.humidity = (self.cwd['humidity']['@value'], self.cwd['humidity']['@unit'])
         self.pressure = (self.cwd['pressure']['@value'], self.cwd['pressure']['@unit'])
         self.wind_speed = (self.cwd['wind']['speed']['@value'], self.cwd['wind']['speed']['@unit'], self.cwd['wind']['speed']['@name'])
         try:
-            self.wind_direction = (self.cwd['wind']['direction']['@name'])
+            self.wind_direction = (self.cwd['wind']['direction']['@value'], self.cwd['wind']['direction']['@code'])
         except TypeError:
             self.wind_direction = None
         self.clouds = (self.cwd['clouds']['@name'])
         self.weather = (self.cwd['weather']['@number'], self.cwd['weather']['@value'], self.cwd['weather']['@icon'])
         self.precipitation = (self.cwd['precipitation']['@mode'])
+        self.lastupdate = datetime.now().strftime('%Y.%m.%d - %H:%M:%S')
 
 
     def get_url(self, url):
@@ -239,6 +240,14 @@ def splitvalue(value, start=None, end=None):
         end = value.find(end)
 
     return value[start:end]
+
+@bp.app_template_filter()
+def round_value(value):
+    if type(value) is str:
+        return round(float(value))
+    else:
+        return round(value)
+
 
 
 def upload_image(form_image): #nova funkcija

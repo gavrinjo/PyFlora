@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, BooleanField
 from wtforms.validators import DataRequired, Length, ValidationError, NumberRange
 from app.models import User, Plant
 
@@ -43,14 +43,6 @@ class AddPlantForm(FlaskForm):
     s_min = IntegerField('Salinity min. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
     s_max = IntegerField('Salinity max. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
 
-    # sunlight = SelectField('Sunlight', coerce=int)
-
-
-    # salinity = SelectField('Salinity', validators=[DataRequired()], choices=['Low', 'Medium', 'High'])
-    # temperature = IntegerField('Temperature', validators=[DataRequired(), NumberRange(min=0, max=40)])
-    # ph_range = SelectField('PH range', validators=[DataRequired()], choices=['Acidic', 'Neutral', 'Alkaline'])
-    # moisture = SelectField('Moisture', validators=[DataRequired()], choices=['Low', 'Medium', 'High'])
-    # shade = SelectField('Shade', validators=[DataRequired()], choices=['Intolerant', 'Intermediate', 'Tolerant'])
     soil_texture = SelectField('Soil texture', choices=['Fine', 'Medium', 'Coarse'])
     substrate = StringField('Substrate recomendation')
     description = TextAreaField('Description', validators=[Length(min=0, max=256)])
@@ -72,6 +64,25 @@ class PotForm(FlaskForm):
     plant = SelectField('Select plant', coerce=int) # , validators=[DataRequired()]
     description = TextAreaField('Description', validators=[Length(min=0, max=256)])
     submit = SubmitField('Submit')
+
+
+class EditPotForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    plant = SelectField('Select plant', coerce=int) # , validators=[DataRequired()]
+    description = TextAreaField('Description', validators=[Length(min=0, max=256)])
+
+    sunlight = BooleanField('Light sensor')
+    # temperature_status = BooleanField('Temperature')
+    moisture = BooleanField('Moisture sensor')
+    reaction = BooleanField('pH reaction sensor')
+    nutrient = BooleanField('Nutrient sensor')
+    salinity = BooleanField('Salinity sensor')
+
+    submit = SubmitField('Submit')
+
+    def __init__(self, original_name, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.original_name=original_name
 
 
 class EmptyForm(FlaskForm):

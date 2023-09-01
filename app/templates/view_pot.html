@@ -18,4 +18,8 @@
     {{ form.hidden_tag() }}
     {{ form.submit(value='Synchronize', class_='btn btn-primary btn-md') }}
 </form>
+<form action="{{ url_for('main.update_pot', pot_id=pot.id) }}" method="get">
+    {{ form.hidden_tag() }}
+    {{ form.submit(value='Update', class_='btn btn-primary btn-md') }}
+</form>
 {% endblock %}
