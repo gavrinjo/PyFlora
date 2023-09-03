@@ -171,15 +171,32 @@ def view_pot(pot_id):
     pot = Pot.query.get(pot_id)
     metrics = SensorMeasurements
 
-    query = (
-        metrics.query
-        .with_entities(metrics.measured, metrics.temperature, metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
-        .filter_by(pot_id=pot_id)
-        .order_by(metrics.measured.desc()).limit(7)
-    )
-    columns = ['measured', 'temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
+    ## new stuff
 
-    df = pd.DataFrame(query, columns=columns)
+    line_ch = Line()
+    line_ch.build(pot, metrics, 'salinity', 'red')
+    line_ch.build(pot, metrics, 'moisture', 'blue')
+    data = line_ch.represent_chart()
+
+    ## old stuff
+
+    # query = (
+    #     metrics.query
+    #     .with_entities(
+    #         metrics.measured,
+    #         metrics.temperature,
+    #         metrics.moisture,
+    #         metrics.salinity,
+    #         metrics.reaction,
+    #         metrics.sunlight,
+    #         metrics.nutrient
+    #     )
+    #     .filter_by(pot_id=pot_id)
+    #     .order_by(metrics.measured.desc()).limit(7)
+    # )
+    # columns = ['measured', 'temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
+
+    # df = pd.DataFrame(query, columns=columns)
 
     # df = pd.DataFrame(metrics.query
     # .with_entities(metrics.salinity, metrics.ph_range, metrics.moisture)
@@ -206,23 +223,23 @@ def view_pot(pot_id):
 
 
 
-    radar = Radar()
+    # radar = Radar()
 
     # df = pd.DataFrame(metrics.query
     # .with_entities(metrics.temperature, metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
     # .filter_by(pot_id=pot_id)
     # .order_by(metrics.measured.desc()).limit(1), columns=['temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'])
 
-    data = []
-    for i, val in enumerate(df.iloc[0][columns[1:]]):
-        if i == 0:
-           data.append(np.interp(val, [-20,80], [1,10]))
-        else:
-            data.append(np.interp(val, [0,100], [1,10]))
+    # data = []
+    # for i, val in enumerate(df.iloc[0][columns[1:]]):
+    #     if i == 0:
+    #        data.append(np.interp(val, [-20,80], [1,10]))
+    #     else:
+    #         data.append(np.interp(val, [0,100], [1,10]))
 
-    radar.plot(columns[1:], data, 'green', 'measured')
-    radar.plot(columns[1:], [5, 5, 5, 5, 5, 5], 'orange', 'neutral')
-    data = radar.represent_chart()
+    # radar.plot(columns[1:], data, 'green', 'measured')
+    # radar.plot(columns[1:], [5, 5, 5, 5, 5, 5], 'orange', 'neutral')
+    # data = radar.represent_chart()
 
     return render_template('view_pot.html', title=pot.name, pot=pot, data=data, form=form)
 

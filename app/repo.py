@@ -6,6 +6,7 @@ import base64
 import secrets
 from datetime import datetime
 import numpy as np
+import pandas as pd
 from requests import get
 from contextlib import closing
 from matplotlib.figure import Figure
@@ -15,6 +16,8 @@ from app import db
 from .functions import bp
 from app.models import User, Plant, Pot, SensorMeasurements, Gauge
 from flask import current_app, request, abort
+
+from ipychart import Chart
 
 COLUMNS = ['sunlight', 'temperature', 'moisture', 'reaction', 'nutrient', 'salinity']
 
@@ -54,6 +57,27 @@ class Line(PyGraf):
         # self.ax.yaxis.set_ticks(y_axis)
         # self.ax.margins(x=0, y=0)
         self.ax.legend()
+    
+    def build(self, pot, metrics, column, color):
+        columns = ['measured', 'temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
+        query = (
+            metrics.query
+            .with_entities(
+                metrics.measured,
+                metrics.temperature,
+                metrics.moisture,
+                metrics.salinity,
+                metrics.reaction,
+                metrics.sunlight,
+                metrics.nutrient
+            )
+            .filter_by(pot_id=pot.id)
+            .order_by(metrics.measured.desc()).limit(7)
+        )
+        df = pd.DataFrame(query, columns=columns)
+
+        return self.plot(df['measured'], df[column], color, column.capitalize())
+
 
 
 class Histogram(PyGraf):
@@ -242,3 +266,35 @@ def form_data(form):
         return form.split(';')
     except:
         return None, None
+    
+def build2(self, pot, metrics, column, color):
+    cols = SensorMeasurements.__table__.columns.keys()[1:-1]
+    dataset = []
+    for col in cols:
+        dataset.append([
+            val[0] for val in db.session.execute(
+                db.select(getattr(SensorMeasurements, col))
+                .filter_by(pot_id=pot.id)
+                .order_by(SensorMeasurements.measured.desc())).all()
+                ])
+
+
+    l = db.session.execute(db.select(SensorMeasurements.moisture, SensorMeasurements.sunlight).order_by(SensorMeasurements.measured.desc())).all() 
+    columns = ['measured', 'temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
+    query = (
+        metrics.query
+        .with_entities(
+            metrics.measured,
+            metrics.temperature,
+            metrics.moisture,
+            metrics.salinity,
+            metrics.reaction,
+            metrics.sunlight,
+            metrics.nutrient
+        )
+        .filter_by(pot_id=pot.id)
+        .order_by(metrics.measured.desc()).limit(7)
+    )
+    df = pd.DataFrame(query, columns=columns)
+
+    return self.plot(df['measured'], df[column], color, column.capitalize())

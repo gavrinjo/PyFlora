@@ -125,7 +125,7 @@ class SensorMeasurements(db.Model):
     pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'))
 
     def __repr__(self):
-        return f'<Sensor data for {self.get_pot(self.pot_id).name}, measured at {self.measured}-> {self.salinity}/{self.moisture}/{self.ph_range} >'
+        return f'<Measured at {self.measured} -> {self.sunlight}/{self.temperature}/{self.moisture}/{self.reaction}/{self.nutrient}/{self.salinity} >'
 
     def get_pot(self, id):
         return Pot.query.get(id)

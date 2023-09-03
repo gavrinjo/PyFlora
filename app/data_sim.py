@@ -29,7 +29,7 @@ class Sensor():
             else:
                 val = None
             attribs[c] = val
-        temperature = round(float(Weather('Zagreb').temperature[0]))
+        temperature = round(float(Weather('Zagreb').temperature['value']))
         measurement = SensorMeasurements(
             sunlight=attribs['sunlight'],
             moisture=attribs['moisture'],

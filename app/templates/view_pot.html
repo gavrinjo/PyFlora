@@ -14,6 +14,36 @@
         </td>
     </tr>
 </table>
+
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script> -->
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/_line.js')}}"></script> -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Line chart</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Radar chart</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Histogram chart</button>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+        <canvas id="line" width="400" height="400"></canvas>
+    </div>
+    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+        <canvas id="radar" width="400" height="400"></canvas>
+    </div>
+    <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+        ...
+    </div>
+
+</div>
+
+
+
 <form action="{{ url_for('main.sync_pot', pot_id=pot.id) }}" method="post">
     {{ form.hidden_tag() }}
     {{ form.submit(value='Synchronize', class_='btn btn-primary btn-md') }}
@@ -22,4 +52,20 @@
     {{ form.hidden_tag() }}
     {{ form.submit(value='Update', class_='btn btn-primary btn-md') }}
 </form>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<!-- Optional JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/_line.js')}}"></script>
+<script type="text/javascript">
+
+    var radar_cfg = radar_chart_cfg()
+    var radar = new Chart(document.getElementById('radar'), radar_cfg)
+    var radar = update_chart(radar)
+
+    var line_cfg = config_chart()
+    var line = new Chart(document.getElementById('line'), line_cfg)
+    var line = update_chart(line)
+</script>
 {% endblock %}
