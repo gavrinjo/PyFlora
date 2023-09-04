@@ -1,6 +1,21 @@
 
 const labels = [1,2,3,4];
 
+function addData(chart, data, label) {
+    const newDataset = {
+        label: label,
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: data,
+        cubicInterpolationMode: 'monotone',
+        tension: 0.4,
+    };
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(newDataset);
+    });
+    chart.update();
+}
+
 function update_chart(chart, data, label){
     const dsColor = 'rgb(255, 99, 132)';
     const newDataset = {
