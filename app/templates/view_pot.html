@@ -59,13 +59,23 @@
 <!-- Optional JavaScript -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/_line.js')}}"></script>
 <script type="text/javascript">
+    const cols = {{ data['columns']|safe }}
+    const df = {{ data['data'] }}
+    const labs = {{ data['labels']|safe }}
+    // var labels = ['06/28/2023, 10:50:31', '06/28/2023, 10:49:55', '06/28/2023, 10:37:45', '06/28/2023, 10:27:51', '06/28/2023, 10:27:21', '06/28/2023, 10:26:45', '06/28/2023, 10:19:51']
 
     var radar_cfg = radar_chart_cfg()
     var radar = new Chart(document.getElementById('radar'), radar_cfg)
-    var radar = update_chart(radar)
+    // var radar = update_chart(radar)
 
-    var line_cfg = config_chart()
+
+
+    var line_cfg = config_chart(labs)
     var line = new Chart(document.getElementById('line'), line_cfg)
-    var line = update_chart(line)
+
+    for (let i = 0; i < cols.length; i++){
+        var line = update_chart(line, df[i], cols[i])
+    }
+
 </script>
 {% endblock %}

@@ -13,11 +13,11 @@ from matplotlib.figure import Figure
 import xmltodict
 
 from app import db
+from sqlalchemy.inspection import inspect
 from .functions import bp
 from app.models import User, Plant, Pot, SensorMeasurements, Gauge
 from flask import current_app, request, abort
 
-from ipychart import Chart
 
 COLUMNS = ['sunlight', 'temperature', 'moisture', 'reaction', 'nutrient', 'salinity']
 
@@ -267,34 +267,37 @@ def form_data(form):
     except:
         return None, None
     
-def build2(self, pot, metrics, column, color):
-    cols = SensorMeasurements.__table__.columns.keys()[1:-1]
+def build2(pot):
+    cols = SensorMeasurements.__table__.columns.keys()[1:-2]
+    
+    df = pd.read_sql_query("SELECT * FROM sensor_measurements", current_app.config['SQLALCHEMY_DATABASE_URI']) 
+    df = df.sort_values(by=['measured'], ascending=False)
+    df = df[df['pot_id']==pot]
+    df = df.fillna(0)
+
     dataset = []
-    for col in cols:
-        dataset.append([
-            val[0] for val in db.session.execute(
-                db.select(getattr(SensorMeasurements, col))
-                .filter_by(pot_id=pot.id)
-                .order_by(SensorMeasurements.measured.desc())).all()
-                ])
+    for column in cols:
+        dataset.append(df[column].tolist())
+
+    labels = df['measured'].tolist()
+
+    # for col in cols:
+    #     query = measurement_query(pot, col)
+    #     # query = db.select(getattr(SensorMeasurements, col)).filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc())
+    #     for val in db.session.execute(query).all():
+    #         if val[0] is None:
+    #             dataset.append(0)
+    #             break
+    #         else:
+    #             dataset.append(val[0])
+    #             break
+    #     # dataset.append([val[0] for val in db.session.execute(query).all()])
+    
+    # labels = [val[0].strftime('%d/%m/%Y, %H:%M:%S-%f') for val in db.session.execute(measurement_query(pot, 'measured')).all()]
 
 
-    l = db.session.execute(db.select(SensorMeasurements.moisture, SensorMeasurements.sunlight).order_by(SensorMeasurements.measured.desc())).all() 
-    columns = ['measured', 'temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
-    query = (
-        metrics.query
-        .with_entities(
-            metrics.measured,
-            metrics.temperature,
-            metrics.moisture,
-            metrics.salinity,
-            metrics.reaction,
-            metrics.sunlight,
-            metrics.nutrient
-        )
-        .filter_by(pot_id=pot.id)
-        .order_by(metrics.measured.desc()).limit(7)
-    )
-    df = pd.DataFrame(query, columns=columns)
-
-    return self.plot(df['measured'], df[column], color, column.capitalize())
+    return {'columns': cols, 'labels':labels, 'data': dataset}
+# c = SensorMeasurements.__table__.columns.keys()[1:-2]
+# a = pd.DataFrame(db.session.execute(db.select(SensorMeasurements).filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc())).all())
+def measurement_query(pot, field):
+    return db.select(getattr(SensorMeasurements, field)).filter_by(pot_id=pot).order_by(SensorMeasurements.measured.desc())

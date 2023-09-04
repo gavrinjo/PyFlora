@@ -1,16 +1,16 @@
 
 const labels = [1,2,3,4];
 
-function update_chart(chart){
-    const data = chart.data;
+function update_chart(chart, data, label){
     const dsColor = 'rgb(255, 99, 132)';
     const newDataset = {
-        label: 'Dataset ' + (data.datasets.length + 1),
+        label: label,
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: dsColor,
-        data: [2,4,6,8],
+        data: data,
+        cubicInterpolationMode: 'monotone',
+        tension: 0.4,
     };
-    chart.data.labels = labels;
     chart.data.datasets.push(newDataset);
     chart.update();
 };
@@ -36,13 +36,17 @@ const data2 = {
         backgroundColor: 'rgb(255, 99, 132)',
         cubicInterpolationMode: 'monotone',
         tension: 0.4,
+        spanGaps: true,
     }]
 };
 
-function config_chart(){
+function config_chart(labels){
     return config = {
         type: 'line',
-        data: {},
+        data: {
+            labels: labels,
+            datasets: []
+        },
         options: {
             responsive: true,
             plugins: {
@@ -84,3 +88,4 @@ function radar_chart_cfg(){
         },
     }
 }
+

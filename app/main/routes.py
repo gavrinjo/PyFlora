@@ -7,7 +7,7 @@ from app.data_sim import Sensor, Gauge
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm, EditPotForm, EmptyForm
-from app.repo import Weather, Radar, Line, upload_image
+from app.repo import Weather, Radar, Line, upload_image, build2
 
 import numpy as np
 import pandas as pd
@@ -173,10 +173,12 @@ def view_pot(pot_id):
 
     ## new stuff
 
-    line_ch = Line()
-    line_ch.build(pot, metrics, 'salinity', 'red')
-    line_ch.build(pot, metrics, 'moisture', 'blue')
-    data = line_ch.represent_chart()
+    data = build2(pot.id)
+
+    # line_ch = Line()
+    # line_ch.build(pot, metrics, 'salinity', 'red')
+    # line_ch.build(pot, metrics, 'moisture', 'blue')
+    # data = line_ch.represent_chart()
 
     ## old stuff
 
@@ -191,7 +193,7 @@ def view_pot(pot_id):
     #         metrics.sunlight,
     #         metrics.nutrient
     #     )
-    #     .filter_by(pot_id=pot_id)
+    #     .filter_by(pot_id=pot.id)
     #     .order_by(metrics.measured.desc()).limit(7)
     # )
     # columns = ['measured', 'temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']

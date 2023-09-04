@@ -129,6 +129,21 @@ class SensorMeasurements(db.Model):
 
     def get_pot(self, id):
         return Pot.query.get(id)
+    
+    def to_dict(self):
+        data = {
+            'measured': self.measured.isoformat() + 'Z',
+            'sunlight' : self.sunlight,
+            'temperature': self.temperature,
+            'moisture': self.moisture,
+            'reaction': self.reaction,
+            'nutrient': self.nutrient,
+            'salinity': self.salinity
+        }
+        return data
+
+
+
 
 
 @login.user_loader
