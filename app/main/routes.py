@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user
 from app import db, weather
 from app.data_sim import Sensor, Gauge
@@ -173,8 +173,24 @@ def view_pot(pot_id):
 
     ## new stuff
 
-    data = build2(pot.id)
+    dt = build2(pot.id) # za charts.js
 
+    # za plotly ----
+    df = pd.read_sql_query("SELECT * FROM sensor_measurements", current_app.config['SQLALCHEMY_DATABASE_URI']) 
+    df = df.sort_values(by=['measured'], ascending=False)[:10]
+    df = df[df['pot_id']==pot.id]
+
+    import json
+    import plotly
+    import plotly.express as px
+
+    fig = px.line(df[::-1], x='measured', y=['moisture', 'salinity'], template='plotly_white', line_shape='spline')
+    fig.update_xaxes(type='category')
+    fig.update_traces(mode="markers+lines", hovertemplate=None)
+    fig.update_layout(hovermode="x unified")
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    # ------
     # line_ch = Line()
     # line_ch.build(pot, metrics, 'salinity', 'red')
     # line_ch.build(pot, metrics, 'moisture', 'blue')
@@ -243,7 +259,7 @@ def view_pot(pot_id):
     # radar.plot(columns[1:], [5, 5, 5, 5, 5, 5], 'orange', 'neutral')
     # data = radar.represent_chart()
 
-    return render_template('view_pot.html', title=pot.name, pot=pot, data=data, form=form)
+    return render_template('view_pot.html', title=pot.name, pot=pot, data=dt, form=form, graphJSON=graphJSON)
 
 
 @bp.route('/pot/new', methods=['GET', 'POST'])
