@@ -52,7 +52,7 @@ const options = {
             display: true,
             text: 'Chart.js Line Chart'
         }
-    },
+    }
 };
 const dataset = [{
     label: label,

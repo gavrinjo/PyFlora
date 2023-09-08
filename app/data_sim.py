@@ -4,6 +4,7 @@ from random import randint
 from app import db
 from app.models import Gauge, SensorMeasurements
 from app.repo import Weather
+from app.scripts.repository import mapper
 
 class Sensor():
 
@@ -18,12 +19,19 @@ class Sensor():
             c = column[:column.find('_')]
             if self.measurement is not None:
                 if getattr(self.pot, column):
-                    # default_value, min_value, max_value, off_value = self.gauge_values(column)
-                    measured_value = getattr(self.measurement, c)
-                    if measured_value is not None:
-                        val = self.simulate(measured_value, 1, 100, 2)
-                    else:
-                        val = self.simulate(50, 1, 100, 2)
+                    if c != 'temperature':
+                        # default_value, min_value, max_value, off_value = self.gauge_values(column)
+                        measured_value = getattr(self.measurement, c)
+                        vals = mapper(measured_value, c)
+                        miv = Gauge.query.filter_by(name=c).order_by(Gauge.min_value).first()
+                        mav = Gauge.query.filter_by(name=c).order_by(Gauge.max_value.desc()).first()
+                        av = Gauge.query.filter_by(name=c, eiv=5).first()
+                        # min_value = int(getattr(self.plant, c).split(';')[0])
+                        # max_value = int(getattr(self.plant, c).split(';')[1])
+                        if measured_value is not None:
+                            val = self.simulate(vals['value'], vals['min_value'], vals['max_value'], 2)
+                        else:
+                            val = self.simulate(vals['avg_value'], vals['min_value'], vals['max_value'], 2)
                 else:
                     val = None
             else:
@@ -49,15 +57,15 @@ class Sensor():
                 cols.append(c.key)
         return cols
     
-    def gauge_values(self, column):
-        column_name = column[:column.find('_')]
-        norm = Gauge.query.filter_by(name=column_name, eiv=5).first()
-        max_value = Gauge.query.filter_by(name=column_name).order_by(Gauge.max_value.desc()).first().max_value
-        min_value = Gauge.query.filter_by(name=column_name).order_by(Gauge.min_value).first().min_value
-        avg_value = int(np.floor((norm.max_value + norm.min_value) / 2))
-        off_value = int(np.floor(np.log10(max_value)))
+    # def gauge_values(self, column):
+    #     column_name = column[:column.find('_')]
+    #     norm = Gauge.query.filter_by(name=column_name, eiv=5).first()
+    #     max_value = Gauge.query.filter_by(name=column_name).order_by(Gauge.max_value.desc()).first().max_value
+    #     min_value = Gauge.query.filter_by(name=column_name).order_by(Gauge.min_value).first().min_value
+    #     avg_value = int(np.floor((norm.max_value + norm.min_value) / 2))
+    #     off_value = int(np.floor(np.log10(max_value)))
 
-        return avg_value, min_value, max_value, off_value
+    #     return avg_value, min_value, max_value, off_value
 
     def simulate(self, value, min_value, max_value, offset):
         """Randomize and return multi sensor data set
@@ -65,21 +73,21 @@ class Sensor():
         Returns:
             tuple: Resturns tuple of sensor data in particular order (ph, salinity, moisture)
         """
-        if value is None:
-            return (value, min_value, max_value)
+        # if value is None:
+        #     return (value, min_value, max_value)
 
+        # else:
+        if value <= min_value:
+            mi = min_value
         else:
-            if value <= min_value:
-                mi = min_value
-            else:
-                mi = value - offset
+            mi = value - offset
 
-            if value >= max_value:
-                mx = max_value
-            else:
-                mx = value + offset
+        if value >= max_value:
+            mx = max_value
+        else:
+            mx = value + offset
 
-            return randint(mi, mx)
+        return randint(mi, mx)
             # return self.randomizer(value, min_value, max_value, offset)
             # ph_range = self.randomizer(1, 14, 1, int(self.mesurement.ph_range))
             # salinity = self.randomizer(1,32, 1, int(self.mesurement.salinity))
