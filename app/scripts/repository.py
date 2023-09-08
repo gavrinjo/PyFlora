@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 
+from ipychart import Chart
 
 
 
@@ -34,3 +35,26 @@ def plot_config(fig: go.Figure, df: pd.DataFrame):
     )
     return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
+
+
+
+dataset = {
+  'labels': ['Data 1', 'Data 2', 'Data 3', 'Data 4', 
+             'Data 5', 'Data 6', 'Data 7', 'Data 8'],
+  'datasets': [{'data': [14, 22, 36, 48, 60, 90, 28, 12]}]
+}
+options= {
+        'scales': {
+            'y': {
+                'ticks': {
+                    # Include a dollar sign in the ticks
+                    'callback': '''function(value, index, values) {
+                        return '$' + value;
+                    }'''
+                }
+            }
+        },
+    }
+
+mychart = Chart(data=dataset, kind='line', options=options)
+print(mychart.get_html_template())
