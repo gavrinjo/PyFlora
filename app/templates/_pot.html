@@ -10,20 +10,22 @@
     </tr>
 </table> -->
 {% if pot.get_plant(pot.plant_id) %}
-<div class="col">
-    <div class="card h-100">
-        <img src="{{ url_for('static', filename='plants/' + pot.get_plant(pot.plant_id).photo ) }}" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title"><a href="{{ url_for('main.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a></h5>
+<div class="col-md-6">
+    <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+        <div class="card-body d-flex flex-column align-items-start">
+            <h5 class="card-title mb-0">
+                <a class="text-dark" href="{{ url_for('main.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a>
+            </h5>
             <p class="card-text">{{ pot.description }}</p>
+            <!-- <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{ pot.get_plant(pot.plant_id).name }}</li>
+                <li class="list-group-item">{{ pot.get_user(pot.user_id).username }}</li>
+            </ul> -->
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{ pot.get_plant(pot.plant_id).name }}</li>
-            <li class="list-group-item">{{ pot.get_user(pot.user_id).username }}</li>
-        </ul>
-        <div class="card-footer">
+        <img src="{{ url_for('static', filename='plants/' + pot.get_plant(pot.plant_id).photo ) }}" class="card-img-right flex-auto d-none d-lg-block" width="180" height="150" alt="...">
+        <!-- <div class="card-footer">
             <small class="text-muted">Last updated 3 mins ago</small>
-        </div>
+        </div> -->
     </div>
 </div>
 {% else %}

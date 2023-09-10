@@ -1,3 +1,7 @@
+* {
+  border-radius: 0;
+}
+
 h5 a {
   text-decoration: none;
   color: unset;
@@ -45,4 +49,18 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+} */
+
+/* body {background-color:#163a63; color:#163a63; padding-top:15px;} */
+
+.list-group {box-shadow: 0px 11px 23px 5px rgba(0,0,0,0.34);}
+
+.list-group-item {background-color: rgba(255,255,255,0.7); border:1;}
+
+section img {box-shadow: 0px 11px 23px 5px rgba(0,0,0,0.34);}
+/* .btn-toolbar {margin-top:10px;} */
+
+/* img {
+  float:left; 
+  margin-right:15px;
 } */
