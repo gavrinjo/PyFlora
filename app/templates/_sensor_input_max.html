@@ -2,9 +2,9 @@
 
     <span class="input-group-text">MAX</span>
     {{ field(class='form-control') }}
-    <!-- {% for error in field.errors %}
-        <div class="invalid-feedback">[{{ error }}]</div>
-    {% endfor %} -->
+    {% for error in field.errors %}
+        <div class="invalid-tooltip shadow">{{ error }}</div>
+    {% endfor %}
     <span class="input-group-text">{{ field.label|splitvalue(start='[', end=']') }}</span>
     <span class="input-group-text dropdown">
 
@@ -26,15 +26,3 @@
         </div>
     </span>
 </div>
-
-<a tabindex="0" class="btn btn-lg btn-danger" role="button" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-title="Dismissible popover" data-bs-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
-<button type="button" class="btn btn-primary btn-lg" id="myPopover" data-toggle="popover">Click to toggle popover</button>
-<script>
-    $(document).ready(function(){
-        $("#myPopover").popover({
-            title: '<h4 class="custom-title"><i class="bi-info-circle-fill"></i> Popover info</h4>',
-            content: '<p>This is a <em>simple example</em> demonstrating how to insert HTML code inside <strong>Bootstrap popover</strong>.</p>',
-            html: true
-        }); 
-    });
-    </script>

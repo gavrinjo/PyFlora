@@ -88,6 +88,6 @@ nav div a span {
   border-radius: 0px;
 }
 
-/* .no-deco a {
+.no-deco {
   text-decoration: none;
-} */
+}

@@ -18,14 +18,24 @@
         {% endif %}
     {% endfor %}
 </form>
-<script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-(() => {
-  'use strict'
+<!-- Optional JavaScript new plant-->
+<button type="button" data-bs-toggle="popover" title="Popover title" data-bs-content="Here's some amazing content.">Click to toggle popover</button>
+{% endblock %}
 
+{% block scripts %}
+{{ super() }}
+<script>
+  
+  document.querySelectorAll('[data-bs-toggle="popover"]')
+  .forEach(popover => {
+    new bootstrap.Popover(popover)
+  })
+  // const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+  // const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+  
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
   const forms = document.querySelectorAll('.needs-validation')
-
   // Loop over them and prevent submission
   Array.from(forms).forEach(form => {
     form.addEventListener('submit', event => {
@@ -33,10 +43,9 @@
         event.preventDefault()
         event.stopPropagation()
       }
-
       form.classList.add('was-validated')
     }, false)
   })
-})()
+
 </script>
 {% endblock %}
