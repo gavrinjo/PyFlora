@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h3>pyPots</h3>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4">
     {% for pot in pots %}
         {% include '_pot.html' %}
     {% endfor %}
-
+    {% include '_pot_new.html' %}
 </div>
 {% endblock %}

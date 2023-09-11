@@ -4,7 +4,9 @@
 <section>
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-top">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 img-thumbnail" src="{{ image_file }}" alt="{{ image_file }}" /></div>
+            <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ image_file }}" alt="{{ image_file }}" />
+            </div>
             <div class="col-md-6">
                 <div class="small mb-1">nekakav važan teks ako bude bilo potrebe</div>
                 <h1 class="display-5 fw-bolder" style="text-transform: uppercase;">{{ plant.name }}</h1>
@@ -23,7 +25,7 @@
                 <div class="d-flex">
                     <form action="{{ url_for('main.update_plant', plant_id=plant.id) }}" method="get">
                         {{ form.hidden_tag() }}
-                        {{ form.submit(value='Edit', class_='btn btn-outline-dark flex-shrink-0') }}
+                        {{ form.submit(value='Edit', class_='btn btn-outline-success flex-shrink-0') }}
                     </form>
                 </div>
             </div>
