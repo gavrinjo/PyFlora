@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user
-from app import db, weather
+from app import db
 from app.data_sim import Sensor, Gauge
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
@@ -338,7 +338,7 @@ def sync_pot(pot_id):
 
 @bp.route('/weather')
 @login_required
-def wether():
+def weather():
     user = User.query.filter_by(username=current_user.username).first_or_404()
     cwd = Weather('Zagreb')
     return render_template('weather.html', title='Weather', cwd=cwd)
