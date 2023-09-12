@@ -37,6 +37,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
+login.login_message_category = 'info'
 mail = Mail()
 bootstrap = Bootstrap5()
 admin = Admin(name='PyFlora', index_view=AdminViewController(), template_mode='bootstrap4')

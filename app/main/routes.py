@@ -13,8 +13,6 @@ from app.scripts.repository import plot_config
 import numpy as np
 import pandas as pd
 
-temperature = round(float(weather.temperature[0]))
-f_like = round(float(weather.feels_like[0]))
 
 @bp.before_app_request
 def before_request():
@@ -38,7 +36,7 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home', posts=posts, temperature=temperature, f_like=f_like)
+    return render_template('index.html', title='Home', posts=posts)
 
 
 @bp.route('/user/<username>')
@@ -81,7 +79,6 @@ def new_plant():
     if form.validate_on_submit():
         plant = Plant(
             name=form.name.data,
-            # photo=upload_image(request.files['photo']),
             sunlight=f'{form.l_min.data};{form.l_max.data}',
             temperature=f'{form.t_min.data};{form.t_max.data}',
             moisture=f'{form.f_min.data};{form.f_max.data}',
@@ -92,7 +89,7 @@ def new_plant():
             substrate=form.substrate.data,
             description=form.description.data
         )
-        photo = upload_image(form.photo.data)
+        photo = upload_image(form.photo.data, 'plants')
         plant.photo = photo
         db.session.add(plant)
         db.session.commit()
@@ -117,7 +114,7 @@ def update_plant(plant_id):
     form = AddPlantForm(plant.name)
     if form.validate_on_submit():
         plant.name=form.name.data
-        photo = upload_image(form.photo.data)
+        photo = upload_image(form.photo.data, 'plants')
         plant.photo = photo
         # plant.photo=upload_image(request.files['photo']),
         plant.sunlight=f'{form.l_min.data};{form.l_max.data}'

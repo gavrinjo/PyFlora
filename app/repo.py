@@ -247,7 +247,7 @@ def plant_needs():
     return attribs
 
 
-def upload_image(form_image): #nova funkcija
+def upload_image(form_image, folder): #nova funkcija
     if form_image:
         random_hex = secrets.token_hex(8)
         file_ext = os.path.splitext(form_image.filename)[1]
@@ -255,7 +255,7 @@ def upload_image(form_image): #nova funkcija
             abort(400)
         else:
             filename = random_hex + file_ext
-            filename_path = os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', filename))
+            filename_path = os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], folder, filename))
             form_image.save(filename_path)
             return filename
 
