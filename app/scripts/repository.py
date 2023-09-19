@@ -7,8 +7,9 @@ import pandas as pd
 import numpy as np
 
 # from ipychart import Chart
-
-from app.models import Gauge
+from random import randint
+from app.models import Gauge, Pot
+from app import db
 
 
 def plot_config(fig: go.Figure, df: pd.DataFrame):
@@ -88,3 +89,64 @@ def mapper(value, column: str):
         'max_value': mav.max_value,
         'avg_value': (av.min_value + av.max_value) / 2
     }
+
+
+def get_columns(pot):
+        columns = []
+        for column in db.inspect(pot).attrs:
+            if column.key.endswith("status"):
+                columns.append(column.key)
+        return columns
+
+def get_norm_data(query):
+
+    min_array = [getattr(x, 'min_value') for x in query]
+    min_median = np.median(min_array)
+
+    max_array = [getattr(x, 'max_value') for x in query]
+    max_median = np.median(max_array)
+
+    avg_value = np.ceil(np.median([min_median, max_median]))
+
+    off_value = np.ceil(avg_value * 0.1)
+
+    return min(min_array), max(max_array), avg_value, off_value
+
+def get_mapped_data(array: tuple):
+
+    pass
+
+def sensor_data_generator():
+    query = Gauge.query
+    columns = get_columns(Pot.query.get(1))
+    columns.remove('temperature_status')
+    for column in columns:
+        filter_by = query.filter_by(name=column[:column.find('_')]).all()
+        ds = get_norm_data(filter_by) # dataset
+        print(ds)
+        sensor = simulate(ds[2], ds[0], ds[1], ds[3])
+        print(sensor)
+        print('-'*10)
+
+
+def simulate(value, min_value, max_value, offset):
+    """Randomize and return multi sensor data set
+
+    Returns:
+        tuple: Resturns tuple of sensor data in particular order (ph, salinity, moisture)
+    """
+    # if value is None:
+    #     return (value, min_value, max_value)
+
+    # else:
+    if value <= min_value:
+        mi = min_value
+    else:
+        mi = value - offset
+
+    if value >= max_value:
+        mx = max_value
+    else:
+        mx = value + offset
+
+    return randint(mi, mx)
