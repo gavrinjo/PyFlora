@@ -300,4 +300,10 @@ def build2(pot):
 # c = SensorMeasurements.__table__.columns.keys()[1:-2]
 # a = pd.DataFrame(db.session.execute(db.select(SensorMeasurements).filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc())).all())
 def measurement_query(pot, field):
-    return db.select(getattr(SensorMeasurements, field)).filter_by(pot_id=pot).order_by(SensorMeasurements.measured.desc())
+    return (
+        db.select(
+            getattr(SensorMeasurements, field)
+        )
+        .filter_by(pot_id=pot)
+        .order_by(SensorMeasurements.measured.desc())
+    )
