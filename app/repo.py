@@ -123,7 +123,7 @@ class Radar(PyGraf):
         self.ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
 
 
-class Weather():
+class Weather(): # nepotrebno
 
     GEO_LOCATION_URL = 'http://api.openweathermap.org/geo/1.0/direct?q={city_name}&limit={limit}&appid={api_key}'
     WEATHER_DATA_URL = 'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric'
@@ -224,7 +224,7 @@ y2 = np.array([r**3 for r in x])
 # obj_data = Pot(**dict)   
 # db.session.add(obj_data)
 
-def build_gauge(filename, path):
+def build_gauge(filename, path): # potrebno
     # funkcija za popunjavanje gauge tablice u bazi, potrebna joj je JSON datoteka '_gauge.json' nalazi se u static mapi
     with open(os.path.normpath(os.path.join(path, filename)), 'r') as json_data:
         data = json.load(json_data)
@@ -232,7 +232,7 @@ def build_gauge(filename, path):
         db.session.commit()
 
 
-def columns(model_query):
+def columns(model_query): # nepotrebno, nalazi se već u SensorSim klasi
         cols = []
         for c in db.inspect(model_query).attrs:
             if c.key.endswith("status"):
@@ -247,7 +247,7 @@ def plant_needs():
     return attribs
 
 
-def upload_image(form_image, folder): #nova funkcija
+def upload_image(form_image, folder): #nova funkcija, za uploadanje slika, potrebno
     if form_image:
         random_hex = secrets.token_hex(8)
         file_ext = os.path.splitext(form_image.filename)[1]

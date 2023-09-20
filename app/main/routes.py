@@ -3,12 +3,11 @@ from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user
 from app import db
-from app.data_sim import Sensor, Gauge
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm, EditPotForm, EmptyForm
 from app.repo import Weather, Radar, Line, upload_image, build2
-from app.scripts.repository import plot_config
+from app.scripts.repository import plot_config, SensorSim
 
 import numpy as np
 import pandas as pd
@@ -330,8 +329,11 @@ def sync_pot(pot_id):
     if form.validate_on_submit():
         pot = Pot.query.get(pot_id)
         measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
-        sensor_data = Sensor(pot, measurement).build()
-        db.session.add(sensor_data)
+        # sensor_data = Sensor(pot, measurement).build()
+
+        new_measurement = SensorSim(pot, measurement).generate()
+
+        db.session.add(new_measurement)
         db.session.commit()
         return redirect(url_for('main.view_pot', pot_id=pot.id))
 

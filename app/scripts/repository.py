@@ -8,7 +8,9 @@ import numpy as np
 
 # from ipychart import Chart
 from random import randint
-from app.models import Gauge, Pot
+from datetime import datetime
+from app.models import Gauge, Pot, SensorMeasurements
+from app.repo import Weather
 from app import db
 
 
@@ -91,62 +93,76 @@ def mapper(value, column: str):
     }
 
 
-def get_columns(pot):
-        columns = []
-        for column in db.inspect(pot).attrs:
-            if column.key.endswith("status"):
-                columns.append(column.key)
-        return columns
+class SensorSim():
 
-def get_norm_data(query):
+    def __init__(self, pot, last_measurement) -> None:
+        self.pot = pot
+        self.last_measurement = last_measurement
+        self.columns = self.get_columns(self.pot)
 
-    min_array = [getattr(x, 'min_value') for x in query]
-    min_median = np.median(min_array)
+    
+    def get_columns(self, pot: object) -> list:
+            columns = []
+            for column in db.inspect(pot).attrs:
+                if column.key.endswith("status"):
+                    columns.append(column.key)
+            return columns
 
-    max_array = [getattr(x, 'max_value') for x in query]
-    max_median = np.median(max_array)
-
-    avg_value = np.ceil(np.median([min_median, max_median]))
-
-    off_value = np.ceil(avg_value * 0.1)
-
-    return min(min_array), max(max_array), avg_value, off_value
-
-def get_mapped_data(array: tuple):
-
-    pass
-
-def sensor_data_generator():
-    query = Gauge.query
-    columns = get_columns(Pot.query.get(1))
-    columns.remove('temperature_status')
-    for column in columns:
-        filter_by = query.filter_by(name=column[:column.find('_')]).all()
-        ds = get_norm_data(filter_by) # dataset
-        print(ds)
-        sensor = simulate(ds[2], ds[0], ds[1], ds[3])
-        print(sensor)
-        print('-'*10)
+    def get_ref_values(self, query: object) -> tuple:
+        min_array = [getattr(x, 'min_value') for x in query] # array of minimum values column
+        min_median = np.median(min_array) # median value of minimum values array, used as minimum value
+        max_array = [getattr(x, 'max_value') for x in query] # array of maximum values column
+        max_median = np.median(max_array) # median value of maximum values array, used as maximum value
+        std_value = np.ceil(np.median([min_median, max_median])) # median value over minimum and maximum values, used as standard value
+        off_value = np.ceil(std_value * 0.1) # 10% of median value over minimum and maximum values, used as offset value
+        # ref_values = {
+        #     'min_val': min(min_array),
+        #     'max_val': max(max_array),
+        #     'std_val': std_value,
+        #     'off_val': off_value
+        # }
+        return min(min_array), max(max_array), std_value, off_value
 
 
-def simulate(value, min_value, max_value, offset):
-    """Randomize and return multi sensor data set
+    def get_random_value(self, value: int, min_value: int, max_value: int, offset: int) -> int:
 
-    Returns:
-        tuple: Resturns tuple of sensor data in particular order (ph, salinity, moisture)
-    """
-    # if value is None:
-    #     return (value, min_value, max_value)
+        if value <= min_value:
+            mi = min_value
+        else:
+            mi = value - offset
 
-    # else:
-    if value <= min_value:
-        mi = min_value
-    else:
-        mi = value - offset
+        if value >= max_value:
+            mx = max_value
+        else:
+            mx = value + offset
 
-    if value >= max_value:
-        mx = max_value
-    else:
-        mx = value + offset
+        return randint(mi, mx)
+    
 
-    return randint(mi, mx)
+    def generate(self) -> object:
+        new_measurement = SensorMeasurements()
+
+        # columns = self.get_columns(self.pot.id)
+        
+        for column in self.columns:
+            column = column[:column.find('_')]
+            query = Gauge.query.filter_by(name=column).all()
+            if getattr(self.pot, column + '_status'):
+                if column != 'temperature':
+                    ds = self.get_ref_values(query) # dataset
+                    if self.last_measurement is None:
+                        sensor = self.get_random_value(ds[2], ds[0], ds[1], ds[3])
+                    else:
+                        sensor = self.get_random_value(getattr(self.last_measurement, column), ds[0], ds[1], ds[3])
+                else:
+                    sensor = round(float(Weather('Zagreb').temperature['value']))
+            else:
+                sensor = None
+            setattr(new_measurement, column, sensor)
+        
+        new_measurement.measured = datetime.utcnow()
+        new_measurement.pot = self.pot
+
+        return new_measurement
+
+
