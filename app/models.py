@@ -1,6 +1,7 @@
 from datetime import datetime
 from hashlib import md5
 from time import time
+import numpy as np
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
@@ -130,18 +131,28 @@ class SensorMeasurements(db.Model):
     def get_pot(self, id):
         return Pot.query.get(id)
     
-    def to_dict(self):
+    @staticmethod
+    def map_values(value, min_value, max_value):
+        return [value, np.interp(value, [min_value, max_value], [1, 10])]
+
+    @staticmethod
+    def dump_datetime(value: datetime):
+        if value is None:
+            return None
+        return [value.strftime('%d.%m.%Y'), value.strftime('%H:%M:%S.%f')]
+
+    @property
+    def serialize(self):
         data = {
-            'measured': self.measured.isoformat() + 'Z',
-            'sunlight' : self.sunlight,
-            'temperature': self.temperature,
-            'moisture': self.moisture,
-            'reaction': self.reaction,
-            'nutrient': self.nutrient,
-            'salinity': self.salinity
+            'measured': self.dump_datetime(self.measured), #.isoformat() + 'Z'
+            'sunlight' : self.map_values(self.sunlight, 1, 100000),
+            'temperature': self.map_values(self.temperature, -20, 60),
+            'moisture': self.map_values(self.moisture, 0, 100),
+            'reaction': self.map_values(self.reaction, 0, 14),
+            'nutrient': self.map_values(self.nutrient, 0, 100),
+            'salinity': self.map_values(self.salinity, 0, 16)
         }
         return data
-
 
 
 
