@@ -144,13 +144,15 @@ class SensorMeasurements(db.Model):
     @property
     def serialize(self):
         data = {
-            'measured': self.dump_datetime(self.measured), #.isoformat() + 'Z'
-            'sunlight' : self.map_values(self.sunlight, 1, 100000),
-            'temperature': self.map_values(self.temperature, -20, 60),
-            'moisture': self.map_values(self.moisture, 0, 100),
-            'reaction': self.map_values(self.reaction, 0, 14),
-            'nutrient': self.map_values(self.nutrient, 0, 100),
-            'salinity': self.map_values(self.salinity, 0, 16)
+            'x_dataset': self.dump_datetime(self.measured), #.isoformat() + 'Z'
+            'y_dataset': {
+                'sunlight' : self.map_values(self.sunlight, 1, 100000),
+                'temperature': self.map_values(self.temperature, -20, 60),
+                'moisture': self.map_values(self.moisture, 0, 100),
+                'reaction': self.map_values(self.reaction, 0, 14),
+                'nutrient': self.map_values(self.nutrient, 0, 100),
+                'salinity': self.map_values(self.salinity, 0, 16)
+            }
         }
         return data
 

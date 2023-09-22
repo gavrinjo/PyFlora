@@ -255,3 +255,7 @@ class Weather(): # treba
         content = self.get_url(self.WEATHER_DATA_URL.format(lat=location[0], lon=location[1], api_key=current_app.config['WEATHER_API']) + '&mode=xml')
         return xmltodict.parse(content)['current']
 
+
+def graph_data(query):
+    dataset = []
+    pass
