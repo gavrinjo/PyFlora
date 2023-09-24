@@ -135,16 +135,15 @@ class SensorMeasurements(db.Model):
     def map_values(value, min_value, max_value):
         return [value, np.interp(value, [min_value, max_value], [1, 10])]
 
-    @staticmethod
-    def dump_datetime(value: datetime):
-        if value is None:
-            return None
-        return [value.strftime('%d.%m.%Y'), value.strftime('%H:%M:%S.%f')]
+    @property
+    def sunlight_prop(self):
+        data = {'x': self.measured.strftime('%d.%m.%Y - %H:%M:%S.%f'), 'y': self.sunlight}
+        return data
 
     @property
     def serialize(self):
         data = {
-            'x_dataset': self.dump_datetime(self.measured), #.isoformat() + 'Z'
+            'x_dataset': self.measured.strftime('%d.%m.%Y - %H:%M:%S.%f'), #.isoformat() + 'Z'
             'y_dataset': {
                 'sunlight' : self.map_values(self.sunlight, 1, 100000),
                 'temperature': self.map_values(self.temperature, -20, 60),

@@ -14,7 +14,7 @@ from contextlib import closing
 from random import randint
 from datetime import datetime
 from flask import current_app
-from app.models import Gauge, Pot, SensorMeasurements
+from app.models import Gauge, Pot, SensorMeasurements, Plant
 from app.repo import Weather
 from app import db
 
@@ -256,6 +256,29 @@ class Weather(): # treba
         return xmltodict.parse(content)['current']
 
 
-def graph_data(query):
-    dataset = []
+def graph_data(sensor, pot):
+    columns = []
+    for column in db.inspect(pot).attrs:
+        if column.key.endswith("status"):
+            columns.append(column.key)
+    measurements = SensorMeasurements.query.filter_by(pot_id=pot.id).all()
+    data = []
+    for i, column in enumerate(columns):
+        column = column[:column.find('_')]
+        plant = Plant.query.filter_by(id=pot.id).all()
+        min_val, max_val = getattr(plant, column).split(';')
+        data.append({
+            'labels': [],
+            'datasets': [{
+                'label': column,
+                'data': [],
+                'borderColor': 'blue', # rgba(255,0,0,1)
+                'backgroundColor': 'blue' # rgba(255,0,0,1)
+            }]
+        })
+        for item in measurements:
+            data[i]['labels'].append(item.measurement)
+            data[i]['dataset']['data'].append(getattr(item, column))
+
+
     pass

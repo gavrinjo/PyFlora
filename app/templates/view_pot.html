@@ -41,7 +41,7 @@
 </nav>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-        <canvas id="line" width="400" height="400"></canvas>
+        <canvas onload="my_test_func()" id="line" width="400" height="400"></canvas>
     </div>
     <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
         <canvas id="radar" width="400" height="400"></canvas>
@@ -60,6 +60,10 @@
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script type="text/javascript">
     
+    function my_test_func() {
+        console.log("test");
+    }
+
     const myChart = new Chart(ctx, config)
     const cols = {{ data['columns']|safe }}
     const df = {{ data['data'] }}
