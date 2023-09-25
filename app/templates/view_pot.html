@@ -47,17 +47,27 @@
         <canvas id="radar" width="400" height="400"></canvas>
     </div>
     <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-        <div id='chart' class='chart'></div>
+        <!-- <div id='chart' class='chart' style="width:100%"></div> -->
+        <!-- <div id='chart2' class='chart'></div>
+        <div id='chart3' class='chart'></div>
+        <div id='chart4' class='chart'></div>
+        <div id='chart5' class='chart'></div> -->
     </div>
 
 </div>
+<div id='chart' class='chart' style="width:100%"></div>
+<div id='chart2' class='chart'></div>
+<div id='chart3' class='chart'></div>
+<div id='chart4' class='chart'></div>
+<div id='chart5' class='chart'></div>
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 <!-- Optional JavaScript -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/test.js')}}"></script>
-<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script src="https://cdn.plot.ly/plotly-2.26.0.min.js" charset="utf-8"></script>
+<!-- <script src='https://cdn.plot.ly/plotly-latest.min.js'></script> -->
 <script type="text/javascript">
     
     function my_test_func() {
@@ -73,8 +83,10 @@
         var line = addDataSet(myChart, cols[i], 'red', df[i].slice(0, 10), labs.slice(0, 10))
     }
 
+    plotly_chart = document.getElementById('chart');
     var graphs = {{graphJSON | safe}};
-    Plotly.plot('chart',graphs,{});
+    graphs.config = {'displayModeBar': false, 'responsive': true, 'autosizable': true, 'fillFrame': false}
+    Plotly.newPlot(plotly_chart, graphs,{});
 
 </script>
 {% endblock %}

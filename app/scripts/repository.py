@@ -22,8 +22,6 @@ from app import db
 
 def plot_config(fig: go.Figure, df: pd.DataFrame):
 
-
-
     columns = list(set(df.columns.tolist()) - set(['id', 'pot_id', 'measured']))
     data = []
     for column in columns:
@@ -31,28 +29,28 @@ def plot_config(fig: go.Figure, df: pd.DataFrame):
             yy = df[column]
         else:
             yy = mapper(df[column], column)['mapped_value']
-        data.append(go.Scatter(x=df['measured'], y=yy, name=column, line_shape='spline')) # np.interp(df[column], [0,100], [1,10])
+        text = [f'{column.capitalize()} : {val}' for val in df[column]]
+        data.append(go.Scatter(x=df['measured'], y=yy, name=column, line_shape='spline', hovertext=text, hoverinfo='x + text')) # np.interp(df[column], [0,100], [1,10])
     fig.add_traces(data)
-    fig.update_xaxes(type='category', showticklabels=False)
-    # fig.update_yaxes(
-    #     ticktext=[1,2,3,4,5,6,7,8,9,56],
-    #     tickvals=np.interp(df[column], [0,100], [1,10]),
-    #     tick0=0, dtick=1)
+    fig.update_xaxes(type='category', showticklabels=True)#, showspikes=True, spikemode="across", spikesnap="cursor")
     fig.update_traces(mode="lines+markers", hovertemplate=None)
     fig.update_layout(
+        yaxis_range=[0,10],
+        autosize= True,
         hovermode="x unified",
+        hoverlabel=dict(
+            font_size=11
+        ),
         template='plotly_white',
         legend=dict(
             orientation="h",
-            # entrywidth=70,
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        ),
-        margin=dict(l=20, r=20, t=20, b=20),
-        width=900
+            yanchor="top",
+            xanchor="center",
+            y=1.2,
+            x=0.5
+        )
     )
+
     return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
 
@@ -121,12 +119,6 @@ class SensorSim():
         max_median = np.median(max_array) # median value of maximum values array, used as maximum value
         std_value = np.ceil(np.median([min_median, max_median])) # median value over minimum and maximum values, used as standard value
         off_value = np.ceil(std_value * 0.1) # 10% of median value over minimum and maximum values, used as offset value
-        # ref_values = {
-        #     'min_val': min(min_array),
-        #     'max_val': max(max_array),
-        #     'std_val': std_value,
-        #     'off_val': off_value
-        # }
         return min(min_array), max(max_array), std_value, off_value
 
 
@@ -256,29 +248,20 @@ class Weather(): # treba
         return xmltodict.parse(content)['current']
 
 
-def graph_data(sensor, pot):
+def graph_data(pot):
     columns = []
     for column in db.inspect(pot).attrs:
         if column.key.endswith("status"):
             columns.append(column.key)
     measurements = SensorMeasurements.query.filter_by(pot_id=pot.id).all()
-    data = []
-    for i, column in enumerate(columns):
+    data = {}
+    for column in columns:
         column = column[:column.find('_')]
-        plant = Plant.query.filter_by(id=pot.id).all()
-        min_val, max_val = getattr(plant, column).split(';')
-        data.append({
-            'labels': [],
-            'datasets': [{
-                'label': column,
-                'data': [],
-                'borderColor': 'blue', # rgba(255,0,0,1)
-                'backgroundColor': 'blue' # rgba(255,0,0,1)
-            }]
-        })
+        min_val, max_val = getattr(Plant.query.get(pot.plant_id), column).split(';')
+        data[column] = {'measured':{}, 'min_value': {}, 'max_value': {}}
         for item in measurements:
-            data[i]['labels'].append(item.measurement)
-            data[i]['dataset']['data'].append(getattr(item, column))
+            data[column]['measured'][item.measured.strftime("%d.%m.%Y, %H:%M:%S.%f")] = getattr(item, column)
+            data[column]['min_value'][item.measured.strftime("%d.%m.%Y, %H:%M:%S.%f")] = min_val
+            data[column]['max_value'][item.measured.strftime("%d.%m.%Y, %H:%M:%S.%f")] = max_val
+    return data
 
-
-    pass

@@ -172,8 +172,8 @@ def view_pot(pot_id):
 
     dt = build2(pot.id) # za charts.js
 
-    # za plotly ----
-    df = pd.read_sql_query("SELECT * FROM sensor_measurements", current_app.config['SQLALCHEMY_DATABASE_URI']) 
+    # za plotly ---- "SELECT * FROM sensor_measurements"
+    df = pd.read_sql_query(db.select(SensorMeasurements), current_app.config['SQLALCHEMY_DATABASE_URI']) 
     df = df.sort_values(by=['measured'], ascending=False)[:10]
     df = df[df['pot_id']==pot.id]
 
