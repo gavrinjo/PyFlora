@@ -2,6 +2,7 @@
 import json
 import plotly
 import plotly.express as px
+from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
@@ -19,8 +20,92 @@ from app.repo import Weather
 from app import db
 
 
+class ZaPlotlyLine():
+
+    def __init__(self, pypot) -> None:
+        self.pypot = pypot
+        self.columns = self.get_columns(self.pypot)
+
+    
+    def get_columns(self, pot: object) -> list:
+        columns = []
+        for column in db.inspect(pot).attrs:
+            if column.key.endswith("status") and getattr(pot, column.key):
+                columns.append(column.key)
+        return columns
+
+    def get_measured_data(self, pot: object, N=10):
+        df = pd.read_sql_query(db.select(SensorMeasurements), current_app.config['SQLALCHEMY_DATABASE_URI']) 
+        df = df.sort_values(by=['measured'], ascending=False)[:N]
+        df = df[df['pot_id']==pot.id]
+        return df
+
+    def get_ref_values(self, query: object) -> tuple:
+        min_array = [getattr(x, 'min_value') for x in query] # array of minimum values column
+        min_median = np.median(min_array) # median value of minimum values array, used as minimum value
+        max_array = [getattr(x, 'max_value') for x in query] # array of maximum values column
+        max_median = np.median(max_array) # median value of maximum values array, used as maximum value
+        std_value = np.ceil(np.median([min_median, max_median])) # median value over minimum and maximum values, used as standard value
+        off_value = np.ceil(std_value * 0.1) # 10% of median value over minimum and maximum values, used as offset value
+        return min(min_array), max(max_array), std_value, off_value
+    
+    def mapper(self, value, column: str):
+
+        min_value = db.session.execute(db.select(db.func.min(Gauge.min_value)).filter_by(name=column)).scalar_one()
+        max_value = db.session.execute(db.select(db.func.max(Gauge.max_value)).filter_by(name=column)).scalar_one()
+
+        if column != 'temperature':
+            mapped_value = np.interp(value, [-20, 80], [1, 10])
+        else:
+            mapped_value = np.interp(value, [min_value, max_value], [1, 10])
+
+        return mapped_value
+
+    def configure(self):
+        df = self.get_measured_data(self.pypot, N=20)[::-1]
+        fig = make_subplots(rows=6, cols=1, shared_xaxes=True, vertical_spacing=0.0)
+        plant = Plant.query.get(self.pypot.plant_id)
+        for i, column in enumerate(self.columns):
+            column = column[:column.find('_')]
+            min_value, max_value = getattr(plant, column).split(';')
+            x = [item.strftime("%d.%m.%Y, %H:%M:%S.%f") for item in df['measured']]
+            x_rev = x[::-1]
+            y1 = [self.mapper(value, column) for value in df[column]]
+            y2 = [self.mapper(min_value, column) for _ in df[column]]
+            y3 = [self.mapper(max_value, column) for _ in df[column]]
+            text1 = [f'{column.capitalize()} : {val}' for val in df[column]]
+            text2 = [f'MIN : {min_value}' for val in df[column]]
+            # text3 = [f'MAX : {max_value}' for val in df[column]]
+            fig.add_trace(go.Scatter(x=x+x_rev, y=y3+y2, fill='toself', showlegend=False, name=f'Optimal range {column}', hovertext=text2, hoverinfo='x + text'), row=i+1, col=1)
+            fig.add_trace(go.Scatter(x=x, y=y1, line_shape='linear', mode='lines+markers', name=column, hovertext=text1, hoverinfo='x + text'), row=i+1, col=1)
+            # fig.add_trace(go.Scatter(x=x, y=y3, line_shape='spline', name=f'MAX {column}', hovertext=text3, hoverinfo='x + text'), row=i+1, col=1)
+            fig.update_xaxes(type='category', showline=True, linewidth=1, linecolor='black', mirror=True)
+            fig.update_yaxes(showline=True, linewidth=1, linecolor='black', mirror=True, tickvals=[1,2,3,4,5,6,7,8,9,10])
+            fig.update_layout(
+                height=1600,
+                yaxis_range=[1,10],
+                yaxis = dict(tickmode = 'linear', tick0 = 0, dtick = 1),
+                autosize= True,
+                hovermode="x unified",
+                hoverlabel=dict(
+                    font_size=11
+                ),
+                template='plotly_white',
+                legend=dict(
+                    orientation="h",
+                    yanchor="top",
+                    xanchor="center",
+                    y=1.05,
+                    x=0.5
+                )
+            )
+        return fig
+
+
 
 def plot_config(fig: go.Figure, df: pd.DataFrame):
+    
+
 
     columns = list(set(df.columns.tolist()) - set(['id', 'pot_id', 'measured']))
     data = []
@@ -264,4 +349,5 @@ def graph_data(pot):
             data[column]['min_value'][item.measured.strftime("%d.%m.%Y, %H:%M:%S.%f")] = min_val
             data[column]['max_value'][item.measured.strftime("%d.%m.%Y, %H:%M:%S.%f")] = max_val
     return data
+
 

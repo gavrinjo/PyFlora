@@ -7,7 +7,7 @@ from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm, EditPotForm, EmptyForm
 from app.repo import Weather, Radar, Line, upload_image, build2
-from app.scripts.repository import plot_config, SensorSim
+from app.scripts.repository import plot_config, SensorSim, ZaPlotlyLine
 
 import numpy as np
 import pandas as pd
@@ -181,14 +181,15 @@ def view_pot(pot_id):
     import plotly
     import plotly.express as px
     import plotly.graph_objects as go
-    fig = go.Figure()
+    # fig = go.Figure()
     # fig = px.line(df[::-1], x='measured', y=['moisture', 'salinity'], template='plotly_white', line_shape='spline')
     # fig.update_xaxes(type='category')
     # fig.update_traces(mode="markers+lines", hovertemplate=None)
     # fig.update_layout(hovermode="x unified")
     # graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
-    graphJSON = plot_config(fig, df[::-1])
+    fig = ZaPlotlyLine(pot).configure()
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    # graphJSON = plot_config(fig, df[::-1])
     # ------
     # line_ch = Line()
     # line_ch.build(pot, metrics, 'salinity', 'red')
