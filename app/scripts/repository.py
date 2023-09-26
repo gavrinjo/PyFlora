@@ -105,9 +105,10 @@ class ZaPlotlyLine():
             fig.update_layout(
                 height=1600,
                 autosize= True,
-                hovermode="x unified",
+                # hovermode="x unified",
                 hoverlabel=dict(
-                    font_size=11
+                    font_size=12,
+                    bgcolor='rgba(255,255,255,0.2)'
                 ),
                 template='plotly_white',
                 legend=dict(
