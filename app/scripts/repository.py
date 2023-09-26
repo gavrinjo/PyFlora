@@ -22,6 +22,15 @@ from app import db
 
 class ZaPlotlyLine():
 
+    COLORS = {
+        'sunlight': 'orange',
+        'temperature': 'orangered',
+        'moisture': 'lightblue',
+        'reaction': 'darkorange',
+        'nutrient': 'forestgreen',
+        'salinity': 'sienna'
+    }
+
     def __init__(self, pypot) -> None:
         self.pypot = pypot
         self.columns = self.get_columns(self.pypot)
@@ -40,51 +49,61 @@ class ZaPlotlyLine():
         df = df[df['pot_id']==pot.id]
         return df
 
-    def get_ref_values(self, query: object) -> tuple:
-        min_array = [getattr(x, 'min_value') for x in query] # array of minimum values column
-        min_median = np.median(min_array) # median value of minimum values array, used as minimum value
-        max_array = [getattr(x, 'max_value') for x in query] # array of maximum values column
-        max_median = np.median(max_array) # median value of maximum values array, used as maximum value
-        std_value = np.ceil(np.median([min_median, max_median])) # median value over minimum and maximum values, used as standard value
-        off_value = np.ceil(std_value * 0.1) # 10% of median value over minimum and maximum values, used as offset value
-        return min(min_array), max(max_array), std_value, off_value
-    
-    def mapper(self, value, column: str):
-
-        min_value = db.session.execute(db.select(db.func.min(Gauge.min_value)).filter_by(name=column)).scalar_one()
-        max_value = db.session.execute(db.select(db.func.max(Gauge.max_value)).filter_by(name=column)).scalar_one()
-
-        if column != 'temperature':
-            mapped_value = np.interp(value, [-20, 80], [1, 10])
-        else:
-            mapped_value = np.interp(value, [min_value, max_value], [1, 10])
-
-        return mapped_value
-
     def configure(self):
-        df = self.get_measured_data(self.pypot, N=20)[::-1]
-        fig = make_subplots(rows=6, cols=1, shared_xaxes=True, vertical_spacing=0.0)
+        df = self.get_measured_data(self.pypot, N=20)
+        fig = make_subplots(rows=6, cols=1, shared_xaxes=True, vertical_spacing=0.02) # , shared_yaxes='all')
         plant = Plant.query.get(self.pypot.plant_id)
         for i, column in enumerate(self.columns):
             column = column[:column.find('_')]
             min_value, max_value = getattr(plant, column).split(';')
-            x = [item.strftime("%d.%m.%Y, %H:%M:%S.%f") for item in df['measured']]
-            x_rev = x[::-1]
-            y1 = [self.mapper(value, column) for value in df[column]]
-            y2 = [self.mapper(min_value, column) for _ in df[column]]
-            y3 = [self.mapper(max_value, column) for _ in df[column]]
-            text1 = [f'{column.capitalize()} : {val}' for val in df[column]]
-            text2 = [f'MIN : {min_value}' for val in df[column]]
-            # text3 = [f'MAX : {max_value}' for val in df[column]]
-            fig.add_trace(go.Scatter(x=x+x_rev, y=y3+y2, fill='toself', showlegend=False, name=f'Optimal range {column}', hovertext=text2, hoverinfo='x + text'), row=i+1, col=1)
-            fig.add_trace(go.Scatter(x=x, y=y1, line_shape='linear', mode='lines+markers', name=column, hovertext=text1, hoverinfo='x + text'), row=i+1, col=1)
-            # fig.add_trace(go.Scatter(x=x, y=y3, line_shape='spline', name=f'MAX {column}', hovertext=text3, hoverinfo='x + text'), row=i+1, col=1)
-            fig.update_xaxes(type='category', showline=True, linewidth=1, linecolor='black', mirror=True)
-            fig.update_yaxes(showline=True, linewidth=1, linecolor='black', mirror=True, tickvals=[1,2,3,4,5,6,7,8,9,10])
+            x = df['measured']# [value for value in df['measured']] #[item.strftime("%d.%m.%Y, %H:%M:%S.%f") for item in df['measured']]
+            y = df[column]
+            text = [f'{column.capitalize()} : {val}' for val in df[column]]
+            fig.add_scatter(
+                x=x,
+                y=y,
+                line_shape='linear',
+                line_color=self.COLORS[column],
+                mode='lines',#+markers',
+                name=column.capitalize(),
+                hovertext=text,
+                hoverinfo='x + text',
+                row=i+1, col=1
+            )
+            fig.add_hrect(
+                y0=min_value,
+                y1=max_value,
+                annotation_text=f'Optimal {column} range : {min_value}-{max_value}',
+                annotation_position='top left',
+                fillcolor=self.COLORS[column],
+                opacity=.25,
+                line_width=0,
+                row=i+1,
+                col=1
+            )
+            fig.update_xaxes(
+                # type='category',
+                type='date',
+                # tick0=x[0],
+                # tickmode='linear',
+                # dtick=3600000.0,
+                # tickangle = 270,
+                ticksuffix = "  ",
+                showline=True,
+                linewidth=1,
+                linecolor='lightgrey',
+                mirror=True
+            )
+            fig.update_yaxes(
+                ticksuffix = "  ",
+                showline=True,
+                linewidth=1,
+                linecolor='lightgrey',
+                mirror=True,
+                fixedrange=True
+            )
             fig.update_layout(
                 height=1600,
-                yaxis_range=[1,10],
-                yaxis = dict(tickmode = 'linear', tick0 = 0, dtick = 1),
                 autosize= True,
                 hovermode="x unified",
                 hoverlabel=dict(
@@ -233,7 +252,7 @@ class SensorSim():
             if getattr(self.pot, column + '_status'):
                 if column != 'temperature':
                     ds = self.get_ref_values(query) # dataset
-                    if self.last_measurement is None:
+                    if getattr(self.last_measurement, column) is None:
                         sensor = self.get_random_value(ds[2], ds[0], ds[1], ds[3])
                     else:
                         sensor = self.get_random_value(getattr(self.last_measurement, column), ds[0], ds[1], ds[3])
