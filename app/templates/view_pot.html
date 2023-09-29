@@ -30,8 +30,6 @@
     </div>
 </section>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script> -->
-<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/_line.js')}}"></script> -->
 <nav>
     <div class="nav nav-tabs" id="myTab" role="tablist">
         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Line chart</button>
@@ -44,45 +42,21 @@
         <div id='chart' class='chart' style="width:100%"></div>
     </div>
     <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-        <canvas id="radar" width="400" height="400"></canvas>
+        <div id='novi_chart1' class='chart' style="width:100%"></div>
     </div>
     <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-        <!-- <div id='chart' class='chart' style="width:100%"></div> -->
-        <!-- <div id='chart2' class='chart'></div>
-        <div id='chart3' class='chart'></div>
-        <div id='chart4' class='chart'></div>
-        <div id='chart5' class='chart'></div> -->
+        <div id='novi_chart2' class='chart' style="width:100%"></div>
     </div>
 
 </div>
-
-<!-- <div id='chart2' class='chart'></div>
-<div id='chart3' class='chart'></div>
-<div id='chart4' class='chart'></div>
-<div id='chart5' class='chart'></div> -->
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 <!-- Optional JavaScript -->
-<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/test.js')}}"></script> -->
 <script src="https://cdn.plot.ly/plotly-2.26.0.min.js" charset="utf-8"></script>
-<!-- <script src='https://cdn.plot.ly/plotly-latest.min.js'></script> -->
 <script type="text/javascript">
-    /*
-    function my_test_func() {
-        console.log("test");
-    }
 
-    const myChart = new Chart(ctx, config)
-    const cols = {{ data['columns']|safe }}
-    const df = {{ data['data'] }}
-    const labs = {{ data['labels']|safe }}
-
-    for (let i = 0; i < cols.length; i++){
-        var line = addDataSet(myChart, cols[i], 'red', df[i].slice(0, 10), labs.slice(0, 10))
-    }
-    */
     plotly_chart = document.getElementById('chart');
     var graphs = {{graphJSON | safe}};
     graphs.config = {'displayModeBar': false, 'responsive': true, 'autosizable': true, 'fillFrame': false}

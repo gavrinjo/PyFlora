@@ -6,11 +6,13 @@ from app import db
 from app.main import bp
 from app.models import User, Plant, Pot, SensorMeasurements
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm, EditPotForm, EmptyForm
-from app.repo import Weather, Radar, Line, upload_image, build2
-from app.scripts.repository import plot_config, SensorSim, ZaPlotlyLine
+from app.repo import upload_image
+from app.scripts.repository import SensorSim, ZaPlotlyLine, Weather
 
-import numpy as np
+# import numpy as np
 import pandas as pd
+import json
+import plotly
 
 
 @bp.before_app_request
@@ -166,100 +168,10 @@ def pypots():
 def view_pot(pot_id):
     form = EmptyForm()
     pot = Pot.query.get(pot_id)
-    metrics = SensorMeasurements
-
-    ## new stuff
-
-    dt = build2(pot.id) # za charts.js
-
-    # za plotly ---- "SELECT * FROM sensor_measurements"
-    df = pd.read_sql_query(db.select(SensorMeasurements), current_app.config['SQLALCHEMY_DATABASE_URI']) 
-    df = df.sort_values(by=['measured'], ascending=False)[:10]
-    df = df[df['pot_id']==pot.id]
-
-    import json
-    import plotly
-    import plotly.express as px
-    import plotly.graph_objects as go
-    # fig = go.Figure()
-    # fig = px.line(df[::-1], x='measured', y=['moisture', 'salinity'], template='plotly_white', line_shape='spline')
-    # fig.update_xaxes(type='category')
-    # fig.update_traces(mode="markers+lines", hovertemplate=None)
-    # fig.update_layout(hovermode="x unified")
-    # graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     fig = ZaPlotlyLine(pot).configure()
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    # graphJSON = plot_config(fig, df[::-1])
-    # ------
-    # line_ch = Line()
-    # line_ch.build(pot, metrics, 'salinity', 'red')
-    # line_ch.build(pot, metrics, 'moisture', 'blue')
-    # data = line_ch.represent_chart()
 
-    ## old stuff
-
-    # query = (
-    #     metrics.query
-    #     .with_entities(
-    #         metrics.measured,
-    #         metrics.temperature,
-    #         metrics.moisture,
-    #         metrics.salinity,
-    #         metrics.reaction,
-    #         metrics.sunlight,
-    #         metrics.nutrient
-    #     )
-    #     .filter_by(pot_id=pot.id)
-    #     .order_by(metrics.measured.desc()).limit(7)
-    # )
-    # columns = ['measured', 'temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient']
-
-    # df = pd.DataFrame(query, columns=columns)
-
-    # df = pd.DataFrame(metrics.query
-    # .with_entities(metrics.salinity, metrics.ph_range, metrics.moisture)
-    # .filter_by(pot_id=pot_id)
-    # .order_by(metrics.measured.desc()).first(), columns=['salinity', 'ph_range', 'moisture'])
-
-    # df = (metrics.query
-    # .with_entities(metrics.salinity, metrics.ph_range, metrics.moisture)
-    # .filter_by(pot_id=pot_id)
-    # .order_by(metrics.measured.desc()).first())
-    # df = [x for x in df]
-
-    # df = pd.DataFrame(metrics.query
-    # .with_entities(metrics.measured, metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
-    # .filter_by(pot_id=pot_id)
-    # .order_by(metrics.measured.desc()).limit(7)[::-1], columns=['measured', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'])
-
-    # chart = Line()
-    # chart.plot(df['measured'], np.log2(df['salinity'])*2, 'blue', 'salinity')
-    # chart.plot(df['measured'], (df['reaction']/14)*10, 'red', 'reaction')
-    # chart.plot(df['measured'], (df['moisture']/100)*10, 'orange', 'moisture')
-    # data = chart.represent_chart()
-
-
-
-
-    # radar = Radar()
-
-    # df = pd.DataFrame(metrics.query
-    # .with_entities(metrics.temperature, metrics.moisture, metrics.salinity, metrics.reaction, metrics.sunlight, metrics.nutrient)
-    # .filter_by(pot_id=pot_id)
-    # .order_by(metrics.measured.desc()).limit(1), columns=['temperature', 'moisture', 'salinity', 'reaction', 'sunlight', 'nutrient'])
-
-    # data = []
-    # for i, val in enumerate(df.iloc[0][columns[1:]]):
-    #     if i == 0:
-    #        data.append(np.interp(val, [-20,80], [1,10]))
-    #     else:
-    #         data.append(np.interp(val, [0,100], [1,10]))
-
-    # radar.plot(columns[1:], data, 'green', 'measured')
-    # radar.plot(columns[1:], [5, 5, 5, 5, 5, 5], 'orange', 'neutral')
-    # data = radar.represent_chart()
-
-    return render_template('view_pot.html', title=pot.name, pot=pot, data=dt, form=form, graphJSON=graphJSON)
+    return render_template('view_pot.html', title=pot.name, pot=pot, form=form, graphJSON=graphJSON)
 
 
 @bp.route('/pot/new', methods=['GET', 'POST'])
@@ -330,7 +242,6 @@ def sync_pot(pot_id):
     if form.validate_on_submit():
         pot = Pot.query.get(pot_id)
         measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
-        # sensor_data = Sensor(pot, measurement).build()
 
         new_measurement = SensorSim(pot, measurement).generate()
 

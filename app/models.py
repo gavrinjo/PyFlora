@@ -111,6 +111,27 @@ class Gauge(db.Model):
     description = db.Column(db.String(128))
 
 
+class Measurements(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    sensor = db.Column(db.String(64))
+    value = db.Column(db.Integer)
+    unit = db.Column(db.String(64))
+    measured = db.Column(db.DateTime)
+    pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'))
+
+    def __repr__(self):
+        return f'< {self.sensor} : {self.value}[{self.unit}], Measured at : {self.measured}, Pot : {self.pot_id} >'
+
+    @property
+    def serialize(self):
+        data = {
+            'x_dataset': self.measured.strftime('%d.%m.%Y - %H:%M:%S.%f'), #.isoformat() + 'Z'
+            'y_dataset': {self.sensor : self.value}
+        }
+        return data
+
+
 class SensorMeasurements(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 

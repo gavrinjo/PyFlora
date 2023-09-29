@@ -1,22 +1,17 @@
 
 import json
-import plotly
-import plotly.express as px
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 import xmltodict
 
 from requests import get
 from contextlib import closing
-
-# from ipychart import Chart
 from random import randint
 from datetime import datetime
+from plotly.subplots import make_subplots
+
 from flask import current_app
-from app.models import Gauge, Pot, SensorMeasurements, Plant
-from app.repo import Weather
+from app.models import Gauge, SensorMeasurements, Plant
 from app import db
 
 
@@ -56,12 +51,10 @@ class ZaPlotlyLine():
         for i, column in enumerate(self.columns):
             column = column[:column.find('_')]
             min_value, max_value = getattr(plant, column).split(';')
-            x = df['measured']# [value for value in df['measured']] #[item.strftime("%d.%m.%Y, %H:%M:%S.%f") for item in df['measured']]
-            y = df[column]
             text = [f'{column.capitalize()} : {val}' for val in df[column]]
             fig.add_scatter(
-                x=x,
-                y=y,
+                x=df['measured'],
+                y=df[column],
                 line_shape='linear',
                 line_color=self.COLORS[column],
                 mode='lines',#+markers',
@@ -84,10 +77,6 @@ class ZaPlotlyLine():
             fig.update_xaxes(
                 # type='category',
                 type='date',
-                # tick0=x[0],
-                # tickmode='linear',
-                # dtick=3600000.0,
-                # tickangle = 270,
                 ticksuffix = "  ",
                 showline=True,
                 linewidth=1,
@@ -120,86 +109,6 @@ class ZaPlotlyLine():
                 )
             )
         return fig
-
-
-
-def plot_config(fig: go.Figure, df: pd.DataFrame):
-    
-
-
-    columns = list(set(df.columns.tolist()) - set(['id', 'pot_id', 'measured']))
-    data = []
-    for column in columns:
-        if column == 'temperature':
-            yy = df[column]
-        else:
-            yy = mapper(df[column], column)['mapped_value']
-        text = [f'{column.capitalize()} : {val}' for val in df[column]]
-        data.append(go.Scatter(x=df['measured'], y=yy, name=column, line_shape='spline', hovertext=text, hoverinfo='x + text')) # np.interp(df[column], [0,100], [1,10])
-    fig.add_traces(data)
-    fig.update_xaxes(type='category', showticklabels=True)#, showspikes=True, spikemode="across", spikesnap="cursor")
-    fig.update_traces(mode="lines+markers", hovertemplate=None)
-    fig.update_layout(
-        yaxis_range=[0,10],
-        autosize= True,
-        hovermode="x unified",
-        hoverlabel=dict(
-            font_size=11
-        ),
-        template='plotly_white',
-        legend=dict(
-            orientation="h",
-            yanchor="top",
-            xanchor="center",
-            y=1.2,
-            x=0.5
-        )
-    )
-
-    return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
-
-
-
-# dataset = {
-#   'labels': ['Data 1', 'Data 2', 'Data 3', 'Data 4', 
-#              'Data 5', 'Data 6', 'Data 7', 'Data 8'],
-#   'datasets': [{'data': [14, 22, 36, 48, 60, 90, 28, 12]}]
-# }
-# options= {
-#         'scales': {
-#             'y': {
-#                 'ticks': {
-#                     # Include a dollar sign in the ticks
-#                     'callback': '''function(value, index, values) {
-#                         return '$' + value;
-#                     }'''
-#                 }
-#             }
-#         },
-#     }
-
-# mychart = Chart(data=dataset, kind='line', options=options)
-# print(mychart.get_html_template())
-
-
-def mapper(value, column: str):
-    miv = Gauge.query.filter_by(name=column).order_by(Gauge.min_value).first()
-    mav = Gauge.query.filter_by(name=column).order_by(Gauge.max_value.desc()).first()
-    av = Gauge.query.filter_by(name=column, eiv=5).first()
-    if column not in ['sunlight', 'temperature']:
-        mapped_value = np.interp(value, [miv.min_value, mav.max_value], [1, 10])
-    elif column == 'sunlight':
-        mapped_value = np.interp(np.log10(value)*20, [np.log10(miv.min_value)*20, np.log10(mav.max_value)*20], [1, 10])
-
-    
-    return {
-        'mapped_value': mapped_value,
-        'value': value,
-        'min_value': miv.min_value,
-        'max_value': mav.max_value,
-        'avg_value': (av.min_value + av.max_value) / 2
-    }
 
 
 class SensorSim():
@@ -351,23 +260,4 @@ class Weather(): # treba
         location = self.location()
         content = self.get_url(self.WEATHER_DATA_URL.format(lat=location[0], lon=location[1], api_key=current_app.config['WEATHER_API']) + '&mode=xml')
         return xmltodict.parse(content)['current']
-
-
-def graph_data(pot):
-    columns = []
-    for column in db.inspect(pot).attrs:
-        if column.key.endswith("status"):
-            columns.append(column.key)
-    measurements = SensorMeasurements.query.filter_by(pot_id=pot.id).all()
-    data = {}
-    for column in columns:
-        column = column[:column.find('_')]
-        min_val, max_val = getattr(Plant.query.get(pot.plant_id), column).split(';')
-        data[column] = {'measured':{}, 'min_value': {}, 'max_value': {}}
-        for item in measurements:
-            data[column]['measured'][item.measured.strftime("%d.%m.%Y, %H:%M:%S.%f")] = getattr(item, column)
-            data[column]['min_value'][item.measured.strftime("%d.%m.%Y, %H:%M:%S.%f")] = min_val
-            data[column]['max_value'][item.measured.strftime("%d.%m.%Y, %H:%M:%S.%f")] = max_val
-    return data
-
 
