@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form, render_field %}
+
+{% block content %}
+<h1 class="h3 mb-3 fw-normal">Add Plant</h1>
+<div class="col-lg-7">
+<form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="">
+    {{ form.hidden_tag() }}
+        <div class="input-group mb-3">
+            <span class="input-group-text col-3">{{ form.name.label }}</span>
+            {{ form.name(class_="form-control") }}
+        </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.photo.label }}</span>
+            {{ form.photo(class_="form-control") }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.l_min.label|splitvalue(start=0, end=' min.') }}</span>
+            {{ form.l_min(class_="form-control", placeholder="MIN") }}
+            {{ form.l_max(class_="form-control", placeholder="MAX") }}
+            <span class="input-group-text col-1">{{ form.l_min.label|splitvalue(start='[', end=']') }}</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.t_min.label|splitvalue(start=0, end=' min.') }}</span>
+            {{ form.t_min(class_="form-control", placeholder="MIN") }}
+            {{ form.t_max(class_="form-control", placeholder="MAX") }}
+            <span class="input-group-text col-1">{{ form.t_min.label|splitvalue(start='[', end=']') }}</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.f_min.label|splitvalue(start=0, end=' min.') }}</span>
+            {{ form.f_min(class_="form-control", placeholder="MIN") }}
+            {{ form.f_max(class_="form-control", placeholder="MAX") }}
+            <span class="input-group-text col-1">{{ form.f_min.label|splitvalue(start='[', end=']') }}</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.r_min.label|splitvalue(start=0, end=' min.') }}</span>
+            {{ form.r_min(class_="form-control", placeholder="MIN") }}
+            {{ form.r_max(class_="form-control", placeholder="MAX") }}
+            <span class="input-group-text col-1">{{ form.r_min.label|splitvalue(start='[', end=']') }}</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.n_min.label|splitvalue(start=0, end=' min.') }}</span>
+            {{ form.n_min(class_="form-control", placeholder="MIN") }}
+            {{ form.n_max(class_="form-control", placeholder="MAX") }}
+            <span class="input-group-text col-1">{{ form.n_min.label|splitvalue(start='[', end=']') }}</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.s_min.label|splitvalue(start=0, end=' min.') }}</span>
+            {{ form.s_min(class_="form-control", placeholder="MIN") }}
+            {{ form.s_max(class_="form-control", placeholder="MAX") }}
+            <span class="input-group-text col-1">{{ form.s_min.label|splitvalue(start='[', end=']') }}</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.soil_texture.label }}</span>
+            {{ form.soil_texture(class_="form-control") }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.substrate.label }}</span>
+            {{ form.substrate(class_="form-control") }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="input-group">
+            <span class="input-group-text col-3">{{ form.description.label }}</span>
+            {{ form.description(class_="form-control") }}
+        </div>
+    </div>
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+</div>
+<!-- <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="">
+    {{ form.hidden_tag() }}
+    {% for field in form %}
+        {% if field.type == 'IntegerField' and 'min' in field.name %}
+            {% include '_sensor_input_min.html' %}
+        {% elif field.type == 'IntegerField' and 'max' in field.name %}
+            {% include '_sensor_input_max.html' %}
+        {% elif field.type == 'SubmitField' %}
+            {{ render_field(field, form_type='inline', placeholder=field.label.text) }}
+        {% else %}
+            {% include '_sensor_input.html' %}
+        {% endif %}
+    {% endfor %}
+</form> -->
+<!-- Optional JavaScript new plant-->
+<button type="button" data-bs-toggle="popover" title="Popover title" data-bs-content="Here's some amazing content.">Click to toggle popover</button>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+(() => {
+  'use strict'
+
+//   Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
+{% endblock %}
