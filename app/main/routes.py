@@ -65,7 +65,7 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
     
-
+"""
 @bp.route('/explore/pyplants')
 @login_required
 def pyplants():
@@ -256,3 +256,4 @@ def weather():
     user = User.query.filter_by(username=current_user.username).first_or_404()
     cwd = Weather('Zagreb')
     return render_template('weather.html', title='Weather', cwd=cwd)
+"""
