@@ -1,7 +1,6 @@
 from datetime import datetime
 from hashlib import md5
 from time import time
-import numpy as np
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
@@ -15,12 +14,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(128), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     is_admin = db.Column(db.Boolean, default=False)
-
     about_me = db.Column(db.String(256))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    # created = db.Column(db.DateTime, default=datetime.utcnow)
-
+    created = db.Column(db.DateTime, default=datetime.utcnow)
     pots = db.relationship('Pot', backref='owner', lazy='dynamic')
     
     def __repr__(self):
@@ -45,8 +41,32 @@ class User(UserMixin, db.Model):
         except:
             return
         return User.query.get(id)
-    
 
+
+class Plant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    photo = db.Column(db.String(64), nullable=False, default='default.jpg') # ovo ću naknadno napraviti
+    description = db.Column(db.String(256))
+    substrate = db.Column(db.String(128)) # recomendation
+    # soil_texture = db.Column(db.String(64)) # fine, medium, coarse ovo nam možda i neće trebati
+    created = db.Column(db.DateTime, default=datetime.utcnow)
+    pots = db.relationship('Pot', backref='plant', lazy='dynamic')
+    values = db.relationship('Value', backref='plant', lazy='dynamic')
+
+    def __repr__(self):
+        return f'<Plant {self.name}>'
+
+class Value(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    indicator = db.Column(db.String(64)) # sunlight, temperature, moisture, reaction, nutrient, salinity
+    min_value = db.Column(db.Integer)
+    max_value = db.Column(db.Integer)
+    unit = db.Column(db.String(64))
+    plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))
+
+
+""" stara Plant klasa, nepotrebno
 class Plant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
@@ -71,10 +91,45 @@ class Plant(db.Model):
     def __repr__(self):
         return f'<Plant {self.name}>'
 
+"""
 
 
+class Pot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    description = db.Column(db.String(256))
+    created = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))
+    sensors = db.relationship('Sensor', backref='pot', lazy='dynamic')
+
+    def __repr__(self):
+        return f'<Pot {self.name}>'
+    
+    def get_plant(self, id):
+        return Plant.query.get(id)
+    
+    def get_user(self, id):
+        return User.query.get(id)
 
 
+class Sensor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    indicator = db.Column(db.String(64)) # sunlight, temperature, moisture, reaction, nutrient, salinity
+    active = db.Column(db.Boolean, default=False) # senzor aktivan -> True / False
+    pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'))
+    readings = db.relationship('Reading', backref='sensor', lazy='dynamic')
+
+
+class Reading(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Integer) # vrijednost očitanja senzora
+    unit = db.Column(db.String(64)) # mjerna jedinica očitanja
+    measured = db.Column(db.DateTime, default=datetime.utcnow) # vrijeme mjerenja
+    sensor_id = db.Column(db.Integer, db.ForeignKey('sensor.id'))
+
+
+""" stara Pot klasa, nepotrebno
 class Pot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
@@ -102,8 +157,20 @@ class Pot(db.Model):
     
     def get_user(self, id):
         return User.query.get(id)
+"""
 
 
+class Gauge(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    level = db.Column(db.Integer, nullable=False) # indicator value (1-10)
+    name = db.Column(db.String(64))
+    min_value = db.Column(db.Integer, nullable=False) # min value for given 'level'
+    max_value = db.Column(db.Integer, nullable=False) # max value for given 'level'
+    unit = db.Column(db.String(64)) # measuring unit
+    description = db.Column(db.String(128))
+
+
+""" stara Gauge klasa, nepotrebno
 class Gauge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ei = db.Column(db.String(64), nullable=False) # ellenberg indicator [L,T,F,R,N,S]
@@ -113,8 +180,10 @@ class Gauge(db.Model):
     max_value = db.Column(db.Integer, nullable=False) # max value for given 'EIV'
     unit = db.Column(db.String(64)) # measuring unit
     description = db.Column(db.String(128))
+"""
 
 
+""" stara Measurement klasa, nepotrebno
 class Measurements(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -134,8 +203,10 @@ class Measurements(db.Model):
             'y_dataset': {self.sensor : self.value}
         }
         return data
+"""
 
 
+""" stara SensorMeasurements klasa, nepotrebno
 class SensorMeasurements(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
@@ -179,7 +250,7 @@ class SensorMeasurements(db.Model):
             }
         }
         return data
-
+"""
 
 
 

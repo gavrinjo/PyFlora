@@ -11,10 +11,10 @@ from datetime import datetime
 from plotly.subplots import make_subplots
 
 from flask import current_app
-from app.models import Gauge, SensorMeasurements, Plant
+from app.models import Gauge, Plant
 from app import db
 
-
+"""
 class ZaPlotlyLine():
 
     COLORS = {
@@ -177,7 +177,7 @@ class SensorSim():
 
         return new_measurement
 
-
+"""
 class Weather(): # treba
 
     GEO_LOCATION_URL = 'http://api.openweathermap.org/geo/1.0/direct?q={city_name}&limit={limit}&appid={api_key}'

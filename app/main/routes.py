@@ -4,10 +4,10 @@ from flask import render_template, flash, redirect, url_for, request, current_ap
 from flask_login import login_required, current_user
 from app import db
 from app.main import bp
-from app.models import User, Plant, Pot, SensorMeasurements
+from app.models import User, Plant, Pot
 from app.main.forms import EditProfileForm, AddPlantForm, PotForm, EditPotForm, EmptyForm
 from app.repo import upload_image
-from app.scripts.repository import SensorSim, ZaPlotlyLine, Weather
+# from app.scripts.repository import SensorSim, ZaPlotlyLine, Weather
 
 # import numpy as np
 import pandas as pd

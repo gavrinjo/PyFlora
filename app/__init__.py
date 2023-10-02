@@ -77,8 +77,10 @@ from app import models
 
 admin.add_view(ModleViewController(models.User, db.session))
 admin.add_view(ModleViewController(models.Pot, db.session))
+admin.add_view(ModleViewController(models.Sensor, db.session))
+admin.add_view(ModleViewController(models.Reading, db.session))
 admin.add_view(ModleViewController(models.Plant, db.session))
-admin.add_view(ModleViewController(models.SensorMeasurements, db.session))
+admin.add_view(ModleViewController(models.Value, db.session))
 admin.add_view(ModleViewController(models.Gauge, db.session))
 
 path = op.normpath(op.join(op.dirname(__file__), 'static'))
