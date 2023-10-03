@@ -14,16 +14,12 @@
                     <span>{{ plant.description }}</span>
                 </div>
                 <div class="lh-2 mb-3">
-                    <small class="lead">Salinity:{{ plant.salinity }}</small><br>
-                    <small class="lead">Temperature: {{ plant.temperature }}</small><br>
-                    <small class="lead">pH range: {{ plant.ph_range }}</small><br>
-                    <small class="lead">Moisture: {{ plant.moisture }}</small><br>
-                    <small class="lead">Shade: {{ plant.shade }}</small><br>
-                    <small class="lead">Soil texture: {{ plant.soil_texture }}</small><br>
-                    <small class="lead">Substrate: {{ plant.substrate }}</small><br>
+                    {% for value in values %}
+                    <small class="lead">{{ value.indicator }}: {{ value.min_value }} - {{value.max_value}} [{{ value.unit }}]</small><br>
+                    {% endfor %}
                 </div>
                 <div class="d-flex">
-                    <form action="{{ url_for('main.update_plant', plant_id=plant.id) }}" method="get">
+                    <form action="{{ url_for('pyflora.update_plant', plant_id=plant.id) }}" method="get">
                         {{ form.hidden_tag() }}
                         {{ form.submit(value='Edit', class_='btn btn-outline-success flex-shrink-0') }}
                     </form>

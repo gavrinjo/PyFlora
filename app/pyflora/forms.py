@@ -1,32 +1,24 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, BooleanField
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, BooleanField, Form, FormField
 from wtforms.validators import DataRequired, Length, ValidationError, NumberRange
 from app.models import Plant
+
+
+class Testiram(Form):
+    min_value = IntegerField('MIN', validators=[DataRequired()])
+    max_value = IntegerField('MAX', validators=[DataRequired()])
 
 
 class AddPlantForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     photo = FileField('Image file', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
-
-    l_min = IntegerField('Light min. Value [lux]', validators=[DataRequired(), NumberRange(min=0, max=100000)])
-    l_max = IntegerField('Light max. Value [lux]', validators=[DataRequired(), NumberRange(min=0, max=100000)])
-
-    t_min = IntegerField('Temperature min. Value [°C]', validators=[DataRequired(), NumberRange(min=-20, max=60)])
-    t_max = IntegerField('Temperature max. Value [°C]', validators=[DataRequired(), NumberRange(min=-20, max=60)])
-
-    f_min = IntegerField('Moisture min. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
-    f_max = IntegerField('Moisture max. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
-
-    r_min = IntegerField('Reaction min. Value [pH]', validators=[DataRequired(), NumberRange(min=0, max=14)])
-    r_max = IntegerField('Reaction max. Value [pH]', validators=[DataRequired(), NumberRange(min=0, max=14)])
-
-    n_min = IntegerField('Nutrient min. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
-    n_max = IntegerField('Nutrient max. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
-
-    s_min = IntegerField('Salinity min. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
-    s_max = IntegerField('Salinity max. Value [%]', validators=[DataRequired(), NumberRange(min=0, max=100)])
-
+    sunlight = FormField(Testiram, 'Sunlight', render_kw=dict(unit='lux', popover_text='Osvjetljenje u rasponu od 0 luxa do 100000 luxa, normalno vanjsko osvjetljenje izeđu 300 i 750 luxa'))
+    temperature = FormField(Testiram, 'Temperature', render_kw=dict(unit='°C', popover_text='Temperatura u rasponu od -20°C do 80°C'))
+    moisture = FormField(Testiram, 'Moisture', render_kw=dict(unit='%', popover_text='Moisture u rasponu od 0% do 100%'))
+    reaction = FormField(Testiram, 'Reaction', render_kw=dict(unit='pH', popover_text='Reaction u rasponu od 1pH do 14pH'))
+    nutrient = FormField(Testiram, 'Nutrient', render_kw=dict(unit='%', popover_text='Nutrient u rasponu od 0% do 100%'))
+    salinity = FormField(Testiram, 'Salinity', render_kw=dict(unit='%', popover_text='Salinity u rasponu od 0% do 100%'))
     soil_texture = SelectField('Soil texture', choices=['Fine', 'Medium', 'Coarse'])
     substrate = StringField('Substrate recomendation')
     description = TextAreaField('Description', validators=[Length(min=0, max=256)])
