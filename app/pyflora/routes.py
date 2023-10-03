@@ -76,8 +76,19 @@ def update_plant(plant_id):
         form.name.data = plant.name
         form.substrate.data = plant.substrate
         form.description.data = plant.description
+        form.photo.data = os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', plant.photo) # plant.photo
         for value in values:
             getattr(form, value.indicator.lower()).min_value.data = value.min_value
             getattr(form, value.indicator.lower()).max_value.data = value.max_value
-        # form.photo.data = plant.photo # os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], 'plants', plant.photo)) # plant.photo
     return render_template('pyflora/plant_new.html', title='Update PyPlant', form=form)
+
+@bp.route('/plant/<plant_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_plant(plant_id):
+    plant = Plant.query.get_or_404(plant_id)
+    name = plant.name
+    os.remove(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], f'plants/{plant.photo}'))
+    db.session.delete(plant)
+    db.session.commit()
+    flash(f'Congratulations, Plant {name} deleted secessefuly!', 'success')
+    return redirect(url_for('pyflora.pyplants'))

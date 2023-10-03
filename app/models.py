@@ -52,7 +52,7 @@ class Plant(db.Model):
     # soil_texture = db.Column(db.String(64)) # fine, medium, coarse ovo nam možda i neće trebati
     created = db.Column(db.DateTime, default=datetime.utcnow)
     pots = db.relationship('Pot', backref='plant', lazy='dynamic')
-    values = db.relationship('Value', backref='plant', lazy='dynamic')
+    values = db.relationship('Value', backref='plant', lazy='dynamic', cascade='all, delete')
 
     def __repr__(self):
         return f'<Plant {self.name}>'
@@ -63,7 +63,7 @@ class Value(db.Model):
     min_value = db.Column(db.Integer)
     max_value = db.Column(db.Integer)
     unit = db.Column(db.String(64))
-    plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))
+    plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'), nullable=False)
 
 
 """ stara Plant klasa, nepotrebno

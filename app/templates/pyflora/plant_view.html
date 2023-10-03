@@ -18,11 +18,46 @@
                     <small class="lead">{{ value.indicator }}: {{ value.min_value }} - {{value.max_value}} [{{ value.unit }}]</small><br>
                     {% endfor %}
                 </div>
-                <div class="d-flex">
-                    <form action="{{ url_for('pyflora.update_plant', plant_id=plant.id) }}" method="get">
-                        {{ form.hidden_tag() }}
-                        {{ form.submit(value='Edit', class_='btn btn-outline-success flex-shrink-0') }}
-                    </form>
+                <div class="row">
+                    <div class="col-auto">
+                        <form action="{{ url_for('pyflora.update_plant', plant_id=plant.id) }}" method="get">
+                            {{ form.hidden_tag() }}
+                            {{ form.submit(value='Edit', class_='btn btn-outline-success flex-shrink-0') }}
+                        </form>
+                    </div>
+
+                    <!-- button trgger modal bootstrap 5.3 -->
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            Delete
+                        </button>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="deleteModalLabel">Remove {{ plant.name }} from database</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>
+                                        This action will remove {{ plant.name }} from database and all its related records.
+                                    </p>
+
+                                    Please be advised this action is <strong>irreversible!!</strong>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                    <form action="{{ url_for('pyflora.delete_plant', plant_id=plant.id) }}" method="get">
+                                        {{ form.hidden_tag() }}
+                                        {{ form.submit(value='Delete', class_='btn btn-outline-danger btn-sm') }}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

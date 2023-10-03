@@ -86,5 +86,5 @@ admin.add_view(ModleViewController(models.Plant, db.session))
 admin.add_view(ModleViewController(models.Value, db.session))
 admin.add_view(ModleViewController(models.Gauge, db.session))
 
-path = op.normpath(op.join(op.dirname(__file__), 'static'))
-admin.add_view(FileAdmin(path, '/static/', name='Static Files'))
+path = op.join(op.dirname(__file__), 'static')
+admin.add_view(FileAdmin(path, name='Static Files'))
