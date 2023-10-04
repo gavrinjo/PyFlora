@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Pots</h1>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4">
+    {% for pot in pots %}
+        {% if pot.get_plant(pot.plant_id) %}
+        <div class="col g-4">
+            <div class="card h-100">
+                <img class="img-thumbnail bd-0" src="{{ url_for('static', filename='plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="missing image">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a class="text-dark" href="{{ url_for('pyflora.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a>
+                    </h5>
+                    <p class="card-text">{{ pot.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col g-4">
+            <div class="card h-100">
+                <img class="img-thumbnail bd-0" src="{{ url_for('static', filename='plants/default.jpg') }}" alt="missing image">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}">Empty Pot</a>
+                    </h5>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+    <div class="col g-4">
+        <a class="link-secondary" href="{{ url_for('pyflora.new_pot') }}">
+            <div class="card h-100 justify-content-center d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="currentColor" class="bi bi-plus opacity-25" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

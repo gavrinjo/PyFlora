@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+<h1 class="h3 mb-3 fw-normal">Add Pot</h1>
+<div class="col-lg-7">
+    <form action="" method="post" class="needs-validation" novalidate="">
+        {{ form.hidden_tag() }}
+        {% for field in form %}
+            {% if field.type in ['StringField', 'TextAreaField'] %}
+                <div class="input-group mb-3">
+                    {{ field.label(class="input-group-text col-3") }}
+                    {{ field(class_="form-control") }}
+                </div>
+            {% elif field.type == 'SelectField' %}
+                <div class="input-group mb-3">
+                    {{ field.label(class="input-group-text col-3") }}
+                    {{ field(class_="form-control", placeholder='test') }}
+                </div>
+            {% elif field.type == 'SubmitField' %}
+                {{ form.submit(class="btn btn-outline-success flex-shrink-0") }}
+            {% elif field.type == 'CSRFTokenField' %}
+                {{ pass }}
+            {% endif %}
+        {% endfor %}
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+
+
+(() => {
+    'use strict'
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+
+$(document).ready(function(){
+    $('[data-bs-toggle="popover"]').popover({
+        trigger: 'hover'
+    });  
+});
+
+</script>
+{% endblock %}

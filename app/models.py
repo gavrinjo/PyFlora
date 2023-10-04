@@ -101,7 +101,7 @@ class Pot(db.Model):
     created = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))
-    sensors = db.relationship('Sensor', backref='pot', lazy='dynamic')
+    sensors = db.relationship('Sensor', backref='pot', lazy='dynamic', cascade='all, delete')
 
     def __repr__(self):
         return f'<Pot {self.name}>'
@@ -117,8 +117,8 @@ class Sensor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     indicator = db.Column(db.String(64)) # sunlight, temperature, moisture, reaction, nutrient, salinity
     active = db.Column(db.Boolean, default=False) # senzor aktivan -> True / False
-    pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'))
-    readings = db.relationship('Reading', backref='sensor', lazy='dynamic')
+    pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'), nullable=False)
+    readings = db.relationship('Reading', backref='sensor', lazy='dynamic', cascade='all, delete')
 
 
 class Reading(db.Model):
@@ -126,7 +126,7 @@ class Reading(db.Model):
     value = db.Column(db.Integer) # vrijednost očitanja senzora
     unit = db.Column(db.String(64)) # mjerna jedinica očitanja
     measured = db.Column(db.DateTime, default=datetime.utcnow) # vrijeme mjerenja
-    sensor_id = db.Column(db.Integer, db.ForeignKey('sensor.id'))
+    sensor_id = db.Column(db.Integer, db.ForeignKey('sensor.id'), nullable=False)
 
 
 """ stara Pot klasa, nepotrebno

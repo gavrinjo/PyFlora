@@ -47,12 +47,16 @@
                   </span>
                 </a>
                 {% else %}
-                <a class="nav-link" href="{{ url_for('pyflora.pyplants') }}">
+                <a class="nav-link" href="{{ url_for('pyflora.list_plant') }}">
                   <span>
                     PyPlants
                   </span>
                 </a>
-
+                <a class="nav-link" href="{{ url_for('pyflora.list_pot') }}">
+                  <span>
+                    PyPots
+                  </span>
+                </a>
                 <!-- <div class="vr"></div> -->
                 <div class="nav-item dropdown">
                   <a href="#" class="nav-link" data-bs-toggle="dropdown" aria-expanded="false">
