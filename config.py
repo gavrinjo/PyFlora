@@ -18,3 +18,4 @@ class Config(object):
     UPLOADED_FILES_ALLOW = ['.jpg', '.jpeg', '.png']
     UPLOADS_DEFAULT_DEST = os.path.join(basedir, 'app/static')
     WEATHER_API = os.environ.get('WEATHER_API') or None
+    MEASURES = ['sunlight', 'temperature', 'moisture', 'reaction', 'nutrient', 'salinity']

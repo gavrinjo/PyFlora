@@ -57,6 +57,7 @@ class Plant(db.Model):
     def __repr__(self):
         return f'<Plant {self.name}>'
 
+
 class Value(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     indicator = db.Column(db.String(64)) # sunlight, temperature, moisture, reaction, nutrient, salinity
@@ -64,34 +65,6 @@ class Value(db.Model):
     max_value = db.Column(db.Integer)
     unit = db.Column(db.String(64))
     plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'), nullable=False)
-
-
-""" stara Plant klasa, nepotrebno
-class Plant(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
-    photo = db.Column(db.String(64), nullable=False, default='default.jpg') # ovo ću naknadno napraviti
-    
-    # Requirements
-    sunlight = db.Column(db.String(64)) # Intolerant, Intermediate, Tolerant (senzor za svjetlo, photoresistor)
-    temperature = db.Column(db.String(64)) # ~20 (celzijevih) (senzor temperature i vlažnisti zraka, postoji rpi)
-    moisture = db.Column(db.String(64)) #  Low, Medium, High (senzor za vlažnost tla, postoji rpi)
-    reaction = db.Column(db.String(64)) # 6-8 (senzot pH vrijednosti tla, postoji rpi)
-    nutrient = db.Column(db.String(64))
-    salinity = db.Column(db.String(64)) # None, Low, Medium, High (postoji senzor)
-
-    soil_texture = db.Column(db.String(64)) # fine, medium, coarse
-    substrate = db.Column(db.String(128)) # recomendation
-    description = db.Column(db.String(256))
-
-    # created = db.Column(db.DateTime, default=datetime.utcnow)
-
-    pots = db.relationship('Pot', backref='plant', lazy='dynamic')
-
-    def __repr__(self):
-        return f'<Plant {self.name}>'
-
-"""
 
 
 class Pot(db.Model):
@@ -127,37 +100,6 @@ class Reading(db.Model):
     unit = db.Column(db.String(64)) # mjerna jedinica očitanja
     measured = db.Column(db.DateTime, default=datetime.utcnow) # vrijeme mjerenja
     sensor_id = db.Column(db.Integer, db.ForeignKey('sensor.id'), nullable=False)
-
-
-""" stara Pot klasa, nepotrebno
-class Pot(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
-    description = db.Column(db.String(256))
-
-    created = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    sunlight_status = db.Column(db.Boolean, default=False) # 'L status (ACTIVE / INACTIVE)'
-    temperature_status = db.Column(db.Boolean, default=True) # 'T status (ACTIVE / INACTIVE)'
-    moisture_status = db.Column(db.Boolean, default=False) # 'F status (ACTIVE / INACTIVE)'
-    reaction_status = db.Column(db.Boolean, default=False) # 'R status (ACTIVE / INACTIVE)'
-    nutrient_status = db.Column(db.Boolean, default=False) # 'N status (ACTIVE / INACTIVE)' 
-    salinity_status = db.Column(db.Boolean, default=False) # 'S status (ACTIVE / INACTIVE)'
-
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))
-
-    measurements = db.relationship('SensorMeasurements', backref='pot', lazy='dynamic')
-
-    def __repr__(self):
-        return f'<Pot {self.name}>'
-    
-    def get_plant(self, id):
-        return Plant.query.get(id)
-    
-    def get_user(self, id):
-        return User.query.get(id)
-"""
 
 
 class Gauge(db.Model):
