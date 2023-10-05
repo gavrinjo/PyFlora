@@ -2,6 +2,9 @@
 import os
 import secrets
 from flask import current_app, abort
+from app import db
+from app.models import Gauge
+import json
 
 
 # db.session.execute(db.select(User)).first() -> ovo radi, objašnjeno (https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/queries/), query je stari način
@@ -27,3 +30,8 @@ def upload_image(form_image, folder): #nova funkcija, za uploadanje slika, potre
 
 # c = SensorMeasurements.__table__.columns.keys()[1:-2]
 # a = pd.DataFrame(db.session.execute(db.select(SensorMeasurements).filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc())).all())
+
+def load_gauge():
+    base_dir = current_app.config['UPLOADS_DEFAULT_DEST']
+    db.session.execute(Gauge.__table__.insert(), json.loads(open(os.path.join(base_dir, 'gauges/gauge.json')).read()))
+    db.session.commit()

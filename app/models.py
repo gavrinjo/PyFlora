@@ -93,6 +93,9 @@ class Sensor(db.Model):
     pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'), nullable=False)
     readings = db.relationship('Reading', backref='sensor', lazy='dynamic', cascade='all, delete')
 
+    def last_reading(self, id):
+        return Reading.query.filter_by(sensor_id=id).order_by(Reading.measured.desc()).first()
+
 
 class Reading(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -104,7 +107,6 @@ class Reading(db.Model):
 
 class Gauge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    level = db.Column(db.Integer, nullable=False) # indicator value (1-10)
     name = db.Column(db.String(64))
     min_value = db.Column(db.Integer, nullable=False) # min value for given 'level'
     max_value = db.Column(db.Integer, nullable=False) # max value for given 'level'
