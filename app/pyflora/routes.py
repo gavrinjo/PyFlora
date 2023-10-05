@@ -7,6 +7,7 @@ from app.pyflora import bp
 from app.pyflora.forms import PlantForm, PotForm
 from app.main.forms import EmptyForm
 from app.repo import upload_image
+from app.scripts.sensors_sim import SensorSim
 
 
 @bp.route('/plant/list')
@@ -177,13 +178,8 @@ def delete_pot(pot_id):
 @login_required
 def sync_pot(pot_id):
     pass
-    # form = EmptyForm()
-    # if form.validate_on_submit():
-    #     pot = Pot.query.get(pot_id)
-    #     measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
-
-    #     new_measurement = SensorSim(pot, measurement).generate()
-
-    #     db.session.add(new_measurement)
-    #     db.session.commit()
-    #     return redirect(url_for('main.view_pot', pot_id=pot.id))
+    form = EmptyForm()
+    if form.validate_on_submit():
+        pot = Pot.query.get(pot_id)
+        SensorSim(pot).generate()
+        return redirect(url_for('main.view_pot', pot_id=pot.id))

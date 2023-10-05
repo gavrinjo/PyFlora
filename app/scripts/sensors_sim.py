@@ -9,11 +9,9 @@ from app.scripts.weather import Weather
 
 class SensorSim():
 
-    def __init__(self, pot, last_measurement) -> None:
+    def __init__(self, pot) -> None:
         self.pot = pot
         self.sensors = Sensor.query.filter_by(pot_id=pot.id)
-        self.last_measurement = last_measurement
-        self.columns = self.get_columns(self.pot)
 
 
     def get_ref_values(self, query: object) -> tuple:
@@ -45,18 +43,17 @@ class SensorSim():
 
         for sensor in self.sensors:
             if sensor.active:
-                if sensor.name != 'temperature':
-                    query = Gauge.query.filter_by(name=sensor.name).all()
+                if sensor.indicator != 'temperature':
+                    query = Gauge.query.filter_by(name=sensor.indicator).all()
                     ds = self.get_ref_values(query)
-                    last_reading = sensor.last_reading(sensor.id)
                     try:
-                        value = self.get_random_value(last_reading.value, ds[0], ds[1], ds[3])
+                        value = self.get_random_value(sensor.last_reading(sensor.id).value, ds[0], ds[1], ds[3])
                     except:
                         value = self.get_random_value(ds[2], ds[0], ds[1], ds[3])
 
                     reading = Reading()
                     reading.value = value
-                    reading.unit = sensor.unit
+                    # reading.unit = sensor.unit
                     reading.sensor = sensor
                 else:
                     value = round(float(Weather('Zagreb').temperature['value']))
