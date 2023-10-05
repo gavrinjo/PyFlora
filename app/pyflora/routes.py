@@ -182,4 +182,4 @@ def sync_pot(pot_id):
     if form.validate_on_submit():
         pot = Pot.query.get(pot_id)
         SensorSim(pot).generate()
-        return redirect(url_for('main.view_pot', pot_id=pot.id))
+        return redirect(url_for('pyflora.view_pot', pot_id=pot_id))
