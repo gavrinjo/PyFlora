@@ -108,10 +108,11 @@ class Reading(db.Model):
 class Gauge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    min_value = db.Column(db.Integer, nullable=False) # min value for given 'level'
-    max_value = db.Column(db.Integer, nullable=False) # max value for given 'level'
+    min_value = db.Column(db.Integer, nullable=False) # minimum value in measurnig scale
+    max_value = db.Column(db.Integer, nullable=False) # maximum value in measuring scale
+    avg_value = db.Column(db.Integer, nullable=False) # average value in measurnig scale
+    off_value = db.Column(db.Integer, nullable=False) # +-offset of measured or average value
     unit = db.Column(db.String(64)) # measuring unit
-    description = db.Column(db.String(128))
 
 
 """ stara Gauge klasa, nepotrebno

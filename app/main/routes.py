@@ -5,6 +5,7 @@ from app import db
 from app.main import bp
 from app.models import User, Pot
 from app.main.forms import EditProfileForm, EmptyForm
+from app.scripts.weather import Weather
 
 
 @bp.before_app_request
@@ -57,21 +58,6 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
     
-"""
-@bp.route('/pot/<pot_id>/sync', methods=['POST'])
-@login_required
-def sync_pot(pot_id):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        pot = Pot.query.get(pot_id)
-        measurement = SensorMeasurements.query.filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc()).first()
-
-        new_measurement = SensorSim(pot, measurement).generate()
-
-        db.session.add(new_measurement)
-        db.session.commit()
-        return redirect(url_for('main.view_pot', pot_id=pot.id))
-
 
 @bp.route('/weather')
 @login_required
@@ -79,4 +65,3 @@ def weather():
     user = User.query.filter_by(username=current_user.username).first_or_404()
     cwd = Weather('Zagreb')
     return render_template('weather.html', title='Weather', cwd=cwd)
-"""
