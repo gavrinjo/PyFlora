@@ -177,7 +177,6 @@ def delete_pot(pot_id):
 @bp.route('/pot/<pot_id>/sync', methods=['POST'])
 @login_required
 def sync_pot(pot_id):
-    pass
     form = EmptyForm()
     if form.validate_on_submit():
         pot = Pot.query.get(pot_id)
