@@ -3,48 +3,75 @@
 
 {% block content %}
 
-<main class="form-signin border rounded">
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-    {{ render_form(form) }}
-    <p class="mt-2 mb-3"><a class="link-primary" href="{{ url_for('auth.reset_password_request') }}">Forgot Password</a></p>
-    <p class="mt-2 mb-3"><a class="link-primary" href="{{ url_for('auth.register') }}">Sign Up</a></p>
-    <p class="mt-5 mb-3 text-muted">© 2017–2021</p>
-</main>
-    <!-- <div class="row justify-content-center">
-        <div class="text-center">
-            <main class="form-signin border rounded">
-                <form action="" method="post" novalidate>
-                    <img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-                    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-              
-                    <div class="form-floating mb-3">
-                        {{ form.username(class="form-control", placeholder="Username") }}
-                        {{ form.username.label }}
-                        {% for error in form.username.errors %}
-                            <div class="form-text" style="color: red;">[{{ error }}]</div>
-                        {% endfor %}
-                    </div>
-                    <div class="form-floating">
-                        {{ form.password(class="form-control", placeholder="Password") }}
-                        {{ form.password.label }}
-                        {% for error in form.password.errors %}
-                            <div class="small" style="color: red;">[{{ error }}]</div>
-                        {% endfor %}
-                    </div>
-                    
-                    <div class="checkbox mb-3">
-                        <label>
-                            {{ form.remember_me() }} Remember Me
-                        </label>
-                    </div>
-
-                    {{ form.submit(size=32, class="w-100 btn btn-lg btn-primary") }}
-
-                    <p class="mt-2 mb-3"><a class="link-primary" href="{{ url_for('auth.reset_password_request') }}">Forgot Password</a></p>
-                    <p class="mt-2 mb-3"><a class="link-primary" href="{{ url_for('auth.register') }}">Sign Up</a></p>
-                    <p class="mt-5 mb-3 text-muted">© 2017–2021</p>
-                </form>
-            </main>
+<div class="col-lg-5">
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h5>Sign In</h5>
+            </div>
+            <div class="text-end">
+                <small>
+                    <a class="link-primary no-deco" href="{{ url_for('auth.reset_password_request') }}">Forgot Password</a>
+                </small>
+            </div>
         </div>
-    </div> -->
+        <div class="card-body">
+            <form action="" method="post" class="needs-validation pt-4" novalidate="">
+                {{ form.hidden_tag() }}
+                <div class="input-group mb-3">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+                    {{ form.username(class_="form-control", placeholder='Username') }}
+                    {% for error in form.username.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    {{ form.password(class_="form-control", placeholder='Password') }}
+                    {% for error in form.password.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    {{ form.submit(class="btn btn-outline-success flex-shrink-0") }}
+                </div>
+            </form>
+        </div>
+        <div class="card-footer pb-4">
+            <small>
+                Don't have an account!
+                <a class="link-primary no-deco" href="{{ url_for('auth.register') }}">Sign Up</a>
+                Here
+            </small>        
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+
+
+(() => {
+    'use strict'
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+
+</script>
 {% endblock %}
