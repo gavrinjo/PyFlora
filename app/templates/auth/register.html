@@ -18,7 +18,7 @@
                         {{ form.username(class_="form-control", placeholder='Username') }}                    
                         {% for error in form.username.errors %}
                         <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
                         </span>
                         {% endfor %}
                     </div>
@@ -30,7 +30,7 @@
                         {{ form.email(class_="form-control", placeholder='Email') }}
                         {% for error in form.email.errors %}
                         <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
                         </span>
                         {% endfor %}
                     </div>
@@ -42,7 +42,7 @@
                         {{ form.password_one(class_="form-control", placeholder='Password') }}
                         {% for error in form.password_one.errors %}
                         <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
                         </span>
                         {% endfor %}
                     </div>
@@ -51,10 +51,10 @@
                         <span class="input-group-text">
                             <i class="fa-solid fa-lock"></i>
                         </span>
-                        {{ form.password_two(class_="form-control", placeholder='Password') }}
+                        {{ form.password_two(class_="form-control", placeholder='Repeat Password') }}
                         {% for error in form.password_two.errors %}
                         <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
                         </span>
                         {% endfor %}
                     </div>

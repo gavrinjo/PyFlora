@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section>
+<div class="card">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-top">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ url_for('static', filename='plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="..." /></div>
+            <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ url_for('static', filename='plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="..." />
+            </div>
             <div class="col-md-6">
                 <div class="small mb-1">{{ pot.get_user(pot.user_id).username }}</div>
                 <h1 class="display-5 fw-bolder" style="text-transform: uppercase;">{{ pot.name }}</h1>
@@ -19,7 +21,6 @@
                         {{ form.hidden_tag() }}
                         {{ form.submit(value='Synchronize', class_='btn btn-outline-success btn-md') }}
                     </form>
-                    <!-- <div class="vr"></div> -->
                     <form action="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}" method="get">
                         {{ form.hidden_tag() }}
                         {{ form.submit(value='Update', class_='btn btn-outline-success btn-md') }}
@@ -59,26 +60,34 @@
             </div>
         </div>
     </div>
-</section>
+    <div class="card-header border-top">
+        <nav>
+            <div class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                <button class="nav-link active" style="text-transform: uppercase;" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Line chart</button>
+                <button class="nav-link" style="text-transform: uppercase;" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Radar chart</button>
+                <button class="nav-link" style="text-transform: uppercase;" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Histogram chart</button>
+            </div>
+        </nav>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                <div id='chart' class='chart' style="width:100%"></div>
+            </div>
+            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <div id='novi_chart1' class='chart' style="width:100%"></div>
+            </div>
+            <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+                <div id='novi_chart2' class='chart' style="width:100%"></div>
+            </div>
+        </div>
+    </div>
 
-<nav>
-    <div class="nav nav-tabs" id="myTab" role="tablist">
-        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Line chart</button>
-        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Radar chart</button>
-        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Histogram chart</button>
+    <div class="card-body">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
     </div>
-</nav>
-<div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-        <div id='chart' class='chart' style="width:100%"></div>
+    <div class="card-footer">
+        <a href="#" class="btn btn-primary">Go somewhere</a>
     </div>
-    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-        <div id='novi_chart1' class='chart' style="width:100%"></div>
-    </div>
-    <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-        <div id='novi_chart2' class='chart' style="width:100%"></div>
-    </div>
-
 </div>
 {% endblock %}
 

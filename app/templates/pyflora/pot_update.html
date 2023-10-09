@@ -2,56 +2,63 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-<h1 class="h3 mb-3 fw-normal">Add Pot</h1>
-<div class="col-lg-7">
-    <form action="" method="post" class="needs-validation" novalidate="">
-        {{ form.hidden_tag() }}
-        {% for field in form %}
-            {% if field.type in ['StringField', 'TextAreaField'] %}
-                <div class="input-group mb-3">
-                    {{ field.label(class_="input-group-text col-3") }}
-                    {{ field(class_="form-control") }}
-                </div>
-            {% elif field.type == 'SelectField' %}
-                <div class="input-group mb-3">
-                    {{ field.label(class_="input-group-text col-3") }}
-                    {{ field(class_="form-control", placeholder='test') }}
-                </div>
-            {% elif field.type == 'BooleanField' %}
-                <div class="form-check form-switch">
-                    {{ field(class_="form-check-input") }}
-                    {{ field.label(class_="form-check-label") }}
-                </div>
-            {% elif field.type == 'SubmitField' %}
-                {{ form.submit(class_="btn btn-outline-success flex-shrink-0") }}
-            {% elif field.type == 'CSRFTokenField' %}
-                {{ pass }}
-            {% endif %}
-        {% endfor %}
-    </form>
+<div class="d-flex justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-success border-opacity-50">
+            <div class="card-header bg-success bg-opacity-50">
+                <h5>{{ title }}</h5>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" class="needs-validation" novalidate="">
+                    {{ form.hidden_tag() }}
+                    <div class="input-group mb-3">
+                        {{ form.name.label(class_="input-group-text col-3") }}
+                        {{ form.name(class_="form-control") }}
+                        {% for error in form.name.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.plant.label(class_="input-group-text col-3") }}
+                        {{ form.plant(class_="form-control") }}
+                        {% for error in form.plant.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.description.label(class_="input-group-text col-3") }}
+                        {{ form.description(class_="form-control") }}
+                        {% for error in form.description.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex flex-wrap gap-3 mb-3">
+                        {% for field in form %}
+                            {% if field.type == 'BooleanField' %}
+                                <div class="form-check form-switch">
+                                    {{ field(class_="form-check-input") }}
+                                    {{ field.label(class_="form-check-label") }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {{ form.submit(class_="btn btn-outline-success flex-shrink-0") }}
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 <script>
-
-
-(() => {
-    'use strict'
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation')
-    // Loop over them and prevent submission
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
 
 $(document).ready(function(){
     $('[data-bs-toggle="popover"]').popover({

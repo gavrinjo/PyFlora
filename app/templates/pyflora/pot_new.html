@@ -2,38 +2,47 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-<h1 class="h3 mb-3 fw-normal">Add Pot</h1>
-<div class="col-lg-7">
-    <form action="" method="post" class="needs-validation" novalidate="">
-        {{ form.hidden_tag() }}
-        {% for field in form %}
-            {% if field.type in ['StringField', 'TextAreaField'] %}
-                <div class="input-group mb-3">
-                    {{ field.label(class="input-group-text col-3") }}
-                    {{ field(class_="form-control") }}
-                    {% for error in field.errors %}
-                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
-                    </span>
-                    {% endfor %}
-                </div>
-            {% elif field.type == 'SelectField' %}
-                <div class="input-group mb-3">
-                    {{ field.label(class="input-group-text col-3") }}
-                    {{ field(class_="form-control", placeholder='test') }}
-                    {% for error in field.errors %}
-                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
-                    </span>
-                    {% endfor %}
-                </div>
-            {% elif field.type == 'SubmitField' %}
-                {{ form.submit(class="btn btn-outline-success flex-shrink-0") }}
-            {% elif field.type == 'CSRFTokenField' %}
-                {{ pass }}
-            {% endif %}
-        {% endfor %}
-    </form>
+<div class="d-flex justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-success border-opacity-50">
+            <div class="card-header bg-success bg-opacity-50">
+                <h5>{{ title }}</h5>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" class="needs-validation" novalidate="">
+                    {{ form.hidden_tag() }}
+                    <div class="input-group mb-3">
+                        {{ form.name.label(class_="input-group-text col-3") }}
+                        {{ form.name(class_="form-control") }}
+                        {% for error in form.name.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.plant.label(class_="input-group-text col-3") }}
+                        {{ form.plant(class_="form-control") }}
+                        {% for error in form.plant.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.description.label(class_="input-group-text col-3") }}
+                        {{ form.description(class_="form-control") }}
+                        {% for error in form.description.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    {{ form.submit(class_="btn btn-outline-success flex-shrink-0") }}
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

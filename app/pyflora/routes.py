@@ -2,7 +2,7 @@ import os
 from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user
 from app import db
-from app.models import Plant, Value, Pot, Sensor
+from app.models import Plant, Value, Pot, Sensor, Reading
 from app.pyflora import bp
 from app.pyflora.forms import PlantForm, PotForm
 from app.main.forms import EmptyForm
@@ -101,6 +101,14 @@ def list_pot():
 def view_pot(pot_id):
     form = EmptyForm()
     pot = Pot.query.get(pot_id)
+    query_obj = (
+        db.select(Pot.name, Sensor.indicator, Reading.value, Reading.unit, Reading.measured)
+        .select_from(Pot)
+        .join(Sensor)
+        .join(Reading)
+        .filter(Pot.id == pot_id)
+        .order_by(Reading.measured.desc())
+    )
     # fig = ZaPlotlyLine(pot).configure()
     # graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 

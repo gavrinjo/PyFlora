@@ -2,53 +2,61 @@
 {% from 'bootstrap5/form.html' import render_form, render_field %}
 
 {% block content %}
-<h1 class="h3 mb-3 fw-normal">Add Plant</h1>
-<div class="col-lg-7">
-    <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="">
-        {{ form.hidden_tag() }}
-        {% for field in form %}
-            {% if field.type == 'FileField' %}
-                <div class="input-group mb-3 custom-file-button">
-                    {{ field.label(class_="input-group-text col-3") }}
-                    {{ field(class_="form-control") }}
-                    {% for error in field.errors %}
-                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
-                    </span>
+<div class="d-flex justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-success border-opacity-50">
+            <div class="card-header bg-success bg-opacity-50">
+                <h5>{{ title }}</h5>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="">
+                    {{ form.hidden_tag() }}
+                    {% for field in form %}
+                        {% if field.type == 'FileField' %}
+                            <div class="input-group mb-3 custom-file-button">
+                                {{ field.label(class_="input-group-text col-3") }}
+                                {{ field(class_="form-control") }}
+                                {% for error in field.errors %}
+                                <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                                    <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                                </span>
+                                {% endfor %}
+                            </div>
+                        {% elif field.type == 'FormField' %}
+                            <div class="input-group mb-3 ">
+                                {{ field.label(class_="input-group-text col-3") }}
+                                {{ field.min_value(class_="form-control", placeholder=field.min_value.label.text) }}
+                                {{ field.max_value(class_="form-control", placeholder="MAX") }}
+                                <span class="input-group-text" style="width: 50px;">{{ field.render_kw['unit'] }}</span>
+                                <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ field.render_kw['popover_text'] }}">
+                                    <i class="fa-solid fa-info"></i>
+                                </span>
+                                {% for error in field.max_value.errors %}
+                                <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                                    <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                                </span>
+                                {% endfor %}
+                            </div>
+                        {% elif field.type == 'SubmitField' %}
+                            {{ field(class="btn btn-outline-success flex-shrink-0") }}
+                        {% elif field.type == 'CSRFTokenField' %}
+                            {{ pass }}
+                        {% else %}
+                            <div class="input-group mb-3">
+                                {{ field.label(class_="input-group-text col-3") }}
+                                {{ field(class_="form-control") }}
+                                {% for error in field.errors %}
+                                <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                                    <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                                </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     {% endfor %}
-                </div>
-            {% elif field.type == 'FormField' %}
-                <div class="input-group mb-3 ">
-                    {{ field.label(class_="input-group-text col-3") }}
-                    {{ field.min_value(class_="form-control", placeholder=field.min_value.label.text) }}
-                    {{ field.max_value(class_="form-control", placeholder="MAX") }}
-                    <span class="input-group-text" style="width: 50px;">{{ field.render_kw['unit'] }}</span>
-                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ field.render_kw['popover_text'] }}">
-                        <i class="fa-regular fa-circle-question"></i>
-                    </span>
-                    {% for error in field.max_value.errors %}
-                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
-                    </span>
-                    {% endfor %}
-                </div>
-            {% elif field.type == 'SubmitField' %}
-                {{ field(class="btn btn-outline-success flex-shrink-0") }}
-            {% elif field.type == 'CSRFTokenField' %}
-                {{ pass }}
-            {% else %}
-                <div class="input-group mb-3">
-                    {{ field.label(class_="input-group-text col-3") }}
-                    {{ field(class_="form-control") }}
-                    {% for error in field.errors %}
-                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
-                    </span>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endfor %}
-    </form>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

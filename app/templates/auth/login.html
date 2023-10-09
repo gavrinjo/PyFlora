@@ -18,7 +18,7 @@
                         {{ form.username(class_="form-control", placeholder='Username') }}
                         {% for error in form.username.errors %}
                         <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
                         </span>
                         {% endfor %}
                     </div>
@@ -29,7 +29,7 @@
                         {{ form.password(class_="form-control", placeholder='Password') }}
                         {% for error in form.password.errors %}
                         <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
                         </span>
                         {% endfor %}
                     </div>
