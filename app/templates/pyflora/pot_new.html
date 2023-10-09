@@ -11,11 +11,21 @@
                 <div class="input-group mb-3">
                     {{ field.label(class="input-group-text col-3") }}
                     {{ field(class_="form-control") }}
+                    {% for error in field.errors %}
+                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                    </span>
+                    {% endfor %}
                 </div>
             {% elif field.type == 'SelectField' %}
                 <div class="input-group mb-3">
                     {{ field.label(class="input-group-text col-3") }}
                     {{ field(class_="form-control", placeholder='test') }}
+                    {% for error in field.errors %}
+                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                    </span>
+                    {% endfor %}
                 </div>
             {% elif field.type == 'SubmitField' %}
                 {{ form.submit(class="btn btn-outline-success flex-shrink-0") }}
@@ -30,23 +40,6 @@
 {% block scripts %}
 {{ super() }}
 <script>
-
-
-(() => {
-    'use strict'
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation')
-    // Loop over them and prevent submission
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
 
 $(document).ready(function(){
     $('[data-bs-toggle="popover"]').popover({

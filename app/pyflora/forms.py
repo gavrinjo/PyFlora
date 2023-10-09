@@ -9,6 +9,14 @@ class MinMaxValue(Form):
     min_value = IntegerField('MIN', validators=[DataRequired()])
     max_value = IntegerField('MAX', validators=[DataRequired()])
 
+    def validate_max_value(self, field):
+        if self.min_value.data is None:
+            raise ValidationError('This field is required.')
+        if field.data is None:
+            raise ValidationError('This field is required.')
+        if self.min_value.data > field.data:
+            raise ValidationError('MIN value can not be higher then MAX value')
+
 
 class PlantForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])

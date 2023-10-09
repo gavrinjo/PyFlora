@@ -2,66 +2,92 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-<div class="col-lg-5">
-    <div class="card">
-        <div class="card-header">
-            <div>
+<div class="d-flex justify-content-center">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">
                 <h5>Sign Up</h5>
             </div>
-        </div>
-        <div class="card-body">
-            <form action="" method="post" class="needs-validation pt-4" novalidate="">
-                {{ form.hidden_tag() }}
-                <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-user"></i>
-                    </span>
-                    {{ form.username(class_="form-control", placeholder='Username') }}                    
-                    {% for error in form.username.errors %}
-                        <div class="error-feedback">{{ error }}</div>
-                    {% endfor %}
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-at"></i>
-                    </span>
-                    {{ form.email(class_="form-control", placeholder='Email') }}
-                    {% for error in form.email.errors %}
-                        <div class="error-feedback">{{ error }}</div>
-                    {% endfor %}
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-lock"></i>
-                    </span>
-                    {{ form.password_one(class_="form-control", placeholder='Password') }}
-                    {% for error in form.password_one.errors %}
-                        <div class="error-feedback">{{ error }}</div>
-                    {% endfor %}
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-lock"></i>
-                    </span>
-                    {{ form.password_two(class_="form-control", placeholder='Password') }}
-                    {% for error in form.password_two.errors %}
-                        <div class="error-feedback">{{ error }}</div>
-                    {% endfor %}
-                </div>
-                <div class="mb-3">
-                    {{ form.submit(class="btn btn-outline-success flex-shrink-0") }}
-                </div>
-            </form>
-        </div>
-        <div class="card-footer pb-4">
-            <small>
-                Already a member!
-                <a class="link-primary no-deco" href="{{ url_for('auth.login') }}">Sign In</a>
-            </small>        
+            <div class="card-body">
+                <form action="" method="post" class="needs-validation pt-4" novalidate="">
+                    {{ form.hidden_tag() }}
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        {{ form.username(class_="form-control", placeholder='Username') }}                    
+                        {% for error in form.username.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+    
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-at"></i>
+                        </span>
+                        {{ form.email(class_="form-control", placeholder='Email') }}
+                        {% for error in form.email.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+    
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        {{ form.password_one(class_="form-control", placeholder='Password') }}
+                        {% for error in form.password_one.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+    
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        {{ form.password_two(class_="form-control", placeholder='Password') }}
+                        {% for error in form.password_two.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.submit(class="btn btn-outline-success flex-shrink-0") }}
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <small>
+                    Already a member!
+                    <a class="link-primary no-deco" href="{{ url_for('auth.login') }}">Sign In</a>
+                </small>  
+                <div class="text-end">
+                    <small>
+                        <a class="link-primary no-deco" href="{{ url_for('auth.reset_password_request') }}">Forgot Password</a>
+                    </small>
+                </div>       
+            </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+
+$(document).ready(function(){
+    $('[data-bs-toggle="popover"]').popover({
+        trigger: 'hover'
+    });  
+});
+
+</script>
 {% endblock %}

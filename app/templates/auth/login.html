@@ -2,51 +2,54 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-
-<div class="col-lg-5">
-    <div class="card">
-        <div class="card-header">
-            <div>
+<div class="d-lg-flex justify-content-center">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">
                 <h5>Sign In</h5>
             </div>
-            <div class="text-end">
-                <small>
-                    <a class="link-primary no-deco" href="{{ url_for('auth.reset_password_request') }}">Forgot Password</a>
-                </small>
+            <div class="card-body">
+                <form action="" method="post" class="needs-validation pt-4" novalidate="">
+                    {{ form.hidden_tag() }}
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        {{ form.username(class_="form-control", placeholder='Username') }}
+                        {% for error in form.username.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        {{ form.password(class_="form-control", placeholder='Password') }}
+                        {% for error in form.password.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.submit(class="btn btn-outline-success flex-shrink-0") }}
+                    </div>
+                </form>
             </div>
-        </div>
-        <div class="card-body">
-            <form action="" method="post" class="needs-validation pt-4" novalidate="">
-                {{ form.hidden_tag() }}
-                <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-user"></i>
-                    </span>
-                    {{ form.username(class_="form-control", placeholder='Username') }}
-                    {% for error in form.username.errors %}
-                        <div class="invalid-feedback">{{ error }}</div>
-                    {% endfor %}
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-lock"></i>
-                    </span>
-                    {{ form.password(class_="form-control", placeholder='Password') }}
-                    {% for error in form.password.errors %}
-                        <div class="invalid-feedback">{{ error }}</div>
-                    {% endfor %}
-                </div>
-                <div class="mb-3">
-                    {{ form.submit(class="btn btn-outline-success flex-shrink-0") }}
-                </div>
-            </form>
-        </div>
-        <div class="card-footer pb-4">
-            <small>
-                Don't have an account!
-                <a class="link-primary no-deco" href="{{ url_for('auth.register') }}">Sign Up</a>
-                Here
-            </small>        
+            <div class="card-footer">
+                <small>
+                    Don't have an account!
+                    <a class="link-primary no-deco" href="{{ url_for('auth.register') }}">Sign Up</a>
+                    Here
+                </small>      
+                <div class="text-end">
+                    <small>
+                        <a class="link-primary no-deco" href="{{ url_for('auth.reset_password_request') }}">Forgot Password</a>
+                    </small>
+                </div>  
+            </div>
         </div>
     </div>
 </div>
@@ -56,22 +59,11 @@
 {{ super() }}
 <script>
 
-
-(() => {
-    'use strict'
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation')
-    // Loop over them and prevent submission
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
+$(document).ready(function(){
+    $('[data-bs-toggle="popover"]').popover({
+        trigger: 'hover'
+    });  
+});
 
 </script>
 {% endblock %}

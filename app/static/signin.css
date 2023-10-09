@@ -120,3 +120,8 @@ nav div a span {
   font-size: .875em;
   color: #dc3545;
 }
+
+span.custom-bkg {
+  background-color: #00000000;
+  border-left: 0;
+}

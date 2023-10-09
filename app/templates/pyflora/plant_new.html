@@ -9,27 +9,28 @@
         {% for field in form %}
             {% if field.type == 'FileField' %}
                 <div class="input-group mb-3 custom-file-button">
-                    {{ field.label(class="input-group-text col-3") }}
+                    {{ field.label(class_="input-group-text col-3") }}
                     {{ field(class_="form-control") }}
                     {% for error in field.errors %}
-                        <div class="error-feedback">{{ error }}</div>
+                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                    </span>
                     {% endfor %}
                 </div>
             {% elif field.type == 'FormField' %}
                 <div class="input-group mb-3 ">
-                    {{ field.label(class="input-group-text col-3") }}
+                    {{ field.label(class_="input-group-text col-3") }}
                     {{ field.min_value(class_="form-control", placeholder=field.min_value.label.text) }}
-                    {% for error in field.min_value.errors %}
-                        <div class="error-feedback">{{ error }}</div>
-                    {% endfor %}
                     {{ field.max_value(class_="form-control", placeholder="MAX") }}
-                    {% for error in field.max_value.errors %}
-                        <div class="error-feedback">{{ error }}</div>
-                    {% endfor %}
                     <span class="input-group-text" style="width: 50px;">{{ field.render_kw['unit'] }}</span>
                     <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ field.render_kw['popover_text'] }}">
                         <i class="fa-regular fa-circle-question"></i>
                     </span>
+                    {% for error in field.max_value.errors %}
+                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                    </span>
+                    {% endfor %}
                 </div>
             {% elif field.type == 'SubmitField' %}
                 {{ field(class="btn btn-outline-success flex-shrink-0") }}
@@ -37,8 +38,13 @@
                 {{ pass }}
             {% else %}
                 <div class="input-group mb-3">
-                    <span class="input-group-text col-3">{{ field.label }}</span>
+                    {{ field.label(class_="input-group-text col-3") }}
                     {{ field(class_="form-control") }}
+                    {% for error in field.errors %}
+                    <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                        <i class="fa-regular fa-circle-xmark" style="color: red;"></i>
+                    </span>
+                    {% endfor %}
                 </div>
             {% endif %}
         {% endfor %}
@@ -49,23 +55,6 @@
 {% block scripts %}
 {{ super() }}
 <script>
-
-
-(() => {
-    'use strict'
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation')
-    // Loop over them and prevent submission
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                //event.preventDefault()
-                //event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
 
 $(document).ready(function(){
     $('[data-bs-toggle="popover"]').popover({
