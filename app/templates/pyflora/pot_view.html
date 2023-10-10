@@ -68,6 +68,8 @@
                 <button class="nav-link" style="text-transform: uppercase;" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Histogram chart</button>
             </div>
         </nav>
+    </div>
+    <div class="card-body">
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
                 <div id='chart' class='chart' style="width:100%"></div>
@@ -89,5 +91,18 @@
         <a href="#" class="btn btn-primary">Go somewhere</a>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.plot.ly/plotly-2.26.0.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+    plotly_chart = document.getElementById('chart');
+    var graphs = {{graphJSON | safe}};
+    graphs.config = {'displayModeBar': false, 'responsive': true, 'autosizable': true, 'fillFrame': false}
+    Plotly.newPlot(plotly_chart, graphs,{});
+
+</script>
 {% endblock %}
 

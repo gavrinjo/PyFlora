@@ -3,6 +3,7 @@ import json
 import pandas as pd
 import numpy as np
 import xmltodict
+import plotly.express as px
 
 from requests import get
 from contextlib import closing
@@ -13,6 +14,64 @@ from plotly.subplots import make_subplots
 from flask import current_app
 from app.models import Gauge, Plant
 from app import db
+
+
+class PlotlyLine():
+    def __init__(self, query_obj) -> None:
+        self.query_obj = query_obj
+    
+    def data_frame(self, query_obj: object):
+        df = pd.read_sql_query(query_obj, current_app.config['SQLALCHEMY_DATABASE_URI'])
+        # df['measured'] = df['measured'].dt.strftime("%d.%m.%Y. %H:%M:%S.%f")
+        return df
+    
+    def config(self):
+        df = self.data_frame(self.query_obj)
+        fig = px.line(df, x='measured', y='value', custom_data=['unit'], color='indicator', facet_row='indicator')
+        fig.update_xaxes(
+            # type='category',
+            # type='date',
+            ticksuffix = "  ",
+            tickmode = 'linear',
+            showline=True,
+            linewidth=1,
+            linecolor='lightgrey',
+            mirror=True
+        )
+        fig.update_yaxes(
+            matches=None,
+            ticksuffix = "  ",
+            showline=True,
+            linewidth=1,
+            linecolor='lightgrey',
+            mirror=True,
+            fixedrange=True
+        )
+        
+        fig.update_layout(
+            height=1600,
+            autosize= True,
+            hovermode="x unified",
+            hoverlabel=dict(
+                font_size=12,
+                bgcolor='rgba(255,255,255)'
+            ),
+            template='plotly_white',
+            legend=dict(
+                orientation="h",
+                yanchor="top",
+                xanchor="center",
+                y=1.05,
+                x=0.5
+            )
+        )
+        fig.for_each_trace(lambda t: t.update(hovertemplate='%{y}%{customdata[0]}'))
+        fig.for_each_yaxis(lambda y: y.update(title=''))
+        fig.for_each_xaxis(lambda x: x.update(title=''))
+        fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+        return fig
+
+
 
 """
 class ZaPlotlyLine():

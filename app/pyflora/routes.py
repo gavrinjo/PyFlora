@@ -1,4 +1,6 @@
 import os
+import plotly
+import json
 from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user
 from app import db
@@ -8,6 +10,7 @@ from app.pyflora.forms import PlantForm, PotForm
 from app.main.forms import EmptyForm
 from app.repo import upload_image
 from app.scripts.sensors_sim import SensorSim
+from app.scripts.charts import PlotlyLine
 
 
 @bp.route('/plant/list')
@@ -109,10 +112,10 @@ def view_pot(pot_id):
         .filter(Pot.id == pot_id)
         .order_by(Reading.measured.desc())
     )
-    # fig = ZaPlotlyLine(pot).configure()
-    # graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    fig = PlotlyLine(query_obj).config()
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return render_template('pyflora/pot_view.html', title=pot.name, pot=pot, form=form)
+    return render_template('pyflora/pot_view.html', title=pot.name, pot=pot, form=form, graphJSON=graphJSON)
 
 @bp.route('/pot/new', methods=['GET', 'POST'])
 @login_required

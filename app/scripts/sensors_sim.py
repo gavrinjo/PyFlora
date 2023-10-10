@@ -30,6 +30,7 @@ class SensorSim():
 
     def generate(self) -> object:
         weather = Weather('Zagre')
+        readings = []
         for sensor in self.sensors:
             if sensor.active:
                 if sensor.indicator != 'temperature':
@@ -46,5 +47,6 @@ class SensorSim():
                 reading.value = value
                 reading.unit = unit
                 reading.sensor = sensor
-                db.session.add(reading)
-                db.session.commit()
+                readings.append(reading)
+        db.session.add_all(readings)
+        db.session.commit()
