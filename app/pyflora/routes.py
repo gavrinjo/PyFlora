@@ -104,15 +104,7 @@ def list_pot():
 def view_pot(pot_id):
     form = EmptyForm()
     pot = Pot.query.get(pot_id)
-    query_obj = (
-        db.select(Pot.name, Sensor.indicator, Reading.value, Reading.unit, Reading.measured)
-        .select_from(Pot)
-        .join(Sensor)
-        .join(Reading)
-        .filter(Pot.id == pot_id)
-        .order_by(Reading.measured.desc())
-    )
-    fig = PlotlyLine(query_obj).config()
+    fig = PlotlyLine(pot).config()
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return render_template('pyflora/pot_view.html', title=pot.name, pot=pot, form=form, graphJSON=graphJSON)
