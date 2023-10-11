@@ -11,6 +11,11 @@
                 <div class="small mb-1">{{ pot.get_user(pot.user_id).username }}</div>
                 <h1 class="display-5 fw-bolder" style="text-transform: uppercase;">{{ pot.name }}</h1>
                 <div class="fs-5 mb-3">
+                    <a style="text-decoration: none; text-transform: uppercase;" href="{{ url_for('pyflora.view_plant', plant_id=pot.plant_id) }}">
+                        <span>{{ pot.get_plant(pot.plant_id).name }}</span>
+                    </a>
+                </div>
+                <div class="fs-5 mb-3">
                     <span>{{ pot.description }}</span>
                 </div>
                 <div class="lh-2 mb-3">
@@ -72,23 +77,15 @@
     <div class="card-body">
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                <div id='chart' class='chart' style="width:100%"></div>
+                <div id='line_chart' class='chart' style="width:100%"></div>
             </div>
             <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                <div id='novi_chart1' class='chart' style="width:100%"></div>
+                <div id='pie_chart' class='chart' style="width:100%"></div>
             </div>
             <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-                <div id='novi_chart2' class='chart' style="width:100%"></div>
+                <div id='histo_chart' class='chart' style="width:100%"></div>
             </div>
         </div>
-    </div>
-
-    <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    </div>
-    <div class="card-footer">
-        <a href="#" class="btn btn-primary">Go somewhere</a>
     </div>
 </div>
 {% endblock %}
@@ -98,8 +95,24 @@
 <script src="https://cdn.plot.ly/plotly-2.26.0.min.js" charset="utf-8"></script>
 <script type="text/javascript">
 
-    plotly_chart = document.getElementById('chart');
-    var graphs = {{graphJSON | safe}};
+    plotly_chart = document.getElementById('line_chart');
+    var graphs = {{line_graphJSON | safe}};
+    graphs.config = {'displayModeBar': false, 'responsive': true, 'autosizable': true, 'fillFrame': false}
+    Plotly.newPlot(plotly_chart, graphs,{});
+
+</script>
+<script type="text/javascript">
+
+    plotly_chart = document.getElementById('histo_chart');
+    var graphs = {{histo_graphJSON | safe}};
+    graphs.config = {'displayModeBar': false, 'responsive': true, 'autosizable': true, 'fillFrame': false}
+    Plotly.newPlot(plotly_chart, graphs,{});
+
+</script>
+<script type="text/javascript">
+
+    plotly_chart = document.getElementById('pie_chart');
+    var graphs = {{pie_graphJSON | safe}};
     graphs.config = {'displayModeBar': false, 'responsive': true, 'autosizable': true, 'fillFrame': false}
     Plotly.newPlot(plotly_chart, graphs,{});
 

@@ -25,3 +25,11 @@
 - pH vrijednost (očitanje sa senzora)
 - vlaga (očitanje sa senzora)
 - temperatura (očitanje sa meteo stanice putem API-a)
+
+
+## weather template
+- https://www.themezy.com/demos/128-steel-weather-free-responsive-website-template
+
+## Weather API
+- https://open-meteo.com/en/docs#latitude=45.8144&longitude=15.978
+  

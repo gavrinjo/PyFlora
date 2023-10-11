@@ -72,6 +72,7 @@ class Pot(db.Model):
     name = db.Column(db.String(64))
     description = db.Column(db.String(256))
     created = db.Column(db.DateTime, default=datetime.utcnow)
+    synced = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     plant_id = db.Column(db.Integer, db.ForeignKey('plant.id'))
     sensors = db.relationship('Sensor', backref='pot', lazy='dynamic', cascade='all, delete')

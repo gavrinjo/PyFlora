@@ -1,5 +1,5 @@
 
-import numpy as np
+from datetime import datetime
 from random import randint
 from app import db
 from app.models import Gauge, Sensor, Reading
@@ -29,7 +29,7 @@ class SensorSim():
     
 
     def generate(self) -> object:
-        weather = Weather('Zagre')
+        weather = Weather('Zagreb')
         readings = []
         for sensor in self.sensors:
             if sensor.active:
@@ -49,4 +49,5 @@ class SensorSim():
                 reading.sensor = sensor
                 readings.append(reading)
         db.session.add_all(readings)
+        self.pot.synced = datetime.utcnow()
         db.session.commit()

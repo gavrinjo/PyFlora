@@ -1,6 +1,7 @@
 import os
 import plotly
 import json
+from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user
 from app import db
@@ -10,7 +11,7 @@ from app.pyflora.forms import PlantForm, PotForm
 from app.main.forms import EmptyForm
 from app.repo import upload_image
 from app.scripts.sensors_sim import SensorSim
-from app.scripts.charts import PlotlyLine
+from app.scripts.charts import PlotlyLine, PlotlyHisto, PlotlyPie
 
 
 @bp.route('/plant/list')
@@ -104,10 +105,22 @@ def list_pot():
 def view_pot(pot_id):
     form = EmptyForm()
     pot = Pot.query.get(pot_id)
-    fig = PlotlyLine(pot).config()
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    fig_line = PlotlyLine(pot).config()
+    line_graphJSON = json.dumps(fig_line, cls=plotly.utils.PlotlyJSONEncoder)
+    fig_histo = PlotlyHisto(pot).config()
+    histo_graphJSON = json.dumps(fig_histo, cls=plotly.utils.PlotlyJSONEncoder)
+    fig_pie = PlotlyPie(pot).config()
+    pie_graphJSON = json.dumps(fig_pie, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return render_template('pyflora/pot_view.html', title=pot.name, pot=pot, form=form, graphJSON=graphJSON)
+    return render_template(
+        'pyflora/pot_view.html',
+        title=pot.name,
+        pot=pot,
+        form=form,
+        line_graphJSON=line_graphJSON,
+        histo_graphJSON=histo_graphJSON,
+        pie_graphJSON=pie_graphJSON
+    )
 
 @bp.route('/pot/new', methods=['GET', 'POST'])
 @login_required

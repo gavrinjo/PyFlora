@@ -99,11 +99,15 @@
 
             {% block content %}{% endblock %}
         </main>
-          
+        <footer class="py-4 my-4">
+          <p class="text-center text-body-secondary border-top pt-4">© 2023 pyFlora, Algebra seminarski rad</p>
+        </footer>
 
         {% block scripts %}
             <!-- Optional JavaScript -->
             {{ bootstrap.load_js() }}
+            {{ moment.include_moment() }}
+            {{ moment.locale(auto_detect=True) }}
             <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
         {% endblock %}
     </body>

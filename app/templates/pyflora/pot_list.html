@@ -15,7 +15,7 @@
                     <p class="card-text">{{ pot.description }}</p>
                 </div>
                 <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
+                    <small class="text-muted">{{ moment(pot.synced).fromNow() }}</small>
                 </div>
             </div>
         </div>
@@ -28,9 +28,9 @@
                         <a href="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}">Empty Pot</a>
                     </h5>
                 </div>
-                <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
+                <!-- <div class="card-footer">
+                    <small class="text-muted">{{ pot.synced }}</small>
+                </div> -->
             </div>
         </div>
         {% endif %}
