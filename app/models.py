@@ -3,7 +3,6 @@ from hashlib import md5
 from time import time
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy_utils import PhoneNumber
 from flask import current_app
 from flask_login import UserMixin
 from app import db, login
