@@ -2,26 +2,87 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-<h1 class="h3 mb-3 fw-normal">Edit Profile</h1>
-{{ render_form(form) }}
-<!-- 
-    <h1>Edit Profile</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.about_me.label }}<br>
-            {{ form.about_me(cols=50, rows=4) }}<br>
-            {% for error in form.about_me.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form> -->
+<div class="d-flex justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-success border-opacity-50">
+            <div class="card-header bg-success bg-opacity-50">
+                <h5>{{ title }} - {{ current_user.username.capitalize() }}</h5>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" class="needs-validation" novalidate="">
+                    {{ form.hidden_tag() }}
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        {{ form.username(class_="form-control", placeholder=form.username.label.text) }}
+                        {% for error in form.username.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-signature"></i>
+                        </span>
+                        {{ form.first_name(class_="form-control", placeholder=form.first_name.label.text) }}
+                        {{ form.last_name(class_="form-control", placeholder=form.last_name.label.text) }}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-at"></i>
+                        </span>
+                        {{ form.email(class_="form-control", placeholder=form.email.label.text) }}
+                        {% for error in form.email.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                        {{ form.phone(class_="form-control", placeholder=form.phone.label.text) }}
+                        {% for error in form.phone.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                        {{ form.mobile(class_="form-control", placeholder=form.mobile.label.text) }}
+                        {% for error in form.mobile.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-address-book"></i>
+                        </span>
+                        {{ form.address(class_="form-control", placeholder=form.address.label.text) }}
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-address-book"></i>
+                        </span>
+                        {{ form.postcode(class_="form-control", placeholder=form.postcode.label.text) }}
+                        {{ form.city(class_="form-control", placeholder=form.city.label.text) }}
+                        {{ form.country(class_="form-control", placeholder=form.country.label.text) }}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-address-card"></i>
+                        </span>
+                        {{ form.about_me(class_="form-control", placeholder=form.about_me.label.text) }}
+                    </div>
+                    {{ form.submit(class_="btn btn-outline-success flex-shrink-0") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

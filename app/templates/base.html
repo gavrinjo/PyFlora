@@ -46,11 +46,11 @@
                   </span>
                 </a>
                 {% else %}
-                <a class="nav-link" href="{{ url_for('main.weather') }}">
+                <!-- <a class="nav-link" href="">
                   <span>
                     Weather
                   </span>
-                </a>
+                </a> -->
                 <a class="nav-link" href="{{ url_for('pyflora.list_plant') }}">
                   <span>
                     PyPlants
@@ -108,7 +108,7 @@
             {{ bootstrap.load_js() }}
             {{ moment.include_moment() }}
             {{ moment.locale(auto_detect=True) }}
-            <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         {% endblock %}
     </body>
 

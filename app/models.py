@@ -3,6 +3,7 @@ from hashlib import md5
 from time import time
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy_utils import PhoneNumber
 from flask import current_app
 from flask_login import UserMixin
 from app import db, login
@@ -13,8 +14,16 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(128), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    is_admin = db.Column(db.Boolean, default=False)
+
+    # first_name = db.Column(db.String(64), index=True)
+    # last_name = db.Column(db.String(64), index=True)
+    # address = db.Column(db.String(64), index=True)
+    # postcode = db.Column(db.String(64), index=True)
+    # city = db.Column(db.String(64), index=True)
+    # country = db.Column(db.String(64), index=True)
+
     about_me = db.Column(db.String(256))
+    is_admin = db.Column(db.Boolean, default=False)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     created = db.Column(db.DateTime, default=datetime.utcnow)
     pots = db.relationship('Pot', backref='owner', lazy='dynamic')

@@ -5,21 +5,23 @@
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-top">
             <div class="col-md-6">
-                <img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ url_for('static', filename='plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="..." />
+                <img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ url_for('static', filename='plants/' + plant.photo ) }}" alt="..." />
             </div>
-            <div class="col-md-6">
-                <div class="small mb-1">{{ pot.get_user(pot.user_id).username }}</div>
+            <div class="col-md-6">Added by: 
+                <a class="link-secondary no-deco" style="text-transform: uppercase;" href="{{ url_for('main.user', username=pot.get_user(pot.user_id).username) }}">
+                    {{ pot.get_user(pot.user_id).username.capitalize() }}
+                </a>
                 <h1 class="display-5 fw-bolder" style="text-transform: uppercase;">{{ pot.name }}</h1>
-                <div class="fs-5 mb-3">
-                    <a style="text-decoration: none; text-transform: uppercase;" href="{{ url_for('pyflora.view_plant', plant_id=pot.plant_id) }}">
-                        <span>{{ pot.get_plant(pot.plant_id).name }}</span>
-                    </a>
-                </div>
+                <a class="link-secondary no-deco" style="text-transform: uppercase;" href="{{ url_for('pyflora.view_plant', plant_id=plant.id) }}">
+                    <h4>{{ plant.name }}</h4>
+                </a>
                 <div class="fs-5 mb-3">
                     <span>{{ pot.description }}</span>
                 </div>
                 <div class="lh-2 mb-3">
-                    test
+                    {% for value in values %}
+                    <small>{{ value.indicator.capitalize() }}: {{ value.min_value }} - {{value.max_value}} [{{ value.unit }}]</small><br>
+                    {% endfor %}
                 </div>
                 <div class="hstack gap-3">
                     <form action="{{ url_for('pyflora.sync_pot', pot_id=pot.id) }}" method="post">

@@ -59,9 +59,9 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile', form=form)
     
 
-@bp.route('/weather')
-@login_required
-def weather():
-    user = User.query.filter_by(username=current_user.username).first_or_404()
-    cwd = Weather('Zagreb')
-    return render_template('weather.html', title='Weather', cwd=cwd)
+# @bp.route('/weather')
+# @login_required
+# def weather():
+#     user = User.query.filter_by(username=current_user.username).first_or_404()
+#     cwd = Weather('Zagreb')
+#     return render_template('weather.html', title='Weather', cwd=cwd)

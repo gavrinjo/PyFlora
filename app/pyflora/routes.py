@@ -105,6 +105,8 @@ def list_pot():
 def view_pot(pot_id):
     form = EmptyForm()
     pot = Pot.query.get(pot_id)
+    plant = Plant.query.get(pot.plant_id)
+    values = Value.query.filter_by(plant_id=pot.plant_id).all()
     fig_line = PlotlyLine(pot).config()
     line_graphJSON = json.dumps(fig_line, cls=plotly.utils.PlotlyJSONEncoder)
     fig_histo = PlotlyHisto(pot).config()
@@ -116,6 +118,8 @@ def view_pot(pot_id):
         'pyflora/pot_view.html',
         title=pot.name,
         pot=pot,
+        plant=plant,
+        values=values,
         form=form,
         line_graphJSON=line_graphJSON,
         histo_graphJSON=histo_graphJSON,
