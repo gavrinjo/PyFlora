@@ -12,25 +12,14 @@
                 <form action="" method="post" class="needs-validation" novalidate="">
                     {{ form.hidden_tag() }}
                     <div class="input-group mb-3">
-                        <span class="input-group-text">
-                            <i class="fa-solid fa-user"></i>
-                        </span>
-                        {{ form.username(class_="form-control", placeholder=form.username.label.text) }}
-                        {% for error in form.username.errors %}
-                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
-                        </span>
-                        {% endfor %}
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">
+                        <span class="input-group-text" style="width: 45px;">
                             <i class="fa-solid fa-signature"></i>
                         </span>
                         {{ form.first_name(class_="form-control", placeholder=form.first_name.label.text) }}
                         {{ form.last_name(class_="form-control", placeholder=form.last_name.label.text) }}
                     </div>
                     <div class="input-group mb-3">
-                        <span class="input-group-text">
+                        <span class="input-group-text" style="width: 45px;">
                             <i class="fa-solid fa-at"></i>
                         </span>
                         {{ form.email(class_="form-control", placeholder=form.email.label.text) }}
@@ -41,7 +30,7 @@
                         {% endfor %}
                     </div>
                     <div class="input-group mb-3">
-                        <span class="input-group-text">
+                        <span class="input-group-text" style="width: 45px;">
                             <i class="fa-solid fa-phone"></i>
                         </span>
                         {{ form.phone(class_="form-control", placeholder=form.phone.label.text) }}
@@ -58,22 +47,16 @@
                         {% endfor %}
                     </div>
                     <div class="input-group mb-3">
-                        <span class="input-group-text">
+                        <span class="input-group-text" style="width: 45px;">
                             <i class="fa-solid fa-address-book"></i>
                         </span>
                         {{ form.address(class_="form-control", placeholder=form.address.label.text) }}
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">
-                            <i class="fa-solid fa-address-book"></i>
-                        </span>
-                        {{ form.postcode(class_="form-control", placeholder=form.postcode.label.text) }}
-                        {{ form.city(class_="form-control", placeholder=form.city.label.text) }}
-                        {{ form.country(class_="form-control", placeholder=form.country.label.text) }}
+                        {{ form.postcode(class_="form-control input-w-100", placeholder=form.postcode.label.text) }}
+                        {{ form.city(class_="form-control input-w-150", placeholder=form.city.label.text) }}
+                        {{ form.country(class_="form-control input-w-150", placeholder=form.country.label.text) }}
                     </div>
                     <div class="input-group mb-3">
-                        <span class="input-group-text">
+                        <span class="input-group-text" style="width: 45px;">
                             <i class="fa-solid fa-address-card"></i>
                         </span>
                         {{ form.about_me(class_="form-control", placeholder=form.about_me.label.text) }}
@@ -85,4 +68,17 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+
+$(document).ready(function(){
+    $('[data-bs-toggle="popover"]').popover({
+        trigger: 'hover'
+    });  
+});
+
+</script>
 {% endblock %}

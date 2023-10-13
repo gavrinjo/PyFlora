@@ -129,3 +129,14 @@ span.custom-bkg {
 .card-group [class*='col-'] {
   float:none;
 }
+
+
+.input-group > input.input-w-100 {
+  flex: 0 1 100px;
+}
+.input-group > input.input-w-150 {
+  flex: 0 1 150px;
+}
+.input-group > input.input-w-200 {
+  flex: 0 1 200px;
+}

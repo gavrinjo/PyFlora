@@ -46,15 +46,33 @@ def user(username):
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm(current_user.username)
+    form = EditProfileForm(current_user.email)
     if form.validate_on_submit():
-        current_user.username = form.username.data
+        # current_user.username = form.username.data
+        current_user.first_name = form.first_name.data
+        current_user.last_name = form.last_name.data
+        current_user.email = form.email.data
+        current_user.phone = form.phone.data
+        current_user.mobile = form.mobile.data
+        current_user.address = form.address.data
+        current_user.postcode = form.postcode.data
+        current_user.city = form.city.data
+        current_user.country = form.country.data
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash('Changes have been saved!', 'success')
         return redirect(url_for('main.edit_profile'))
     elif request.method == 'GET':
-        form.username.data = current_user.username
+        # form.username.data = current_user.username
+        form.first_name.data = current_user.first_name
+        form.last_name.data = current_user.last_name
+        form.email.data = current_user.email
+        form.phone.data = current_user.phone
+        form.mobile.data = current_user.mobile
+        form.address.data = current_user.address
+        form.postcode.data = current_user.postcode
+        form.city.data = current_user.city
+        form.country.data = current_user.country
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
     
