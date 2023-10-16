@@ -1,22 +1,100 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <table>
-        <tr valign="top">
-            <td><img src="{{ user.avatar(64) }}"></td>
-            <td>
-                <h1>User: {{ user.username }}</h1>
-                {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
-                {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
-                {% if user == current_user %}
-                <form action="{{ url_for('main.edit_profile') }}" method="get">
-                    {{ form.hidden_tag() }}
-                    {{ form.submit(value='Edit profile', class_='btn btn-primary btn-md') }}
-                </form>
+<div class="card">
+    <div class="container p-4 p-lg-4">
+        <div class="row gx-4 gx-lg-5 align-items-top">
+            <div class="col-md-2">
+                <img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ user.avatar(128) }}" alt="..." />
+            </div>
+            <div class="col-md-6">
+                {% if user.is_admin %}
+                <h1 class="display-5 fw-bolder" style="text-transform: uppercase; color: brown;">
+                    <i class="fa-solid fa-bug"></i>{{ user.username }}
+                </h1>
+                {% else %}
+                <h1 class="display-5 fw-bolder" style="text-transform: uppercase;">
+                    {{ user.username }}
+                </h1>
                 {% endif %}
-            </td>
-        </tr>
-    </table>
-    <hr>
+                <div class="lh-2 mb-3">
+                    {% if user.last_seen %}
+                        <small>Last seen on: {{ moment(user.last_seen).fromNow()  }}</small><br>
+                    {% endif %}
+                </div>
+                <div class="mb-1">
+                    {% if user.first_name %}Name: {{ user.first_name }}{% endif %}
+                    {% if user.last_name %}{{ user.last_name }}{% endif %}
+                </div>
+                <div class="mb-1">
+                    {% if user.email %}E-mail: {{ user.email }}{% endif %}
+                </div>
+                <div class="mb-1">
+                    {% if user.mobile %}Mobile: {{ user.mobile }}{% endif %}
+                    {% if user.phone %}Phone: {{ user.phone }}{% endif %}
+                </div>
+                <div class="mb-1">                    
+                    {% if user.address %}Address: {{ user.address }}{% endif %},
+                    {% if user.postcode %}{{ user.postcode }}{% endif %}
+                    {% if user.city %}{{ user.city }}{% endif %},
+                    {% if user.country %}{{ user.country }}{% endif %}
+                </div>
+                <div class="mt-3 mb-3">
+                    <span>
+                        {% if user.about_me %}
+                            {{ user.about_me }}
+                        {% endif %}
+                    </span>
+                </div>
+                {% if user == current_user %}
+                <div class="hstack gap-3">
+                    <form action="{{ url_for('main.edit_profile') }}" method="get">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Edit profile', class_='btn btn-success btn-md') }}
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="card-header border-top">
+        <h5>{{ user.username }} Pots</h5>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 p-4">
+        {% for pot in pots %}
+            {% if pot.get_plant(pot.plant_id) %}
+            <div class="col my-2">
+                <div class="card h-100 r-0">
+                    <img class="img-thumbnail r-0 b-0" src="{{ url_for('static', filename='plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="missing image">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a class="text-dark" href="{{ url_for('pyflora.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a>
+                        </h5>
+                        <p class="card-text">{{ pot.description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">{{ moment(pot.synced).fromNow() }}</small>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col g-4">
+                <div class="card h-100 r-0">
+                    <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='plants/default.jpg') }}" alt="missing image">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}">Empty Pot</a>
+                        </h5>
+                    </div>
+                    <!-- <div class="card-footer">
+                        <small class="text-muted">{{ pot.synced }}</small>
+                    </div> -->
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
 
 {% endblock %}

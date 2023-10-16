@@ -11,7 +11,7 @@ from app.pyflora.forms import PlantForm, PotForm
 from app.main.forms import EmptyForm
 from app.repo import upload_image
 from app.scripts.sensors_sim import SensorSim
-from app.scripts.charts import PlotlyLine, PlotlyHisto, PlotlyPie
+from app.scripts.charts import PlotlyLine, PlotlyHisto, PlotlyPie, PLine
 
 
 @bp.route('/plant/list')
@@ -108,6 +108,7 @@ def view_pot(pot_id):
     plant = Plant.query.get(pot.plant_id)
     values = Value.query.filter_by(plant_id=pot.plant_id).all()
     fig_line = PlotlyLine(pot).config()
+    # fig_line = PLine(pot).config()
     line_graphJSON = json.dumps(fig_line, cls=plotly.utils.PlotlyJSONEncoder)
     fig_histo = PlotlyHisto(pot).config()
     histo_graphJSON = json.dumps(fig_histo, cls=plotly.utils.PlotlyJSONEncoder)
