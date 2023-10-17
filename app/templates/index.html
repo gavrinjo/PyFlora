@@ -1,8 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
-    {% endfor %}
+    <div class="justify-content-center row">
+        <div class="col text-center mb-5">
+            <h1>pyFlora</h1>
+        </div>
+    </div>
+    <div class="justify-content-center row">
+        <div class="col-xl-6 col-lg-8 col-md-10 lead">
+            <p>
+                Do you want to keep your plants healthy and happy?
+                Do you want to know the optimal conditions for each plant species?
+                If yes, then pyFlora is the website for you.
+            </p>
+            <p>
+                pyFlora is a platform where you can find smart sensors that measure and monitor various parameters of your plants,
+                such as soil, moisture, temperature, humidity, reaction and light.
+            <p>
+                pyFlora will help you take better care of your plants and prevent common problems like overwatering, underwatering, pests, and diseases.
+                pyFlora is the ultimate solution for plant lovers who want to enjoy the beauty and benefits of nature.
+            </p>
+            <p class="text-center">
+                <strong class="h4">
+                    pyFlora<br>
+                    Where sensors save your plants<em>!</em>
+                </strong>
+            </p>
+        </div>
+    </div>
 {% endblock %}

@@ -1,0 +1,11 @@
+Dear {{ user }},
+
+your message has been successfully received, we will contact you as soon as possible.
+
+Sincerely,
+pyFlora Team
+
+{{ '-'*32 }}
+
+Your message follows:
+{{ message }}

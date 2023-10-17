@@ -200,7 +200,7 @@ class PlotlyLine():
                 y=1.05,
                 x=0.5
             ),
-            xaxis_range=[datetime.utcnow() - timedelta(hours=1), datetime.utcnow()]
+            xaxis_range=[datetime.utcnow() - timedelta(days=1), datetime.utcnow()]
         )
         fig.for_each_trace(lambda t: t.update(hovertemplate='%{y}%{customdata[0]}'))
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))

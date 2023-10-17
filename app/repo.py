@@ -33,5 +33,16 @@ def upload_image(form_image, folder): #nova funkcija, za uploadanje slika, potre
 
 def load_gauge():
     base_dir = current_app.config['UPLOADS_DEFAULT_DEST']
-    db.session.execute(Gauge.__table__.insert(), json.loads(open(os.path.join(base_dir, 'gauges/gauge.json')).read()))
+    db.session.execute(Gauge.__table__.insert(), json.loads(open(os.path.join(base_dir, 'gauge.json')).read()))
     db.session.commit()
+
+def json2sql():
+    import sqlite3
+    base_dir = current_app.config['UPLOADS_DEFAULT_DEST']
+    db_path = current_app.config['SQLALCHEMY_DATABASE_URI']
+    connection = sqlite3.connect(db_path)
+    cursor = connection.cursor()
+    with open(os.path.join(base_dir, 'gauge.json'), "r") as file:
+        obj = json.load(file)
+        plant = ''
+    pass

@@ -13,7 +13,6 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(128), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
     address = db.Column(db.String(64), index=True)
@@ -22,7 +21,6 @@ class User(UserMixin, db.Model):
     country = db.Column(db.String(64), index=True)
     phone = db.Column(db.String(64), index=True)
     mobile = db.Column(db.String(64), index=True)
-
     about_me = db.Column(db.String(256))
     is_admin = db.Column(db.Boolean, default=False)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
@@ -124,92 +122,6 @@ class Gauge(db.Model):
     avg_value = db.Column(db.Integer, nullable=False) # average value in measurnig scale
     off_value = db.Column(db.Integer, nullable=False) # +-offset of measured or average value
     unit = db.Column(db.String(64)) # measuring unit
-
-
-""" stara Gauge klasa, nepotrebno
-class Gauge(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    ei = db.Column(db.String(64), nullable=False) # ellenberg indicator [L,T,F,R,N,S]
-    eiv = db.Column(db.Integer, nullable=False) # ellenberg indicator value
-    name = db.Column(db.String(64))
-    min_value = db.Column(db.Integer, nullable=False) # min value for given 'EIV'
-    max_value = db.Column(db.Integer, nullable=False) # max value for given 'EIV'
-    unit = db.Column(db.String(64)) # measuring unit
-    description = db.Column(db.String(128))
-"""
-
-
-""" stara Measurement klasa, nepotrebno
-class Measurements(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    sensor = db.Column(db.String(64))
-    value = db.Column(db.Integer)
-    unit = db.Column(db.String(64))
-    measured = db.Column(db.DateTime)
-    pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'))
-
-    def __repr__(self):
-        return f'< {self.sensor} : {self.value}[{self.unit}], Measured at : {self.measured}, Pot : {self.pot_id} >'
-
-    @property
-    def serialize(self):
-        data = {
-            'x_dataset': self.measured.strftime('%d.%m.%Y - %H:%M:%S.%f'), #.isoformat() + 'Z'
-            'y_dataset': {self.sensor : self.value}
-        }
-        return data
-"""
-
-
-""" stara SensorMeasurements klasa, nepotrebno
-class SensorMeasurements(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-
-    sunlight = db.Column(db.Integer) # [lux]
-    temperature = db.Column(db.Integer) # [°C]
-    moisture = db.Column(db.Integer) # [%]
-    reaction = db.Column(db.Integer) # [pH]
-    nutrient = db.Column(db.Integer) # [%]
-    salinity = db.Column(db.Integer) # [%]
-
-    measured = db.Column(db.DateTime)
-
-    pot_id = db.Column(db.Integer, db.ForeignKey('pot.id'))
-
-    def __repr__(self):
-        return f'<Measured at {self.measured} -> {self.sunlight}/{self.temperature}/{self.moisture}/{self.reaction}/{self.nutrient}/{self.salinity} >'
-
-    def get_pot(self, id):
-        return Pot.query.get(id)
-    
-    @staticmethod
-    def map_values(value, min_value, max_value):
-        return [value, np.interp(value, [min_value, max_value], [1, 10])]
-
-    @property
-    def sunlight_prop(self):
-        data = {'x': self.measured.strftime('%d.%m.%Y - %H:%M:%S.%f'), 'y': self.sunlight}
-        return data
-
-    @property
-    def serialize(self):
-        data = {
-            'x_dataset': self.measured.strftime('%d.%m.%Y - %H:%M:%S.%f'), #.isoformat() + 'Z'
-            'y_dataset': {
-                'sunlight' : self.map_values(self.sunlight, 1, 100000),
-                'temperature': self.map_values(self.temperature, -20, 60),
-                'moisture': self.map_values(self.moisture, 0, 100),
-                'reaction': self.map_values(self.reaction, 0, 14),
-                'nutrient': self.map_values(self.nutrient, 0, 100),
-                'salinity': self.map_values(self.salinity, 0, 16)
-            }
-        }
-        return data
-"""
-
-
-
 
 
 @login.user_loader

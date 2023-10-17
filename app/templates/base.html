@@ -10,7 +10,7 @@
             <!-- Bootstrap CSS -->
             {{ bootstrap.load_css() }}
         {% endblock %}
-        <link href="{{ url_for('static', filename='signin.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
         <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         {% if title %}
@@ -20,7 +20,7 @@
         {% endif %}
         {% endblock %}
     </head>
-    <body">
+    <body>
         <!-- navbar -->
         <nav class="navbar navbar-expand-md bg-light fixed-top border-bottom ">
           <div class="container">
@@ -34,6 +34,11 @@
 
             <div class="navbar-collapse collapse w-100" id="navbarNav">
               <div class="nav navbar-nav ms-auto w-100 justify-content-end">
+                <a class="nav-link" href="{{ url_for('main.contact') }}">
+                  <span>
+                    Contact
+                  </span>
+                </a>
                 {% if current_user.is_anonymous %}
                 <a class="nav-link" href="{{ url_for('auth.login') }}">
                   <span>
