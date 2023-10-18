@@ -41,8 +41,18 @@ def json2sql():
     base_dir = current_app.config['UPLOADS_DEFAULT_DEST']
     db_path = current_app.config['SQLALCHEMY_DATABASE_URI']
     connection = sqlite3.connect(db_path)
-    cursor = connection.cursor()
-    with open(os.path.join(base_dir, 'gauge.json'), "r") as file:
-        obj = json.load(file)
-        plant = ''
-    pass
+    with open(os.path.join(base_dir, 'plants.json'), "r") as file:
+        data = json.load(file)
+        for item in data:
+            connection.execute(
+                "INSERT INTO plant (id, name, photo, description, substrate, created) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)",
+                item['id'], item['name'], item['photo'], item['description'], item['substrate']
+            )
+            connection.commit()
+            for value in item['values'] :
+                connection.execute(
+                    "INSERT INTO value (indicator, min_value, max_value, unit, plant_id) VALUES (?, ?, ?, ?, ?)",
+                    value['indicator'], value['min_value'], value['max_value'], value['unit'], value['plant_id']
+                )
+                connection.commit()
+    connection.close()
