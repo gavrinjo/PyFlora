@@ -38,10 +38,29 @@ def load_gauge():
 
 def json2sql():
     import sqlite3
-    base_dir = current_app.config['UPLOADS_DEFAULT_DEST']
-    db_path = current_app.config['SQLALCHEMY_DATABASE_URI']
-    connection = sqlite3.connect(db_path)
-    with open(os.path.join(base_dir, 'plants.json'), "r") as file:
+    import json
+    from werkzeug.security import generate_password_hash
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    db = os.path.join(basedir, "app.db")
+    resources = os.path.normpath(os.path.join(basedir, 'app/resources'))
+    connection = sqlite3.connect(db)
+
+    # dodaj ADMIN korisnika u bazu
+    connection.execute(
+        "INSERT INTO user (username, email, password_hash, is_admin, created) VALUES (?, ?, ?, 1, CURRENT_TIMESTAMP)",
+        'admin', 'admin@email.com', generate_password_hash('0000')
+    )
+    connection.commit()
+
+    # dodaj prazan lonac u bazu
+    connection.execute(
+        "INSERT INTO pot (name, created) VALUES (?, CURRENT_TIMESTAMP)",
+        'dummy pot'
+    )
+    connection.commit()
+    
+    # dodaj 10 predefiniranih biljaka i njihovih vrijednosti u bazu
+    with open(os.path.join(resources, 'plants.json'), "r") as file:
         data = json.load(file)
         for item in data:
             connection.execute(
@@ -55,4 +74,14 @@ def json2sql():
                     value['indicator'], value['min_value'], value['max_value'], value['unit'], value['plant_id']
                 )
                 connection.commit()
+    
+    # dodaj nominalne vrijednosti u bazu
+    with open(os.path.join(resources, 'gauge.json')) as file:
+        data = json.load(file)
+        for item in data:
+            connection.execute(
+                "INSERT INTO gauge (name, min_value, max_value, avg_value, off_value, unit) VALUES (?, ?, ?, ?, ?, ?)",
+                item['name'], item['min_value'], item['max_value'], item['avg_value'], item['off_value'], item['unit']
+            )
+            connection.commit()
     connection.close()
