@@ -7,7 +7,7 @@
     {% for plant in plants %}
         <div class="col g-4">
             <div class="card h-100 r-0">
-                <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='plants/' + plant.photo) }}" alt="missing image">
+                <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/' + plant.photo) }}" alt="missing image">
                 <div class="card-body">
                     <h5 class="card-title">
                         <a href="{{ url_for('pyflora.view_plant', plant_id=plant.id) }}">{{ plant.name }}</a>

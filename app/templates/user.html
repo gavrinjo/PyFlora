@@ -65,7 +65,7 @@
             {% if pot.get_plant(pot.plant_id) %}
             <div class="col my-2">
                 <div class="card h-100 r-0">
-                    <img class="img-thumbnail r-0 b-0" src="{{ url_for('static', filename='plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="missing image">
+                    <img class="img-thumbnail r-0 b-0" src="{{ url_for('static', filename='images/plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="missing image">
                     <div class="card-body">
                         <h5 class="card-title">
                             <a class="text-dark" href="{{ url_for('pyflora.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a>
@@ -80,7 +80,7 @@
             {% else %}
             <div class="col g-4">
                 <div class="card h-100 r-0">
-                    <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='plants/default.jpg') }}" alt="missing image">
+                    <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/default.jpg') }}" alt="missing image">
                     <div class="card-body">
                         <h5 class="card-title">
                             <a href="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}">Empty Pot</a>

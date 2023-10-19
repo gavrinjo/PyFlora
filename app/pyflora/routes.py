@@ -38,7 +38,7 @@ def new_plant():
         plant.name = form.name.data
         plant.description = form.description.data
         plant.substrate = form.substrate.data
-        photo = upload_image(form.photo.data, 'plants')
+        photo = upload_image(form.photo.data, 'images/plants')
         plant.photo = photo
         db.session.add(plant)
         db.session.flush()
@@ -66,7 +66,7 @@ def update_plant(plant_id):
         plant.name = form.name.data
         plant.description = form.description.data
         plant.substrate = form.substrate.data
-        photo = upload_image(form.photo.data, 'plants')
+        photo = upload_image(form.photo.data, 'images/plants')
         plant.photo = photo
         for value in values:
                 value.min_value = getattr(form, value.indicator.lower()).min_value.data
