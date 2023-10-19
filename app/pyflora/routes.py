@@ -1,17 +1,16 @@
 import os
 import plotly
 import json
-from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user
 from app import db
-from app.models import Plant, Value, Pot, Sensor, Reading
+from app.models import Plant, Value, Pot, Sensor
 from app.pyflora import bp
 from app.pyflora.forms import PlantForm, PotForm
 from app.main.forms import EmptyForm
 from app.repo import upload_image
-from app.scripts.sensors_sim import SensorSim
-from app.scripts.charts import PlotlyLine, PlotlyHisto, PlotlyPie, PLine
+from app.resources.sensors_sim import SensorSim
+from app.resources.charts import PlotlyLine, PlotlyHisto, PlotlyPie, PLine
 
 
 @bp.route('/plant/list')

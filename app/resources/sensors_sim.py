@@ -3,7 +3,7 @@ from datetime import datetime
 from random import randint
 from app import db
 from app.models import Gauge, Sensor, Reading
-from app.scripts.weather import Weather
+from app.resources.weather import Weather
 
 
 

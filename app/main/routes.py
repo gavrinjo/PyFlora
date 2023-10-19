@@ -6,7 +6,7 @@ from app.main import bp
 from app.email import send_email
 from app.models import User, Pot
 from app.main.forms import EditProfileForm, EmptyForm, ContactForm
-from app.scripts.weather import Weather
+from app.resources.weather import Weather
 
 
 @bp.before_app_request
