@@ -8,7 +8,7 @@
 		"substrate": "supstrati",
 		"values":[
 			{"indicator": "sunlight", "min_value": 0, "max_value": 0, "unit": "lux", "plant_id": 1},
-			{"indicator": "temperature", "min_value": 0, "max_value": 0, "unit": "°C", "plant_id": 1},
+			{"indicator": "temperature", "min_value": 0, "max_value": 0, "unit": "\u2103", "plant_id": 1},
 			{"indicator": "moisture", "min_value": 0, "max_value": 0, "unit": "%", "plant_id": 1},
 			{"indicator": "reaction", "min_value": 0, "max_value": 0, "unit": "pH", "plant_id": 1},
 			{"indicator": "nutrient", "min_value": 0, "max_value": 0, "unit": "%", "plant_id": 1},
