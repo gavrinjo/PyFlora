@@ -54,10 +54,10 @@ class User(UserMixin, db.Model):
 class Plant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    photo = db.Column(db.String(64), nullable=False, default='default.jpg') # ovo ću naknadno napraviti
+    photo = db.Column(db.String(64), nullable=False, default='default.jpg')
     description = db.Column(db.String(256))
-    substrate = db.Column(db.String(128)) # recomendation
-    # soil_texture = db.Column(db.String(64)) # fine, medium, coarse ovo nam možda i neće trebati
+    substrate = db.Column(db.String(128))
+    soil_texture = db.Column(db.String(64))
     created = db.Column(db.DateTime, default=datetime.utcnow)
     pots = db.relationship('Pot', backref='plant', lazy='dynamic')
     values = db.relationship('Value', backref='plant', lazy='dynamic', cascade='all, delete')
