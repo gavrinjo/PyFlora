@@ -31,7 +31,7 @@ class PlantForm(FlaskForm):
     substrate = StringField('Substrate')
     wiki_url = StringField('Wikipedia', render_kw=dict(popover_text='Wikipedia outside reference'))
     other_url = StringField('Other', render_kw=dict(popover_text='Other outside reference'))
-    description = TextAreaField('Description', validators=[Length(min=0, max=256)])
+    description = TextAreaField('Description', validators=[Length(min=0, max=1024)])
     submit = SubmitField('Submit')
 
     def __init__(self, original_name, *args, **kwargs):

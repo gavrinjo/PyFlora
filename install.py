@@ -19,7 +19,7 @@ def json2sql():
 
     # dodaj prazan lonac u bazu
     cursor.execute(
-        "INSERT INTO pot (name, created) VALUES ('dummy_pot', CURRENT_TIMESTAMP)"
+        "INSERT INTO pot (name, created, user_id) VALUES ('dummy_pot', CURRENT_TIMESTAMP, 1)"
     )
     connection.commit()
     

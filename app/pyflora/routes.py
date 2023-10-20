@@ -96,7 +96,10 @@ def update_plant(plant_id):
 def delete_plant(plant_id):
     plant = Plant.query.get_or_404(plant_id)
     name = plant.name
-    os.remove(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], f'plants/{plant.photo}'))
+    try:
+        os.remove(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], f'plants/{plant.photo}'))
+    except:
+        pass
     db.session.delete(plant)
     db.session.commit()
     flash(f'Congratulations, Plant {name} deleted secessefuly!', 'success')
@@ -206,8 +209,8 @@ def delete_pot(pot_id):
 @bp.route('/pot/<pot_id>/sync', methods=['POST'])
 @login_required
 def sync_pot(pot_id):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        pot = Pot.query.get(pot_id)
-        SensorSim(pot).generate()
-        return redirect(url_for('pyflora.view_pot', pot_id=pot_id))
+    # form = EmptyForm()
+    # if form.validate_on_submit():
+    pot = Pot.query.get(pot_id)
+    SensorSim(pot).generate()
+    return redirect(url_for('pyflora.view_pot', pot_id=pot_id))

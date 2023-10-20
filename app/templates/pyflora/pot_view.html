@@ -25,8 +25,7 @@
                 </div>
                 <div class="hstack gap-3">
                     <form action="{{ url_for('pyflora.sync_pot', pot_id=pot.id) }}" method="post">
-                        {{ form.hidden_tag() }}
-                        {{ form.submit(value='Synchronize', class_='btn btn-outline-success btn-md') }}
+                        <input class="btn btn-outline-success btn-md" id="submit" name="submit" type="submit" value="Synchronize">
                     </form>
                     <form action="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}" method="get">
                         {{ form.hidden_tag() }}

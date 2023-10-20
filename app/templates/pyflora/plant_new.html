@@ -44,9 +44,6 @@
                             <div class="input-group mb-3">
                                 {{ field.label(class_="input-group-text col-3") }}
                                 {{ field(class_="form-control") }}
-                                <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ field.render_kw['popover_text'] }}">
-                                    <i class="fa-solid fa-info"></i>
-                                </span>
                                 {% for error in field.errors %}
                                 <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
                                     <i class="fa-solid fa-exclamation" style="color: red;"></i>
