@@ -24,7 +24,7 @@ def list_plant():
 def view_plant(plant_id):
     form = EmptyForm()
     plant = Plant.query.get(plant_id)
-    image_file = url_for('static', filename=f'plants/{plant.photo}')
+    image_file = url_for('static', filename=f'images/plants/{plant.photo}')
     values = Value.query.filter_by(plant_id=plant_id).all()
     return render_template('pyflora/plant_view.html', title=plant.name, plant=plant, image_file=image_file, values=values, form=form)
 

@@ -12,7 +12,7 @@
                     <h5 class="card-title">
                         <a href="{{ url_for('pyflora.view_plant', plant_id=plant.id) }}">{{ plant.name }}</a>
                     </h5>
-                    <p class="card-text">{{ plant.description }}</p>
+                    <p class="card-text">{{ plant.description|truncate(128) }}</p>
                 </div>
             </div>
         </div>
