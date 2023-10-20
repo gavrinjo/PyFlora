@@ -8,7 +8,7 @@ from app.models import Plant, Value, Pot, Sensor
 from app.pyflora import bp
 from app.pyflora.forms import PlantForm, PotForm
 from app.main.forms import EmptyForm
-from app.repo import upload_image
+from app.resources.repo import upload_image
 from app.resources.sensors_sim import SensorSim
 from app.resources.charts import PlotlyLine, PlotlyHisto, PlotlyPie, PLine
 
@@ -36,7 +36,10 @@ def new_plant():
         plant = Plant()
         plant.name = form.name.data
         plant.description = form.description.data
+        plant.soil_texture = form.soil_texture.data
         plant.substrate = form.substrate.data
+        plant.wiki_url = form.wiki_url.data
+        plant.other_url = form.other_url.data
         photo = upload_image(form.photo.data, 'images/plants')
         plant.photo = photo
         db.session.add(plant)
@@ -64,7 +67,10 @@ def update_plant(plant_id):
         plant = Plant()
         plant.name = form.name.data
         plant.description = form.description.data
+        plant.soil_texture = form.soil_texture.data
         plant.substrate = form.substrate.data
+        plant.wiki_url = form.wiki_url.data
+        plant.other_url = form.other_url.data
         photo = upload_image(form.photo.data, 'images/plants')
         plant.photo = photo
         for value in values:
@@ -75,8 +81,11 @@ def update_plant(plant_id):
         return redirect(url_for('pyflora.view_plant', plant_id=plant_id))
     elif request.method == 'GET':
         form.name.data = plant.name
-        form.substrate.data = plant.substrate
         form.description.data = plant.description
+        form.soil_texture.data = plant.soil_texture
+        form.substrate.data = plant.substrate
+        form.wiki_url.data = plant.wiki_url
+        form.other_url.data = plant.other_url
         for value in values:
             getattr(form, value.indicator.lower()).min_value.data = value.min_value
             getattr(form, value.indicator.lower()).max_value.data = value.max_value

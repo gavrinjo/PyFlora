@@ -28,7 +28,9 @@ class PlantForm(FlaskForm):
     nutrient = FormField(MinMaxValue, 'Nutrient', render_kw=dict(unit='%', popover_text='Nutrient u rasponu od 0% do 100%'))
     salinity = FormField(MinMaxValue, 'Salinity', render_kw=dict(unit='%', popover_text='Salinity u rasponu od 0% do 100%'))
     soil_texture = SelectField('Soil texture', choices=['Fine', 'Medium', 'Coarse'])
-    substrate = StringField('Substrate recomendation')
+    substrate = StringField('Substrate')
+    wiki_url = StringField('Wikipedia', render_kw=dict(popover_text='Wikipedia outside reference'))
+    other_url = StringField('Other', render_kw=dict(popover_text='Other outside reference'))
     description = TextAreaField('Description', validators=[Length(min=0, max=256)])
     submit = SubmitField('Submit')
 

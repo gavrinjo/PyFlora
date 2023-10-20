@@ -2,17 +2,182 @@
 [
 	{
 		"id": 1,
-		"name": "biljka",
-		"photo": "slika",
-		"description": "opis",
-		"substrate": "supstrati",
+		"name": "Christmas cactus",
+		"photo": "christmas-cactus.jpg",
+		"description": "The Christmas cactus (lat. Epiphyllum truncatum) is one of the jointed cacti that originate from South America. It easily adapts to indoor growing conditions, which is why it is an excellent choice for growing in homes and commercial premises.",
+		"substrate": "Liquid fertilizer for indoor plants or fertilizer for cacti and succulents.",
+		"soil_texture": "Medium",
+		"wiki_url": "https://en.wikipedia.org/wiki/Schlumbergera_truncata",
+		"other_url": "https://www.vrtlarica.hr/sadnja-uzgoj-bozicnog-kaktusa/",
 		"values":[
-			{"indicator": "sunlight", "min_value": 0, "max_value": 0, "unit": "lux", "plant_id": 1},
-			{"indicator": "temperature", "min_value": 0, "max_value": 0, "unit": "\u2103", "plant_id": 1},
-			{"indicator": "moisture", "min_value": 0, "max_value": 0, "unit": "%", "plant_id": 1},
-			{"indicator": "reaction", "min_value": 0, "max_value": 0, "unit": "pH", "plant_id": 1},
-			{"indicator": "nutrient", "min_value": 0, "max_value": 0, "unit": "%", "plant_id": 1},
-			{"indicator": "salinity", "min_value": 0, "max_value": 0, "unit": "%", "plant_id": 1}
+			{"indicator": "sunlight", "min_value": 250, "max_value": 750, "unit": "lux", "plant_id": 1},
+			{"indicator": "temperature", "min_value": 13, "max_value": 21, "unit": "\u2103", "plant_id": 1},
+			{"indicator": "moisture", "min_value": 45, "max_value": 55, "unit": "%", "plant_id": 1},
+			{"indicator": "reaction", "min_value": 6, "max_value": 7, "unit": "pH", "plant_id": 1},
+			{"indicator": "nutrient", "min_value": 35, "max_value": 45, "unit": "%", "plant_id": 1},
+			{"indicator": "salinity", "min_value": 10, "max_value": 15, "unit": "%", "plant_id": 1}
+		]
+	},
+	{
+		"id": 2,
+		"name": "Orchid",
+		"photo": "Orchid.jpg",
+		"description": "Orchid (lat. Orchidaceae) belongs to the orchid family (Orchidaceae) with about 1,000 genera and 15,000 to 30,000 species, which makes it very difficult to distinguish between them. Another name for the orchid is the \"queen of flowers\", and it got its name from the Greek word that translates to testicle.",
+		"substrate": "Substrate intended for orchids or use large pieces of bark.",
+		"soil_texture": "Coarse",
+		"wiki_url": "https://en.wikipedia.org/wiki/Orchid",
+		"other_url": "https://www.vrtlarica.hr/sadnja-uzgoj-orhideja/",
+		"values":[
+			{"indicator": "sunlight", "min_value": 350, "max_value": 1000, "unit": "lux", "plant_id": 2},
+			{"indicator": "temperature", "min_value": 16, "max_value": 24, "unit": "\u2103", "plant_id": 2},
+			{"indicator": "moisture", "min_value": 60, "max_value": 75, "unit": "%", "plant_id": 2},
+			{"indicator": "reaction", "min_value": 6, "max_value": 7, "unit": "pH", "plant_id": 2},
+			{"indicator": "nutrient", "min_value": 15, "max_value": 25, "unit": "%", "plant_id": 2},
+			{"indicator": "salinity", "min_value": 10, "max_value": 20, "unit": "%", "plant_id": 2}
+		]
+	},
+	{
+		"id": 3,
+		"name": "Lily",
+		"photo": "lily.jpg",
+		"description": "Lily (lat. Lilium) is an ornamental perennial. It is assumed that it originates from Asia, more precisely from the area of China, Japan and Korea. It has been cultivated for thousands of years, and because of its beauty and fragrance, it has become a popular plant all over the world. It belongs to the lily family (Liliaceae), and some of the best-known representatives of that family are tulip, sedum, dog's tooth, calochort and clintonia.",
+		"substrate": "Peat substrate, sand and compost in a ratio of 1-1-1",
+		"soil_texture": "Medium",
+		"wiki_url": "https://en.wikipedia.org/wiki/Lilium",
+		"other_url": "https://www.vrtlarica.hr/ljiljan-sadnja-uzgoj/",
+		"values":[
+			{"indicator": "sunlight", "min_value": 350, "max_value": 1000, "unit": "lux", "plant_id": 3},
+			{"indicator": "temperature", "min_value": 0, "max_value": 25, "unit": "\u2103", "plant_id": 3},
+			{"indicator": "moisture", "min_value": 50, "max_value": 75, "unit": "%", "plant_id": 3},
+			{"indicator": "reaction", "min_value": 6, "max_value": 7, "unit": "pH", "plant_id": 3},
+			{"indicator": "nutrient", "min_value": 15, "max_value": 25, "unit": "%", "plant_id": 3},
+			{"indicator": "salinity", "min_value": 10, "max_value": 20, "unit": "%", "plant_id": 3}
+		]
+	},
+	{
+		"id": 4,
+		"name": "Chrysanthemum",
+		"photo": "chrysanthemum.jpg",
+		"description": "Chrysanthemum (lat. Chrysanthemum) is a genus of flowering plants with about 40 species from the Asteraceae, Compositae family. In addition to being the most well-known, sedums are also the most widespread family in our area, so every day we encounter sedum, wormwood, daisy, yarrow, tarragon, chicory, dahlia, endive, sedum, calendula and yarrow, which are among the most famous representatives. Chrysanthemum is a very popular flowering plant whose Latin name comes from the Greek phrase chrysos anthos, which means golden flower.",
+		"substrate": "Mineral fertilizers, moist, but not overly wet.",
+		"soil_texture": "Medium",
+		"wiki_url": "https://en.wikipedia.org/wiki/Chrysanthemum",
+		"other_url": "https://www.vrtlarica.hr/krizantema-sadnja-uzgoj/",
+		"values":[
+			{"indicator": "sunlight", "min_value": 350, "max_value": 1000, "unit": "lux", "plant_id": 3},
+			{"indicator": "temperature", "min_value": 5, "max_value": 20, "unit": "\u2103", "plant_id": 3},
+			{"indicator": "moisture", "min_value": 60, "max_value": 75, "unit": "%", "plant_id": 3},
+			{"indicator": "reaction", "min_value": 6, "max_value": 7, "unit": "pH", "plant_id": 3},
+			{"indicator": "nutrient", "min_value": 20, "max_value": 30, "unit": "%", "plant_id": 3},
+			{"indicator": "salinity", "min_value": 10, "max_value": 20, "unit": "%", "plant_id": 3}
+		]
+	},
+	{
+		"id": 5,
+		"name": "Pansy",
+		"photo": "pansy.jpg",
+		"description": "Pansy (lat. Viola tricolor) is a biennial flower from the violet family (Violaceae), order Malpighiales, and is an ornamental plant with beautiful multi-colored flowers. There are many folk names for the plant, so it is also called widow, widow, meadow violet and lady's flower.",
+		"substrate": "Complex mineral fertilizers and the use of manure should be avoided.",
+		"soil_texture": "Medium",
+		"wiki_url": "https://en.wikipedia.org/wiki/Viola_tricolor",
+		"other_url": "https://www.vrtlarica.hr/macuhica-sadnja-uzgoj/",
+		"values":[
+			{"indicator": "sunlight", "min_value": 250, "max_value": 1000, "unit": "lux", "plant_id": 3},
+			{"indicator": "temperature", "min_value": 4, "max_value": 21, "unit": "\u2103", "plant_id": 3},
+			{"indicator": "moisture", "min_value": 45, "max_value": 55, "unit": "%", "plant_id": 3},
+			{"indicator": "reaction", "min_value": 5, "max_value": 6, "unit": "pH", "plant_id": 3},
+			{"indicator": "nutrient", "min_value": 20, "max_value": 30, "unit": "%", "plant_id": 3},
+			{"indicator": "salinity", "min_value": 10, "max_value": 20, "unit": "%", "plant_id": 3}
+		]
+	},
+	{
+		"id": 6,
+		"name": "Cyclamen",
+		"photo": "cyclamen.jpg",
+		"description": "Cyclamen (lat. Cyclamen) is an ornamental flower from the primrose family (Primulaceae). As the name suggests, the representative of the family is the primrose, a spring plant with a characteristic trumpet shape and yellow color. The most common are semi-permanent or permanent herbaceous species, and among the more well-known there are also mužika, protivak and water feather. The Latin name comes from a Greek word meaning round thing or cake, and is related to round tubers.",
+		"substrate": "A planting substrate is used, in which zeolite in granules can be added.",
+		"soil_texture": "Fine",
+		"wiki_url": "https://en.wikipedia.org/wiki/Cyclamen",
+		"other_url": "https://www.vrtlarica.hr/ciklama-sadnja-uzgoj/",
+		"values":[
+			{"indicator": "sunlight", "min_value": 450, "max_value": 1000, "unit": "lux", "plant_id": 3},
+			{"indicator": "temperature", "min_value": 10, "max_value": 22, "unit": "\u2103", "plant_id": 3},
+			{"indicator": "moisture", "min_value": 45, "max_value": 55, "unit": "%", "plant_id": 3},
+			{"indicator": "reaction", "min_value": 6, "max_value": 7, "unit": "pH", "plant_id": 3},
+			{"indicator": "nutrient", "min_value": 20, "max_value": 30, "unit": "%", "plant_id": 3},
+			{"indicator": "salinity", "min_value": 10, "max_value": 20, "unit": "%", "plant_id": 3}
+		]
+	},
+	{
+		"id": 7,
+		"name": "Mimosa",
+		"photo": "mimosa.jpg",
+		"description": "Silver wattle (lat. Acacia dealbata), also known as Mimosa, is a fast-growing evergreen tree that, along with the vegetable crops of peas, beans, soybeans, carob, lupine, acacia, peanuts and broad beans, belongs to the legume family (Fabaceae). It originates from southeastern Australia, specifically New South Wales, Victoria, Tasmania and the Australian mainland and grows in Mediterranean, warm-temperate and mountain-tropical landscapes.",
+		"substrate": "It thrives in any good garden soil that does not contain lime.",
+		"soil_texture": "Fine",
+		"wiki_url": "https://en.wikipedia.org/wiki/Acacia_dealbata",
+		"other_url": "https://www.vrtlarica.hr/mimoza-sadnja-uzgoj/",
+		"values":[
+			{"indicator": "sunlight", "min_value": 450, "max_value": 1000, "unit": "lux", "plant_id": 3},
+			{"indicator": "temperature", "min_value": -10, "max_value": 22, "unit": "\u2103", "plant_id": 3},
+			{"indicator": "moisture", "min_value": 20, "max_value": 30, "unit": "%", "plant_id": 3},
+			{"indicator": "reaction", "min_value": 5, "max_value": 7, "unit": "pH", "plant_id": 3},
+			{"indicator": "nutrient", "min_value": 25, "max_value": 35, "unit": "%", "plant_id": 3},
+			{"indicator": "salinity", "min_value": 15, "max_value": 25, "unit": "%", "plant_id": 3}
+		]
+	},
+	{
+		"id": 8,
+		"name": "Petunia",
+		"photo": "petunia.jpg",
+		"description": "Petunia (lat. Petunia) is an annual flowering plant native to South America, and it comes from the Solanaceae family, as do potatoes, peppers, tomatoes, eggplants, goji berries, and winter cherries. It is a summer plant that blooms from June to October.",
+		"substrate": "The soil must be well drained, and sandy soil is preferred.",
+		"soil_texture": "Fine",
+		"wiki_url": "https://en.wikipedia.org/wiki/Petunia",
+		"other_url": "https://www.vrtlarica.hr/petunija-sadnja-uzgoj/",
+		"values":[
+			{"indicator": "sunlight", "min_value": 450, "max_value": 1000, "unit": "lux", "plant_id": 3},
+			{"indicator": "temperature", "min_value": 15, "max_value": 25, "unit": "\u2103", "plant_id": 3},
+			{"indicator": "moisture", "min_value": 20, "max_value": 30, "unit": "%", "plant_id": 3},
+			{"indicator": "reaction", "min_value": 6, "max_value": 7, "unit": "pH", "plant_id": 3},
+			{"indicator": "nutrient", "min_value": 25, "max_value": 35, "unit": "%", "plant_id": 3},
+			{"indicator": "salinity", "min_value": 15, "max_value": 25, "unit": "%", "plant_id": 3}
+		]
+	},
+	{
+		"id": 9,
+		"name": "Vinca",
+		"photo": "vinca.jpg",
+		"description": "Vinca (lat. Catharanthus roseus) is an annual plant, while in its natural environment in Madagascar it is a perennial tropical plant. Vinca means \"evergreen\" in translation. It can be found as a wild, wild species in forests across Europe.",
+		"substrate": "In general, she is not picky about the choice of soil, the only thing you need to watch out for is that it is not too dry.",
+		"soil_texture": "Fine",
+		"wiki_url": "https://en.wikipedia.org/wiki/Catharanthus_roseus",
+		"other_url": "https://www.vrtlarica.hr/sadnja-uzgoj-vinke/",
+		"values":[
+			{"indicator": "sunlight", "min_value": 450, "max_value": 1000, "unit": "lux", "plant_id": 3},
+			{"indicator": "temperature", "min_value": 10, "max_value": 25, "unit": "\u2103", "plant_id": 3},
+			{"indicator": "moisture", "min_value": 10, "max_value": 25, "unit": "%", "plant_id": 3},
+			{"indicator": "reaction", "min_value": 5, "max_value": 6, "unit": "pH", "plant_id": 3},
+			{"indicator": "nutrient", "min_value": 25, "max_value": 35, "unit": "%", "plant_id": 3},
+			{"indicator": "salinity", "min_value": 15, "max_value": 25, "unit": "%", "plant_id": 3}
+		]
+	},
+	{
+		"id": 10,
+		"name": "Adam",
+		"photo": "adam.jpg",
+		"description": "Adam (lat. Alocasia odora) is a tropical ornamental plant valued for its large and decorative leaves, and because of its characteristic appearance it is also called elephant's ear. It comes from the Araceae family, spread all over the world, while 11 species grow in Croatia, the most popular of which are calla lilies, dieffenbachia, monstera, taro and philodendron. However, most of them grow in subtropical and tropical areas of Africa and Asia, where they are part of the rainforest community. Adam got his Latin name from the genus Colocasia in which he was classified before his genus was changed.",
+		"substrate": "It is best to use a mixture of substrate for flowers, peat and sand. It likes rich and humus soil, and can tolerate slightly acidic soil.",
+		"soil_texture": "Fine",
+		"wiki_url": "https://en.wikipedia.org/wiki/Alocasia_odora",
+		"other_url": "https://www.vrtlarica.hr/adam-sadnja-uzgoj/",
+		"values":[
+			{"indicator": "sunlight", "min_value": 450, "max_value": 1000, "unit": "lux", "plant_id": 3},
+			{"indicator": "temperature", "min_value": 15, "max_value": 25, "unit": "\u2103", "plant_id": 3},
+			{"indicator": "moisture", "min_value": 50, "max_value": 60, "unit": "%", "plant_id": 3},
+			{"indicator": "reaction", "min_value": 5, "max_value": 6, "unit": "pH", "plant_id": 3},
+			{"indicator": "nutrient", "min_value": 55, "max_value": 60, "unit": "%", "plant_id": 3},
+			{"indicator": "salinity", "min_value": 35, "max_value": 45, "unit": "%", "plant_id": 3}
 		]
 	}
 ]

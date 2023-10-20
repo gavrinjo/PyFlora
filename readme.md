@@ -38,3 +38,7 @@
 
 - <https://open-meteo.com/en/docs#latitude=45.8144&longitude=15.978>
   
+
+## reference
+
+- dodati reference na vanjski sadržaj (link na wikipediju ili vrtlarica.hr)

@@ -28,8 +28,8 @@ def json2sql():
         data = json.load(file)
         for item in data:
             cursor.execute(
-                "INSERT INTO plant (id, name, photo, description, substrate, created) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)",
-                (item['id'], item['name'], item['photo'], item['description'], item['substrate'])
+                "INSERT INTO plant (id, name, photo, description, soil_texture, substrate, wiki_url, other_url, created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)",
+                (item['id'], item['name'], item['photo'], item['description'], item['soil_texture'], item['substrate'], item['wiki_url'], item['other_url'])
             )
             connection.commit()
             for value in item['values'] :
