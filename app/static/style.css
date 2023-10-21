@@ -28,6 +28,7 @@ nav div a span {
 
 .no-deco {
   text-decoration: none;
+  color: unset;
 }
 
 .custom-file-button input[type=file] {

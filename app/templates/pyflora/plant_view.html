@@ -8,14 +8,22 @@
                 <img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ image_file }}" alt="{{ image_file }}" />
             </div>
             <div class="col-md-6">
-                <div class="small mb-1">nekakav važan teks ako bude bilo potrebe</div>
                 <h1 class="display-5 fw-bolder" style="text-transform: uppercase;">{{ plant.name }}</h1>
                 <div class="fs-5 mb-3">
                     <span>{{ plant.description }}</span>
                 </div>
+                <small>References:</small>
+                <h4>
+                    <a class="no-deco" href="{{ plant.wiki_url }}">
+                        <i class="fa-brands fa-wikipedia-w"></i>
+                    </a>
+                    <a class="no-deco"  href="{{ plant.other_url }}">
+                        <i class="fa-solid fa-clover"></i>
+                    </a>
+                </h4>
                 <div class="lh-2 mb-3">
                     {% for value in values %}
-                    <small class="lead">{{ value.indicator }}: {{ value.min_value }} - {{value.max_value}} [{{ value.unit }}]</small><br>
+                    <small>{{ value.indicator.capitalize() }}: {{ value.min_value }} - {{value.max_value}} [{{ value.unit }}]</small><br>
                     {% endfor %}
                 </div>
                 <div class="row">

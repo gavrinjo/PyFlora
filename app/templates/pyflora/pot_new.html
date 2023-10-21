@@ -30,7 +30,7 @@
                     </div>
                     <div class="input-group mb-3">
                         {{ form.description.label(class_="input-group-text col-3") }}
-                        {{ form.description(class_="form-control") }}
+                        {{ form.description(rows=5, class_="form-control") }}
                         {% for error in form.description.errors %}
                         <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
                             <i class="fa-solid fa-exclamation" style="color: red;"></i>

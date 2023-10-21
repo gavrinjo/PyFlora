@@ -64,15 +64,14 @@ def update_plant(plant_id):
     values = Value.query.filter_by(plant_id=plant.id).all()
     form = PlantForm(plant.name)
     if form.validate_on_submit():
-        plant = Plant()
         plant.name = form.name.data
         plant.description = form.description.data
         plant.soil_texture = form.soil_texture.data
         plant.substrate = form.substrate.data
         plant.wiki_url = form.wiki_url.data
         plant.other_url = form.other_url.data
-        photo = upload_image(form.photo.data, 'images/plants')
-        plant.photo = photo
+        if form.photo.data:
+            plant.photo = upload_image(form.photo.data, 'images/plants')
         for value in values:
                 value.min_value = getattr(form, value.indicator.lower()).min_value.data
                 value.max_value = getattr(form, value.indicator.lower()).max_value.data
@@ -97,7 +96,7 @@ def delete_plant(plant_id):
     plant = Plant.query.get_or_404(plant_id)
     name = plant.name
     try:
-        os.remove(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], f'plants/{plant.photo}'))
+        os.remove(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], f'images/plants/{plant.photo}'))
     except:
         pass
     db.session.delete(plant)

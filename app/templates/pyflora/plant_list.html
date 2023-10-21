@@ -6,15 +6,15 @@
 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4">
     {% for plant in plants %}
         <div class="col g-4">
-            <div class="card h-100 r-0">
-                <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/' + plant.photo) }}" alt="missing image">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="{{ url_for('pyflora.view_plant', plant_id=plant.id) }}">{{ plant.name }}</a>
-                    </h5>
-                    <p class="card-text">{{ plant.description|truncate(128) }}</p>
+            <a class="no-deco" href="{{ url_for('pyflora.view_plant', plant_id=plant.id) }}">
+                <div class="card h-100 r-0">
+                    <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/' + plant.photo) }}" alt="missing image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ plant.name }}</h5>
+                        <p class="card-text">{{ plant.description|truncate(128) }}</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     {% endfor %}
         <div class="col g-4">

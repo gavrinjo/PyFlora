@@ -6,32 +6,29 @@
     {% for pot in pots %}
         {% if pot.get_plant(pot.plant_id) %}
         <div class="col g-4">
-            <div class="card h-100 r-0">
-                <img class="img-thumbnail r-0 b-0" src="{{ url_for('static', filename='images/plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="missing image">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a class="text-dark" href="{{ url_for('pyflora.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a>
-                    </h5>
-                    <p class="card-text">{{ pot.description }}</p>
+            <a class="no-deco" href="{{ url_for('pyflora.view_pot', pot_id=pot.id) }}">
+                <div class="card h-100 r-0">
+                    <img class="img-thumbnail r-0 b-0" src="{{ url_for('static', filename='images/plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="missing image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ pot.name }}</h5>
+                        <p class="card-text">{{ pot.description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">{{ moment(pot.synced).fromNow() }}</small>
+                    </div>
                 </div>
-                <div class="card-footer">
-                    <small class="text-muted">{{ moment(pot.synced).fromNow() }}</small>
-                </div>
-            </div>
+            </a>
         </div>
         {% else %}
         <div class="col g-4">
-            <div class="card h-100 r-0">
-                <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/default.jpg') }}" alt="missing image">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}">Empty Pot</a>
-                    </h5>
+            <a class="no-deco" href="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}">
+                <div class="card h-100 r-0">
+                    <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/default.jpg') }}" alt="missing image">
+                    <div class="card-body">
+                        <h5 class="card-title">Empty Pot</h5>
+                    </div>
                 </div>
-                <!-- <div class="card-footer">
-                    <small class="text-muted">{{ pot.synced }}</small>
-                </div> -->
-            </div>
+            </a>
         </div>
         {% endif %}
     {% endfor %}

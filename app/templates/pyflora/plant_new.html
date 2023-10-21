@@ -10,18 +10,26 @@
             <div class="card-body">
                 <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="">
                     {{ form.hidden_tag() }}
+                    <div class="input-group mb-3">
+                        {{ form.name.label(class_="input-group-text col-3") }}
+                        {{ form.name(class_="form-control") }}
+                        {% for error in form.name.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3 custom-file-button">
+                        {{ form.photo.label(class_="input-group-text col-3") }}
+                        {{ form.photo(class_="form-control") }}
+                        {% for error in form.photo.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
                     {% for field in form %}
-                        {% if field.type == 'FileField' %}
-                            <div class="input-group mb-3 custom-file-button">
-                                {{ field.label(class_="input-group-text col-3") }}
-                                {{ field(class_="form-control") }}
-                                {% for error in field.errors %}
-                                <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                                    <i class="fa-solid fa-exclamation" style="color: red;"></i>
-                                </span>
-                                {% endfor %}
-                            </div>
-                        {% elif field.type == 'FormField' %}
+                        {% if field.type == 'FormField' %}
                             <div class="input-group mb-3 ">
                                 {{ field.label(class_="input-group-text col-3") }}
                                 {{ field.min_value(class_="form-control", placeholder=field.min_value.label.text) }}
@@ -36,22 +44,60 @@
                                 </span>
                                 {% endfor %}
                             </div>
-                        {% elif field.type == 'SubmitField' %}
-                            {{ field(class="btn btn-outline-success flex-shrink-0") }}
-                        {% elif field.type == 'CSRFTokenField' %}
-                            {{ pass }}
-                        {% else %}
-                            <div class="input-group mb-3">
-                                {{ field.label(class_="input-group-text col-3") }}
-                                {{ field(class_="form-control") }}
-                                {% for error in field.errors %}
-                                <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
-                                    <i class="fa-solid fa-exclamation" style="color: red;"></i>
-                                </span>
-                                {% endfor %}
-                            </div>
                         {% endif %}
                     {% endfor %}
+                    <div class="input-group mb-3">
+                        {{ form.soil_texture.label(class_="input-group-text col-3") }}
+                        {{ form.soil_texture(class_="form-control") }}
+                        {% for error in form.soil_texture.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.substrate.label(class_="input-group-text col-3") }}
+                        {{ form.substrate(class_="form-control") }}
+                        {% for error in form.substrate.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.wiki_url.label(class_="input-group-text col-3") }}
+                        {{ form.wiki_url(class_="form-control") }}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ form.wiki_url.render_kw['popover_text'] }}">
+                            <i class="fa-solid fa-info"></i>
+                        </span>
+                        {% for error in form.wiki_url.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.other_url.label(class_="input-group-text col-3") }}
+                        {{ form.other_url(class_="form-control") }}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ form.other_url.render_kw['popover_text'] }}">
+                            <i class="fa-solid fa-info"></i>
+                        </span>
+                        {% for error in form.other_url.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.description.label(class_="input-group-text col-3") }}
+                        {{ form.description(rows=5, class_="form-control") }}
+                        {% for error in form.description.errors %}
+                        <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
+                            <i class="fa-solid fa-exclamation" style="color: red;"></i>
+                        </span>
+                        {% endfor %}
+                    </div>
+                    {{ form.submit(class_="btn btn-outline-success flex-shrink-0") }}
                 </form>
             </div>
         </div>

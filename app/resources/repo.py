@@ -14,16 +14,15 @@ from flask import current_app, abort
 # db.session.add(obj_data)
 
 def upload_image(form_image, folder): #nova funkcija, za uploadanje slika, potrebno
-    if form_image:
-        random_hex = secrets.token_hex(8)
-        file_ext = os.path.splitext(form_image.filename)[1]
-        if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
-            abort(400)
-        else:
-            filename = random_hex + file_ext
-            filename_path = os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], folder, filename))
-            form_image.save(filename_path)
-            return filename
+    random_hex = secrets.token_hex(8)
+    file_ext = os.path.splitext(form_image.filename)[1]
+    if file_ext not in current_app.config['UPLOADED_FILES_ALLOW']:
+        abort(400)
+    else:
+        filename = random_hex + file_ext
+        filename_path = os.path.normpath(os.path.join(current_app.config['UPLOADS_DEFAULT_DEST'], folder, filename))
+        form_image.save(filename_path)
+        return filename
 
 # c = SensorMeasurements.__table__.columns.keys()[1:-2]
 # a = pd.DataFrame(db.session.execute(db.select(SensorMeasurements).filter_by(pot_id=pot.id).order_by(SensorMeasurements.measured.desc())).all())
