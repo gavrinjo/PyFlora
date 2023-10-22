@@ -1,4 +1,6 @@
+from flask import current_app
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Length, ValidationError, Email
 from app.models import User
@@ -32,6 +34,11 @@ class ContactForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     message = TextAreaField('Message', validators=[DataRequired(), Length(min=128, max=1024)])
+    submit = SubmitField('Submit')
+
+
+class UploadForm(FlaskForm):
+    file = FileField('File', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     submit = SubmitField('Submit')
 
 

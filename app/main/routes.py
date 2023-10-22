@@ -5,7 +5,8 @@ from app import db
 from app.main import bp
 from app.email import send_email
 from app.models import User, Pot
-from app.main.forms import EditProfileForm, EmptyForm, ContactForm
+from app.main.forms import EditProfileForm, EmptyForm, ContactForm, UploadForm
+from app.resources.repo import upload_image
 from app.resources.weather import Weather
 
 
@@ -38,10 +39,11 @@ def index():
 @login_required
 def user(username):
     form = EmptyForm()
+    upload_form = UploadForm()
     user = User.query.filter_by(username=username).first_or_404()
     pots = Pot.query.filter_by(user_id=user.id).all()
 
-    return render_template('user.html', title=username, user=user, pots=pots, form=form)
+    return render_template('user.html', title=username, user=user, pots=pots, form=form, upload_form=upload_form)
 
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -62,7 +64,7 @@ def edit_profile():
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash('Changes have been saved!', 'success')
-        return redirect(url_for('main.edit_profile'))
+        return redirect(url_for('main.user', username=current_user.username))
     elif request.method == 'GET':
         # form.username.data = current_user.username
         form.first_name.data = current_user.first_name
@@ -76,7 +78,7 @@ def edit_profile():
         form.country.data = current_user.country
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
-    
+
 
 @bp.route('/contact', methods=['GET', 'POST'])
 def contact():

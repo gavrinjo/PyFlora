@@ -40,8 +40,8 @@ def new_plant():
         plant.substrate = form.substrate.data
         plant.wiki_url = form.wiki_url.data
         plant.other_url = form.other_url.data
-        photo = upload_image(form.photo.data, 'images/plants')
-        plant.photo = photo
+        if form.photo.data:
+            plant.photo = upload_image(form.photo.data, 'images/plants')
         db.session.add(plant)
         db.session.flush()
         for measure in current_app.config['MEASURES']:

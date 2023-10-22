@@ -48,18 +48,23 @@
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text" style="width: 45px;">
-                            <i class="fa-solid fa-address-book"></i>
+                            <i class="fa-solid fa-location-dot"></i>
                         </span>
                         {{ form.address(class_="form-control", placeholder=form.address.label.text) }}
-                        {{ form.postcode(class_="form-control input-w-100", placeholder=form.postcode.label.text) }}
-                        {{ form.city(class_="form-control input-w-150", placeholder=form.city.label.text) }}
-                        {{ form.country(class_="form-control input-w-150", placeholder=form.country.label.text) }}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" style="width: 45px;">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </span>
+                        {{ form.postcode(class_="form-control", placeholder=form.postcode.label.text) }}
+                        {{ form.city(class_="form-control", placeholder=form.city.label.text) }}
+                        {{ form.country(class_="form-control", placeholder=form.country.label.text) }}
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text" style="width: 45px;">
                             <i class="fa-solid fa-address-card"></i>
                         </span>
-                        {{ form.about_me(class_="form-control", placeholder=form.about_me.label.text) }}
+                        {{ form.about_me(rows=5, class_="form-control", placeholder=form.about_me.label.text) }}
                     </div>
                     {{ form.submit(class_="btn btn-outline-success flex-shrink-0") }}
                 </form>
