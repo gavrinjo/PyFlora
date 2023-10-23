@@ -5,15 +5,18 @@
     <div class="container p-4 p-lg-4">
         <div class="row gx-4 gx-lg-5 align-items-top">
             <div class="col-md-2">
-                <img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ user.avatar(128) }}" alt="..." />
-                
-                <!-- button trgger modal bootstrap 5.3 -->
-                <div class="col-auto">
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                        Change Avatar
-                    </button>
-                </div>
 
+                <!-- button trgger modal bootstrap 5.3 -->
+                <div class="content">
+                    <img class="img-thumbnail shadow image" src="{{ user.avatar(128) }}" alt="..." />
+                    <div class="overlay_content">
+                        <h4>
+                            <label  id="select" for="file" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i type="button" class="fa-solid fa-camera fa-xl"></i>
+                            </label >
+                        </h4>
+                    </div>
+                </div>
                 <!-- Modal -->
                 <div class="modal fade" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -31,7 +34,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <!-- <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button> -->
-                                    <label  id="select" for="file" type="button" class="btn btn-outline-success btn-sm">Select image</label >
+                                    <!-- <label  id="select" for="file" type="button" class="btn btn-outline-success btn-sm">Select image</label > -->
                                     <button class="btn btn-outline-primary" id="crop-btn" style="width: 100%; margin-top: 10px; display: none;" type="button">Crop</button>
                                     {{ upload_form.submit(value='Upload', class_='btn btn-outline-success btn-sm') }}
                                 </div>
@@ -39,7 +42,6 @@
                         </div>
                     </div>
                 </div>
-
 
             </div>
             <div class="col-md-6">
@@ -190,6 +192,7 @@
             minCropBoxWidth: 100,
             minCropBoxHeight: 100,
             highlight: false, // b verzija
+            preview: '.preview',
         })
 
         // When crop button is clicked this event will get triggered
