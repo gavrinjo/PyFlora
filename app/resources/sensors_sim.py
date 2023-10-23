@@ -11,7 +11,7 @@ class SensorSim():
 
     def __init__(self, pot) -> None:
         self.pot = pot
-        self.sensors = Sensor.query.filter_by(pot_id=pot.id)
+        self.sensors = self.pot.sensors.all() #Sensor.query.filter_by(pot_id=pot.id)
 
     def get_random_value(self, value: int, min_value: int, max_value: int, offset: int) -> int:
 

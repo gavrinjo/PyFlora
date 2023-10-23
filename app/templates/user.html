@@ -7,18 +7,18 @@
             <div class="col-md-2">
 
                 <!-- button trgger modal bootstrap 5.3 -->
-                <div class="content">
+                <!-- <div class="content"> -->
                     <img class="img-thumbnail shadow image" src="{{ user.avatar(128) }}" alt="..." />
-                    <div class="overlay_content">
+                    <!-- <div class="overlay_content">
                         <h4>
                             <label  id="select" for="file" data-bs-toggle="modal" data-bs-target="#deleteModal">
                                 <i type="button" class="fa-solid fa-camera fa-xl"></i>
                             </label >
                         </h4>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
                 <!-- Modal -->
-                <div class="modal fade" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <!-- <div class="modal fade" id="deleteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -32,16 +32,16 @@
                                     <div id="image-box" class="image-container"></div>
                                     <div id="result" class="image-container"></div>
                                 </div>
-                                <div class="modal-footer">
+                                <div class="modal-footer"> -->
                                     <!-- <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button> -->
                                     <!-- <label  id="select" for="file" type="button" class="btn btn-outline-success btn-sm">Select image</label > -->
-                                    <button class="btn btn-outline-primary" id="crop-btn" style="width: 100%; margin-top: 10px; display: none;" type="button">Crop</button>
+                                    <!-- <button class="btn btn-outline-primary" id="crop-btn" style="width: 100%; margin-top: 10px; display: none;" type="button">Crop</button>
                                     {{ upload_form.submit(value='Upload', class_='btn btn-outline-success btn-sm') }}
                                 </div>
                             </form>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
             </div>
             <div class="col-md-6">
@@ -95,43 +95,45 @@
             </div>
         </div>
     </div>
-    <div class="card-header border-top">
-        <h5>{{ user.username }} Pots</h5>
-    </div>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 p-4">
-        {% for pot in pots %}
-            {% if pot.get_plant(pot.plant_id) %}
-            <div class="col my-2">
-                <div class="card h-100 r-0">
-                    <img class="img-thumbnail r-0 b-0" src="{{ url_for('static', filename='images/plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="missing image">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a class="text-dark" href="{{ url_for('pyflora.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a>
-                        </h5>
-                        <p class="card-text">{{ pot.description }}</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">{{ moment(pot.synced).fromNow() }}</small>
+    {% if pots %}
+        <div class="card-header border-top">
+            <h5>{{ user.username }} Pots</h5>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 p-4">
+            {% for pot in pots %}
+                {% if pot.plant %}
+                <div class="col my-2">
+                    <div class="card h-100 r-0">
+                        <img class="img-thumbnail r-0 b-0" src="{{ url_for('static', filename='images/plants/' + pot.plant.photo ) }}" alt="{{ pot.plant.photo }}">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a class="text-dark" href="{{ url_for('pyflora.view_pot', pot_id=pot.id) }}">{{ pot.name }}</a>
+                            </h5>
+                            <p class="card-text">{{ pot.description }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">{{ moment(pot.synced).fromNow() }}</small>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% else %}
-            <div class="col g-4">
-                <div class="card h-100 r-0">
-                    <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/default.jpg') }}" alt="missing image">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}">Empty Pot</a>
-                        </h5>
+                {% else %}
+                <div class="col g-4">
+                    <div class="card h-100 r-0">
+                        <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/default.jpg') }}" alt="default image">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}">Empty Pot</a>
+                            </h5>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <small class="text-muted">{{ pot.synced }}</small>
+                        </div> -->
                     </div>
-                    <!-- <div class="card-footer">
-                        <small class="text-muted">{{ pot.synced }}</small>
-                    </div> -->
                 </div>
-            </div>
-            {% endif %}
-        {% endfor %}
-    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 

@@ -4,11 +4,11 @@
 <h1>Pots</h1>
 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4">
     {% for pot in pots %}
-        {% if pot.get_plant(pot.plant_id) %}
+        {% if pot.plant %}
         <div class="col g-4">
             <a class="no-deco" href="{{ url_for('pyflora.view_pot', pot_id=pot.id) }}">
                 <div class="card h-100 r-0">
-                    <img class="img-thumbnail r-0 b-0" src="{{ url_for('static', filename='images/plants/' + pot.get_plant(pot.plant_id).photo ) }}" alt="missing image">
+                    <img class="img-thumbnail r-0 b-0" src="{{ url_for('static', filename='images/plants/' + pot.plant.photo ) }}" alt="{{ pot.plant.photo }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ pot.name }}</h5>
                         <p class="card-text">{{ pot.description }}</p>
@@ -23,7 +23,7 @@
         <div class="col g-4">
             <a class="no-deco" href="{{ url_for('pyflora.update_pot', pot_id=pot.id) }}">
                 <div class="card h-100 r-0">
-                    <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/default.jpg') }}" alt="missing image">
+                    <img class="img-thumbnail b-0 r-0" src="{{ url_for('static', filename='images/plants/default.jpg') }}" alt="default image">
                     <div class="card-body">
                         <h5 class="card-title">Empty Pot</h5>
                     </div>

@@ -54,7 +54,7 @@ class User(UserMixin, db.Model):
 class Plant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    photo = db.Column(db.String(64), nullable=False, default='default.jpg')
+    photo = db.Column(db.String(64))
     description = db.Column(db.String(1024))
     soil_texture = db.Column(db.String(64))
     substrate = db.Column(db.String(256))
@@ -89,12 +89,6 @@ class Pot(db.Model):
 
     def __repr__(self):
         return f'<Pot {self.name}>'
-    
-    def get_plant(self, id):
-        return Plant.query.get(id)
-    
-    def get_user(self, id):
-        return User.query.get(id)
 
 
 class Sensor(db.Model):

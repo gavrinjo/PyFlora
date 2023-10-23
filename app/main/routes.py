@@ -21,18 +21,7 @@ def before_request():
 @bp.route('/index')
 @login_required
 def index():
-    # ovdje ide lista pyflora posuda
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Home', posts=posts)
+    return render_template('index.html', title='Home')
 
 
 @bp.route('/user/<username>')
@@ -41,7 +30,7 @@ def user(username):
     form = EmptyForm()
     upload_form = UploadForm()
     user = User.query.filter_by(username=username).first_or_404()
-    pots = Pot.query.filter_by(user_id=user.id).all()
+    pots = user.pots.all()
 
     return render_template('user.html', title=username, user=user, pots=pots, form=form, upload_form=upload_form)
 
@@ -51,7 +40,6 @@ def user(username):
 def edit_profile():
     form = EditProfileForm(current_user.email)
     if form.validate_on_submit():
-        # current_user.username = form.username.data
         current_user.first_name = form.first_name.data
         current_user.last_name = form.last_name.data
         current_user.email = form.email.data
@@ -66,7 +54,6 @@ def edit_profile():
         flash('Changes have been saved!', 'success')
         return redirect(url_for('main.user', username=current_user.username))
     elif request.method == 'GET':
-        # form.username.data = current_user.username
         form.first_name.data = current_user.first_name
         form.last_name.data = current_user.last_name
         form.email.data = current_user.email
@@ -101,6 +88,8 @@ def contact():
         flash('Your message has been sent successfully!', 'success')
         return redirect(url_for('main.contact'))
     return render_template('contact_form.html', title='Contact us', form=form)
+
+
 # @bp.route('/weather')
 # @login_required
 # def weather():

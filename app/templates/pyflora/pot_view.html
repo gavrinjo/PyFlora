@@ -5,11 +5,11 @@
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-top">
             <div class="col-md-6">
-                <img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ url_for('static', filename='images/plants/' + plant.photo ) }}" alt="..." />
+                <img class="card-img-top mb-5 mb-md-0 img-thumbnail shadow" src="{{ url_for('static', filename='images/plants/' + plant.photo ) }}" alt="{{ plant.photo }}" />
             </div>
             <div class="col-md-6">Added by: 
-                <a class="link-secondary no-deco" style="text-transform: uppercase;" href="{{ url_for('main.user', username=pot.get_user(pot.user_id).username) }}">
-                    {{ pot.get_user(pot.user_id).username.capitalize() }}
+                <a class="link-secondary no-deco" style="text-transform: uppercase;" href="{{ url_for('main.user', username=pot.owner.username) }}">
+                    {{ pot.owner.username.capitalize() }}
                 </a>
                 <h1 class="display-5 fw-bolder" style="text-transform: uppercase;">{{ pot.name }}</h1>
                 <a class="link-secondary no-deco" style="text-transform: uppercase;" href="{{ url_for('pyflora.view_plant', plant_id=plant.id) }}">

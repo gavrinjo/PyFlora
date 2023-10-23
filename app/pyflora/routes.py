@@ -24,9 +24,8 @@ def list_plant():
 def view_plant(plant_id):
     form = EmptyForm()
     plant = Plant.query.get(plant_id)
-    image_file = url_for('static', filename=f'images/plants/{plant.photo}')
-    values = Value.query.filter_by(plant_id=plant_id).all()
-    return render_template('pyflora/plant_view.html', title=plant.name, plant=plant, image_file=image_file, values=values, form=form)
+    values = plant.values.all()
+    return render_template('pyflora/plant_view.html', title=plant.name, plant=plant, values=values, form=form)
 
 @bp.route('/plant/new', methods=['GET', 'POST'])
 @login_required
@@ -61,7 +60,7 @@ def new_plant():
 @login_required
 def update_plant(plant_id):
     plant = Plant.query.get_or_404(plant_id)
-    values = Value.query.filter_by(plant_id=plant.id).all()
+    values = plant.values.all()
     form = PlantForm(plant.name)
     if form.validate_on_submit():
         plant.name = form.name.data
@@ -115,8 +114,8 @@ def list_pot():
 def view_pot(pot_id):
     form = EmptyForm()
     pot = Pot.query.get(pot_id)
-    plant = Plant.query.get(pot.plant_id)
-    values = Value.query.filter_by(plant_id=pot.plant_id).all()
+    plant = pot.plant
+    values = plant.values.all()
     fig_line = PlotlyLine(pot).config()
     # fig_line = PLine(pot).config()
     line_graphJSON = json.dumps(fig_line, cls=plotly.utils.PlotlyJSONEncoder)
@@ -168,9 +167,9 @@ def new_pot():
 @login_required
 def update_pot(pot_id):
     pot = Pot.query.get_or_404(pot_id)
+    sensors = pot.sensors.all()
     plants = Plant.query.all()
     plant_list = [(i.id, i.name) for i in plants]
-    sensors = Sensor.query.filter_by(pot_id=pot_id).all()
     form = PotForm(pot.name)
     form.plant.choices = plant_list
     if form.validate_on_submit():
@@ -208,8 +207,6 @@ def delete_pot(pot_id):
 @bp.route('/pot/<pot_id>/sync', methods=['POST'])
 @login_required
 def sync_pot(pot_id):
-    # form = EmptyForm()
-    # if form.validate_on_submit():
     pot = Pot.query.get(pot_id)
     SensorSim(pot).generate()
     return redirect(url_for('pyflora.view_pot', pot_id=pot_id))
