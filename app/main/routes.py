@@ -4,9 +4,8 @@ from flask_login import login_required, current_user
 from app import db
 from app.main import bp
 from app.email import send_email
-from app.models import User, Pot
+from app.models import User
 from app.main.forms import EditProfileForm, EmptyForm, ContactForm, UploadForm
-from app.resources.repo import upload_image
 from app.resources.weather import Weather
 
 
@@ -19,7 +18,6 @@ def before_request():
 
 @bp.route('/')
 @bp.route('/index')
-@login_required
 def index():
     return render_template('index.html', title='Home')
 
