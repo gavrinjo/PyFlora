@@ -17,6 +17,5 @@ class Config(object):
     ADMINS = ['admin@pyflora.com']
     UPLOADED_FILES_ALLOW = ['.jpg', '.jpeg', '.png']
     UPLOADS_DEFAULT_DEST = os.path.join(basedir, 'app/static')
-    RESOURCES = os.path.join(basedir, 'app/resources')
     WEATHER_API = os.environ.get('WEATHER_API') or None
     MEASURES = ['sunlight', 'temperature', 'moisture', 'reaction', 'nutrient', 'salinity']
