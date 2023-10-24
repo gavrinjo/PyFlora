@@ -21,7 +21,12 @@
                     </div>
                     <div class="input-group mb-3">
                         {{ form.plant.label(class_="input-group-text col-3") }}
-                        {{ form.plant(class_="form-control") }}
+                        <select class="form-control" id="{{ form.plant.id }}" name="{{ form.plant.name }}">
+                            <option value="0" disabled selected hidden>Select a plant</option>
+                            {% for choice in form.plant.choices %}
+                                <option value="{{ choice[0] }}">{{ choice[1] }}</option>
+                            {% endfor %}
+                        </select>
                         {% for error in form.plant.errors %}
                         <span class="input-group-text" type="button" data-bs-toggle="popover" data-bs-content="{{ error }}">
                             <i class="fa-solid fa-exclamation" style="color: red;"></i>

@@ -1,3 +1,5 @@
+import os
+import json
 from datetime import datetime
 from hashlib import md5
 from time import time
@@ -5,6 +7,7 @@ import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
 from flask_login import UserMixin
+from sqlalchemy import event
 from app import db, login
 
 
@@ -123,3 +126,76 @@ class Gauge(db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(id)
+
+
+@event.listens_for(User.__table__, 'after_create')
+def create_users(*args, **kwargs):
+    admin = User()
+    admin.username='admin'
+    admin.email='administrator@email.com'
+    admin.is_admin = True
+    admin.set_password('0000')
+    db.session.add(admin)
+    db.session.commit()
+
+# @event.listens_for(Plant.__table__, 'after_create')
+@event.listens_for(Value.__table__, 'after_create')
+def create_plants(*args, **kwargs):
+    statis_path = current_app.config['UPLOADS_DEFAULT_DEST']
+    with open(os.path.join(statis_path, 'plants.json'), "r") as file:
+        data = json.load(file)
+        for plant_item in data:
+            plant = Plant()
+            plant.name = plant_item['name']
+            plant.description = plant_item['description']
+            plant.soil_texture = plant_item['soil_texture']
+            plant.substrate = plant_item['substrate']
+            plant.wiki_url = plant_item['wiki_url']
+            plant.other_url = plant_item['other_url']
+            plant.photo = plant_item['photo']
+            db.session.add(plant)
+            db.session.flush()
+            for plant_value in plant_item['values']:
+                value = Value()
+                value.indicator = plant_value['indicator']
+                value.min_value = plant_value['min_value']
+                value.max_value = plant_value['max_value']
+                value.unit = plant_value['unit']
+                value.plant = plant
+                db.session.add(value)
+            db.session.commit()
+
+@event.listens_for(Sensor.__table__, 'after_create')
+def create_pot(*args, **kwargs):
+    user = User.query.get(1)
+    pot = Pot()
+    pot.name = 'Default empty pot'
+    pot.owner = user
+    db.session.add(pot)
+    db.session.flush()
+    for sensor_indicator in current_app.config['MEASURES']:
+        sensor = Sensor()
+        sensor.indicator = sensor_indicator
+        sensor.pot = pot
+        db.session.add(sensor)
+    db.session.commit()
+
+@event.listens_for(Reading.__table__, 'after_create')
+def create_reading(*args, **kwargs):
+    pass
+
+@event.listens_for(Gauge.__table__, 'after_create')
+def create_gauge(*args, **kwargs):
+    statis_path = current_app.config['UPLOADS_DEFAULT_DEST']
+    with open(os.path.join(statis_path, 'gauge.json')) as file:
+        data = json.load(file)
+        for item in data:
+            gauge = Gauge()
+            gauge.name = item['name']
+            gauge.min_value = item['min_value']
+            gauge.max_value = item['max_value']
+            gauge.avg_value = item['avg_value']
+            gauge.off_value = item['off_value']
+            gauge.unit = item['unit']
+            db.session.add(gauge)
+        db.session.commit()

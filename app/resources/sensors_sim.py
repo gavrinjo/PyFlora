@@ -35,9 +35,9 @@ class SensorSim():
             if sensor.active:
                 if sensor.indicator != 'temperature':
                     gauge = Gauge.query.filter_by(name=sensor.indicator).first()
-                    try:
+                    if sensor.last_reading(sensor.id):
                         value = self.get_random_value(sensor.last_reading(sensor.id).value, gauge.min_value, gauge.max_value, gauge.off_value)
-                    except:
+                    else:
                         value = self.get_random_value(gauge.avg_value, gauge.min_value, gauge.max_value, gauge.off_value)
                     unit = gauge.unit
                 else:

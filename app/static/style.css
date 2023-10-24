@@ -115,3 +115,22 @@ span.custom-bkg {
   font-size: 16px;
   padding: 16px 32px;
 }
+
+select,
+select option {
+  color: #000000;
+}
+
+select:invalid,
+select option[value="0"] {
+  color: #999999;
+}
+
+select option[value="0"] {
+  color: #999999;
+}
+
+/*Added for browser compatibility*/
+[hidden] {
+  display: none;
+}
