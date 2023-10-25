@@ -127,7 +127,6 @@ class Gauge(db.Model):
 def load_user(id):
     return User.query.get(id)
 
-
 @event.listens_for(User.__table__, 'after_create')
 def add_users(*args, **kwargs):
     admin = User()
@@ -172,7 +171,6 @@ def add_plant_values(*args, **kwargs):
                 db.session.add(value)
         db.session.commit()
 
-
 @event.listens_for(Pot.__table__, 'after_create')
 def add_pot(*args, **kwargs):
     user = User.query.get(1)
@@ -191,10 +189,6 @@ def add_pot(*args, **kwargs):
         sensor.pot = pot
         db.session.add(sensor)
     db.session.commit()
-
-@event.listens_for(Reading.__table__, 'after_create')
-def create_reading(*args, **kwargs):
-    pass
 
 @event.listens_for(Gauge.__table__, 'after_create')
 def create_gauge(*args, **kwargs):
