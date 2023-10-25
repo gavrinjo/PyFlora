@@ -1,4 +1,32 @@
-# Grafovi potrebni za seminarski rad
+# pyFlora
+
+Seminarski rad Algebra Python Developer
+
+---
+
+## Instalation
+
+Prije svega potrebno je u mapi gdje se nalazi web aplikacija napraviti novi **VIRTUAL ENVIROMET** te isti aktivirati.
+
+
+```{code}ps
+:filename: test.bla
+:name: my-program
+:caption: Creating a TensorMesh using SimPEG
+python.exe -m venv venv
+venv/scripts/activate.ps1
+```
+U slučaju da se skripte ne mogu izvršavati u PowerShelu, potrebno je postaviti **ExecutionPolicy** na **Unrestricted**
+
+```ps
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine
+```
+Nakon toga potrebno je instalirati potrebne pakete
+```ps
+pip install -r requirements.txt
+````
+
+
 
 ## Line chart
 
