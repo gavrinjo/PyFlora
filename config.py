@@ -8,7 +8,8 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or f'sqlite:///{os.path.join(basedir, "app.db")}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+    WERKZEUG_RUN_MAIN = os.environ.get('WERKZEUG_RUN_MAIN') or True
+    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT') or False
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
