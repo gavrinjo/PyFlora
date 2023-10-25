@@ -63,15 +63,15 @@ class Weather():
         with closing(get(url, stream=True)) as source:
             if self.response_check(source):
                 return source.content
-            else:
-                self.log_error(source)
+            # else:
+            #     self.log_error(source)
     
     def response_check(self, check):
         content_type = check.headers["Content-Type"].lower()
         return check.status_code == 200 and content_type is not None
 
-    def log_error(self, error):
-        exit(f"ERROR, check your URLs, invalid response code \"{error.status_code}\"")
+    # def log_error(self, error):
+    #     return (f"ERROR, check your URLs, invalid response code \"{error.status_code}\"")
     
     def location(self):
         content = self.get_url(self.GEO_LOCATION_URL.format(city_name=self.city, limit=1, api_key=current_app.config['WEATHER_API']))
