@@ -129,7 +129,7 @@ def load_user(id):
 
 
 @event.listens_for(User.__table__, 'after_create')
-def create_users(*args, **kwargs):
+def add_users(*args, **kwargs):
     admin = User()
     admin.username='admin'
     admin.email='administrator@email.com'
@@ -138,9 +138,8 @@ def create_users(*args, **kwargs):
     db.session.add(admin)
     db.session.commit()
 
-# @event.listens_for(Plant.__table__, 'after_create')
-@event.listens_for(Value.__table__, 'after_create')
-def create_plants(*args, **kwargs):
+@event.listens_for(Plant.__table__, 'after_create')
+def add_plants(*args, **kwargs):
     statis_path = current_app.config['UPLOADS_DEFAULT_DEST']
     with open(os.path.join(statis_path, 'plants.json'), "r") as file:
         data = json.load(file)
@@ -154,7 +153,15 @@ def create_plants(*args, **kwargs):
             plant.other_url = plant_item['other_url']
             plant.photo = plant_item['photo']
             db.session.add(plant)
-            db.session.flush()
+        db.session.commit()
+
+@event.listens_for(Value.__table__, 'after_create')
+def add_plant_values(*args, **kwargs):
+    statis_path = current_app.config['UPLOADS_DEFAULT_DEST']
+    plant = Plant.query.get(1)
+    with open(os.path.join(statis_path, 'plants.json'), "r") as file:
+        data = json.load(file)
+        for plant_item in data:
             for plant_value in plant_item['values']:
                 value = Value()
                 value.indicator = plant_value['indicator']
@@ -163,16 +170,21 @@ def create_plants(*args, **kwargs):
                 value.unit = plant_value['unit']
                 value.plant = plant
                 db.session.add(value)
-            db.session.commit()
+        db.session.commit()
 
-@event.listens_for(Sensor.__table__, 'after_create')
-def create_pot(*args, **kwargs):
+
+@event.listens_for(Pot.__table__, 'after_create')
+def add_pot(*args, **kwargs):
     user = User.query.get(1)
     pot = Pot()
     pot.name = 'Default empty pot'
     pot.owner = user
     db.session.add(pot)
-    db.session.flush()
+    db.session.commit()
+
+@event.listens_for(Sensor.__table__, 'after_create')
+def add_pot(*args, **kwargs):
+    pot = Pot.query.get(1)
     for sensor_indicator in current_app.config['MEASURES']:
         sensor = Sensor()
         sensor.indicator = sensor_indicator

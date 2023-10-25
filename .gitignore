@@ -164,4 +164,4 @@ cython_debug/
 #.idea/
 app.db
 migrations
-.env
+requirements_backup.txt
