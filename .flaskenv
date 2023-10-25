@@ -1,0 +1,2 @@
+FLASK_ENV=pyflora.py
+FLASK_DEBUG=0
