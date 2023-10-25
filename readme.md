@@ -66,7 +66,7 @@ It is not necessary to initialize the database manually <small> *(although it is
 
 ```ps
 flask db init
-flask db migrate -m "opisna poruka"
+flask db migrate -m "descriptive message"
 flask db upgrade
 ```
 Instead, it is enough to start the application and at the first run the database will be created and filled with predefined records.
@@ -75,7 +75,7 @@ Instead, it is enough to start the application and at the first run the database
 flask run
   * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 ```
-After terminating the launched application, it is advised to perform a db migration and db upgrade.
+After terminating the launched application, it is advised to perform a database migration and upgrade.
 
 ```ps
 flask db migrate -m "descriptive message"
