@@ -168,6 +168,7 @@ class PlotlyLine():
         df = self.data_frame(self.pot)
         fig = px.line(df, x='measured', y='value', custom_data=['unit'], color='indicator', facet_row='indicator')
         fig.update_xaxes(
+            # type='category',
             title='',
             showline=True,
             linewidth=1,
@@ -200,7 +201,7 @@ class PlotlyLine():
                 y=1.05,
                 x=0.5
             ),
-            xaxis_range=[datetime.utcnow() - timedelta(days=1), datetime.utcnow()]
+            # xaxis_range=[datetime.utcnow() - timedelta(days=1), datetime.utcnow()]
         )
         fig.for_each_trace(lambda t: t.update(hovertemplate='%{y}%{customdata[0]}'))
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))

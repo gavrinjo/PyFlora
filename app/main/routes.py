@@ -8,7 +8,6 @@ from app.models import User
 from app.main.forms import EditProfileForm, EmptyForm, ContactForm, UploadForm
 from app.resources.weather import Weather
 
-
 @bp.before_app_request
 def before_request():
     if current_user.is_authenticated:
@@ -67,24 +66,26 @@ def edit_profile():
 
 @bp.route('/contact', methods=['GET', 'POST'])
 def contact():
+    1/0
     form = ContactForm()
     if form.validate_on_submit():
         send_email(
         'PyFlora - Message submited',
-        sender=current_app.config['ADMINS'][0],
-        recipients=[form.email.data],
-        text_body=render_template('email/contact_message.txt', user=form.name.data, message=form.message.data),
-        html_body=render_template('email/contact_message.html', user=form.name.data, message=form.message.data)
+            sender=current_app.config['ADMINS'][0],
+            recipients=[form.email.data],
+            text_body=render_template('email/contact_message.txt', user=form.name.data, message=form.message.data),
+            html_body=render_template('email/contact_message.html', user=form.name.data, message=form.message.data)
         )
         send_email(
-        f'PyFlora - {form.name.data} Message',
-        sender=form.email.data,
-        recipients=[current_app.config['ADMINS'][0]],
-        text_body=render_template('email/contact_message.txt', user=form.name.data, message=form.message.data),
-        html_body=render_template('email/contact_message.html', user=form.name.data, message=form.message.data)
+            f'PyFlora - {form.name.data} Message',
+            sender=form.email.data,
+            recipients=[current_app.config['ADMINS'][0]],
+            text_body=render_template('email/contact_message.txt', user=form.name.data, message=form.message.data),
+            html_body=render_template('email/contact_message.html', user=form.name.data, message=form.message.data)
         )
         flash('Your message has been sent successfully!', 'success')
         return redirect(url_for('main.contact'))
+
     return render_template('contact_form.html', title='Contact us', form=form)
 
 
