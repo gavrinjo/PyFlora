@@ -166,3 +166,4 @@ app.db
 migrations
 requirements_backup.txt
 logs
+*.zip
