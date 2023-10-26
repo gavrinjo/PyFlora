@@ -1,4 +1,3 @@
-import logging
 from flask import Flask, abort
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
