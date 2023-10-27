@@ -11,9 +11,6 @@ def send_async_email(app, msg):
 
 def send_email(subject, recipients, text_body, html_body, sender=None, attachments=None, sync=False):
     msg = dict(subject=subject, sender=sender, receivers=recipients, text=text_body, html=html_body)
-    # msg = Message(subject, sender=sender, recipients=recipients)
-    # msg.body = text_body
-    # msg.html = html_body
     if attachments:
         for attachment in attachments:
             msg.attach(*attachment)
