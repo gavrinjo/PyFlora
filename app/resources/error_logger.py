@@ -9,14 +9,14 @@ FORMATTER = logging.Formatter('\n%(asctime)s %(levelname)s: %(message)s [in %(pa
 # handlers
 def get_mail_handler(app: Flask):
     auth = None
-    if app.config['MAIL_USERNAME'] or app.config['MAIL_PASSWORD']:
-        auth = (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
+    if app.config['EMAIL_USERNAME'] or app.config['EMAIL_PASSWORD']:
+        auth = (app.config['EMAIL_USERNAME'], app.config['EMAIL_PASSWORD'])
     secure = None
-    if app.config['MAIL_USE_TLS']:
+    if app.config['EMAIL_USE_STARTLS']:
         secure = ()
     mail_handler = SMTPHandler(
-        mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
-        fromaddr='no-reply@' + app.config['MAIL_SERVER'],
+        mailhost=(app.config['EMAIL_HOST'], app.config['EMAIL_PORT']),
+        fromaddr=app.config['EMAIL_SENDER'],
         toaddrs=app.config['ADMINS'], subject='pyFlora Failure',
         credentials=auth, secure=secure)
     mail_handler.setFormatter(FORMATTER)
@@ -43,7 +43,7 @@ def exception_errors(app: Flask):
             logger.propagate = False
         
     if not app.debug:
-        if app.config['MAIL_SERVER']:
+        if app.config['EMAIL_HOST']:
             logger.addHandler(get_mail_handler(app))
             logger.propagate = False
 
@@ -58,7 +58,7 @@ def exception_errors(app: Flask):
 def app_errors(app: Flask):
 
     if not app.debug:
-        if app.config['MAIL_SERVER']:
+        if app.config['EMAIL_HOST']:
             app.logger.addHandler(get_mail_handler(app))
             app.logger.propagate = False
 

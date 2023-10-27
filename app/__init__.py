@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user
 from flask_mail import Mail
+from flask_redmail import RedMail
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
@@ -38,7 +39,7 @@ migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message_category = 'info'
-mail = Mail()
+mail = RedMail()
 bootstrap = Bootstrap5()
 admin = Admin(name='PyFlora', index_view=AdminViewController(), template_mode='bootstrap4')
 moment = Moment()

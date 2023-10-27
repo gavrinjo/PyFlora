@@ -66,6 +66,7 @@ def edit_profile():
 
 @bp.route('/contact', methods=['GET', 'POST'])
 def contact():
+    1/0
     form = ContactForm()
     if form.validate_on_submit():
         send_email(
