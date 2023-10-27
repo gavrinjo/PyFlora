@@ -22,7 +22,7 @@ After that, it is necessary to install the required packages
 pip install -r requirements.txt
 ```
 
-- ### Test mail server
+- ### Test mail server (local)
 
 The application includes an email component, **sending messages** and **password reset via email**
 
@@ -30,18 +30,41 @@ before starting the mail server, it is necessary to set the environment variable
 
 ```ps
 # through the powershell terminal
-$env:MAIL_SERVER=localhost
-$env:MAIL_PORT=8025
+$env:EMAIL_HOST=localhost
+$env:EMAIL_PORT=8025
 
 # through the .env file (located in the root folder of the application)
-MAIL_SERVER=localhost
-MAIL_PORT=8025
+EMAIL_HOST=localhost
+EMAIL_PORT=8025
 ```
 
 Python comes with the SMTPD component, and in order to start the test mail server, you need to run the following command in a separate PowerShell instance.
 
 ```ps
 python -m smtpd -n -c DebuggingServer localhost:8025
+```
+
+- ### Test mail server (MailTrap)
+
+Email testing can be done with [MailTrap](https://mailtrap.io/)
+MailTrap provides instruction on how to setup [Flask-Mail](https://pythonhosted.org/Flask-Mail/) ***since Flask-Mail i poorly  maintained*** [Flask-RedMail](https://flask-redmail.readthedocs.io/en/stable/index.html) is used instead.
+
+```ps
+# through the powershell terminal
+$env:EMAIL_HOST=sandbox.smtp.mailtrap.io
+$env:EMAIL_PORT=2525
+$env:EMAIL_USERNAME=username (provided by MailTrap)
+$env:EMAIL_PASSWORD=password (provided by MailTrap)
+$envEMAIL_SENDER=sender address (can be overridden inside application)
+$env:EMAIL_USE_STARTLS=True
+
+# through the .env file (located in the root folder of the application)
+EMAIL_HOST=sandbox.smtp.mailtrap.io
+EMAIL_PORT=2525
+EMAIL_USERNAME=username (provided by MailTrap)
+EMAIL_PASSWORD=password (provided by MailTrap)
+EMAIL_SENDER=sender address (can be overridden inside application)
+EMAIL_USE_STARTLS=True
 ```
 
 - ### Weather
