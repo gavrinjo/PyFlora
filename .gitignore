@@ -167,3 +167,4 @@ migrations
 requirements_backup.txt
 logs
 *.zip
+.env
