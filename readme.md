@@ -9,15 +9,19 @@ First of all, it is necessary to create a new **VIRTUAL ENVIROMET** in the app r
 ```ps
 python.exe -m venv venv
 ```
+
 ```ps
 venv/scripts/activate.ps1
 ```
+
 In case scripts cannot be executed in PowerShell, it is necessary to set **ExecutionPolicy** to **Unrestricted**
 
 ```ps
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine
 ```
+
 After that, it is necessary to install the required packages
+
 ```ps
 pip install -r requirements.txt
 ```
@@ -92,18 +96,21 @@ flask db init
 flask db migrate -m "descriptive message"
 flask db upgrade
 ```
+
 Instead, it is enough to start the application and at the first run the database will be created and filled with predefined records.
 
 ```ps
 flask run
   * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 ```
+
 After terminating the launched application, it is advised to perform a database migration and upgrade.
 
 ```ps
 flask db migrate -m "descriptive message"
 flask db upgrade
 ```
+
 Do this every time changes are made to `db models`.
 
 ## Authorization
@@ -112,14 +119,14 @@ User authorization, ***login, logout, registration, password reset*** are implem
 
 At first run, an administrative account is created with the login details below
 
-```
+```ps
 username: admin
 password: 0000
 ```
+
 The administrative user has the right to access the admin portal within the application and access to all users and models
 
 The administrator has the authority to add admin privileges to users
-
 
 ## Measurements
 
