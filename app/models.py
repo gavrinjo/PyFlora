@@ -157,17 +157,18 @@ def add_plants(*args, **kwargs):
 @event.listens_for(Value.__table__, 'after_create')
 def add_plant_values(*args, **kwargs):
     statis_path = current_app.config['UPLOADS_DEFAULT_DEST']
-    plant = Plant.query.get(1)
+    # plant = Plant.query.get(1)
     with open(os.path.join(statis_path, 'plants.json'), "r") as file:
         data = json.load(file)
-        for plant_item in data:
-            for plant_value in plant_item['values']:
+        for plant in data:
+            plant_id = Plant.query.get(plant['id'])
+            for plant_value in plant['values']:
                 value = Value()
                 value.indicator = plant_value['indicator']
                 value.min_value = plant_value['min_value']
                 value.max_value = plant_value['max_value']
                 value.unit = plant_value['unit']
-                value.plant = plant
+                value.plant = plant_id
                 db.session.add(value)
         db.session.commit()
 
